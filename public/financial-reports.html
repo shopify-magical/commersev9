@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sweet Layers - Financial Reports</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary: #c4a647;
+      --primary-dark: #a68c3a;
+      --primary-light: #f4e5b8;
+      --secondary: #2a6b52;
+      --accent: #d4a574;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bg: #fefdf9;
+      --card-bg: #ffffff;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'Inter', -apple-system, sans-serif; 
+      background: var(--bg); 
+      color: var(--text); 
+    }
+    
+    .financial-layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .financial-sidebar {
+      background: var(--card-bg);
+      border-right: 1px solid var(--border);
+      padding: 20px;
+    }
+    
+    .financial-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+    
+    .financial-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+    }
+    
+    .financial-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .financial-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+    
+    .financial-nav-item:hover {
+      background: var(--bg);
+      color: var(--primary);
+    }
+    
+    .financial-nav-item.active {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+    
+    /* Main Content */
+    .financial-main {
+      padding: 20px;
+    }
+    
+    .financial-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .financial-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    
+    .date-filter {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .filter-btn {
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .filter-btn:hover {
+      background: var(--bg);
+    }
+    
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    
+    /* Revenue Overview */
+    .revenue-overview {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border-radius: var(--radius);
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow);
+    }
+    
+    .revenue-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    
+    .revenue-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .revenue-subtitle {
+      opacity: 0.9;
+      font-size: 0.875rem;
+    }
+    
+    .revenue-amount {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    
+    .revenue-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+    }
+    
+    .revenue-stat {
+      text-align: center;
+    }
+    
+    .revenue-stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .revenue-stat-label {
+      font-size: 0.875rem;
+      opacity: 0.9;
+    }
+    
+    /* Financial Stats Grid */
+    .financial-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .financial-stat-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .financial-stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+    }
+    
+    .financial-stat-card.profit::before {
+      background: linear-gradient(90deg, var(--success), #16a34a);
+    }
+    
+    .financial-stat-card.loss::before {
+      background: linear-gradient(90deg, var(--danger), #dc2626);
+    }
+    
+    .financial-stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    
+    .financial-stat-label {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    
+    .financial-stat-change {
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 20px;
+    }
+    
+    .financial-stat-change.positive {
+      background: rgba(34, 197, 94, 0.1);
+      color: var(--success);
+    }
+    
+    .financial-stat-change.negative {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+    }
+    
+    /* Charts Section */
+    .charts-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .chart-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    
+    .chart-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .chart-container {
+      position: relative;
+      height: 300px;
+    }
+    
+    /* Cost Breakdown */
+    .cost-breakdown {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 30px;
+    }
+    
+    .cost-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .cost-item {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+    }
+    
+    .cost-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 16px;
+      font-size: 1.25rem;
+    }
+    
+    .cost-icon.ingredients {
+      background: rgba(196, 166, 71, 0.1);
+      color: var(--primary);
+    }
+    
+    .cost-icon.labor {
+      background: rgba(42, 107, 82, 0.1);
+      color: var(--secondary);
+    }
+    
+    .cost-icon.overhead {
+      background: rgba(212, 165, 116, 0.1);
+      color: var(--accent);
+    }
+    
+    .cost-icon.marketing {
+      background: rgba(34, 197, 94, 0.1);
+      color: var(--success);
+    }
+    
+    .cost-info {
+      flex: 1;
+    }
+    
+    .cost-name {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .cost-details {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+    
+    .cost-amount {
+      text-align: right;
+    }
+    
+    .cost-value {
+      font-weight: 700;
+      font-size: 1.125rem;
+      color: var(--text);
+    }
+    
+    .cost-percentage {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+    
+    /* Profit Analysis */
+    .profit-analysis {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 30px;
+    }
+    
+    .profit-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    
+    .profit-metric {
+      text-align: center;
+      padding: 20px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+    }
+    
+    .profit-metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .profit-metric-value.high {
+      color: var(--success);
+    }
+    
+    .profit-metric-value.medium {
+      color: var(--warning);
+    }
+    
+    .profit-metric-value.low {
+      color: var(--danger);
+    }
+    
+    .profit-metric-label {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+    
+    /* Export Section */
+    .export-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    
+    .export-info h3 {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .export-info p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+    
+    /* Buttons */
+    .btn {
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      border: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+    
+    .btn-secondary {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--border);
+    }
+    
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+    
+    .btn-success:hover {
+      background: #16a34a;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .financial-layout {
+        grid-template-columns: 1fr;
+      }
+      
+      .financial-sidebar {
+        display: none;
+      }
+      
+      .financial-stats,
+      .charts-section,
+      .profit-metrics {
+        grid-template-columns: 1fr;
+      }
+      
+      .revenue-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .export-section {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="financial-layout">
+    <!-- Sidebar -->
+    <aside class="financial-sidebar">
+      <div class="financial-logo">
+        <div class="financial-logo-icon">Financial</div>
+        <div>
+          <div style="font-weight: 600;">Financial Reports</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);">Sweet Layers</div>
+        </div>
+      </div>
+      
+      <nav class="financial-nav">
+        <a href="cake-shop-owner.html" class="financial-nav-item">
+          <span>Dashboard</span> Dashboard
+        </a>
+        <a href="#" class="financial-nav-item active">
+          <span>Financial</span> Financial Reports
+        </a>
+        <a href="#" class="financial-nav-item">
+          <span>Analytics</span> Analytics
+        </a>
+        <a href="#" class="financial-nav-item">
+          <span>Customers</span> Customers
+        </a>
+        <a href="#" class="financial-nav-item">
+          <span>Marketing</span> Marketing
+        </a>
+      </nav>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="financial-main">
+      <!-- Header -->
+      <header class="financial-header">
+        <div>
+          <h1 class="financial-title">Financial Reports</h1>
+          <p style="color: var(--text-muted);">Comprehensive financial overview and analysis</p>
+        </div>
+        <div class="date-filter">
+          <button class="filter-btn" onclick="setDateRange('today')">Today</button>
+          <button class="filter-btn" onclick="setDateRange('week')">This Week</button>
+          <button class="filter-btn active" onclick="setDateRange('month')">This Month</button>
+          <button class="filter-btn" onclick="setDateRange('quarter')">Quarter</button>
+          <button class="filter-btn" onclick="setDateRange('year')">Year</button>
+        </div>
+      </header>
+      
+      <!-- Revenue Overview -->
+      <div class="revenue-overview">
+        <div class="revenue-header">
+          <div>
+            <div class="revenue-title">Total Revenue</div>
+            <div class="revenue-subtitle">June 2026</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 0.875rem; opacity: 0.9;">Growth</div>
+            <div style="font-size: 1.25rem; font-weight: 600;">+18.5%</div>
+          </div>
+        </div>
+        <div class="revenue-amount">$47,829</div>
+        <div class="revenue-stats">
+          <div class="revenue-stat">
+            <div class="revenue-stat-value">847</div>
+            <div class="revenue-stat-label">Orders</div>
+          </div>
+          <div class="revenue-stat">
+            <div class="revenue-stat-value">$89</div>
+            <div class="revenue-stat-label">Avg Order</div>
+          </div>
+          <div class="revenue-stat">
+            <div class="revenue-stat-value">68%</div>
+            <div class="revenue-stat-label">Profit Margin</div>
+          </div>
+          <div class="revenue-stat">
+            <div class="revenue-stat-value">1.2k</div>
+            <div class="revenue-stat-label">Customers</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Financial Stats -->
+      <div class="financial-stats">
+        <div class="financial-stat-card profit">
+          <div class="financial-stat-value">$32,524</div>
+          <div class="financial-stat-label">Net Profit</div>
+          <span class="financial-stat-change positive">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+            +22% vs last month
+          </span>
+        </div>
+        
+        <div class="financial-stat-card">
+          <div class="financial-stat-value">$15,305</div>
+          <div class="financial-stat-label">Total Expenses</div>
+          <span class="financial-stat-change negative">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/></svg>
+            +8% vs last month
+          </span>
+        </div>
+        
+        <div class="financial-stat-card">
+          <div class="financial-stat-value">$8,947</div>
+          <div class="financial-stat-label">Cost of Goods</div>
+          <span class="financial-stat-change positive">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+            -3% efficiency
+          </span>
+        </div>
+        
+        <div class="financial-stat-card">
+          <div class="financial-stat-value">$6,358</div>
+          <div class="financial-stat-label">Operating Costs</div>
+          <span class="financial-stat-change negative">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/></svg>
+            +12% utilities
+          </span>
+        </div>
+      </div>
+      
+      <!-- Charts Section -->
+      <div class="charts-section">
+          <div class="chart-card">
+            <div class="chart-title">
+              <span>Revenue</span> Revenue Trend
+            </div>
+            <div class="chart-container">
+              <canvas id="revenueChart"></canvas>
+            </div>
+          </div>
+          
+          <div class="chart-card">
+            <div class="chart-title">
+              <span>Product</span> Revenue by Product
+            </div>
+            <div class="chart-container">
+              <canvas id="productChart"></canvas>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Cost Breakdown -->
+        <div class="cost-breakdown">
+          <div class="chart-title">
+            <span>Costs</span> Cost Breakdown
+          </div>
+          <div class="cost-list">
+            <div class="cost-item">
+              <div class="cost-icon ingredients">Food</div>
+              <div class="cost-info">
+                <div class="cost-name">Ingredients & Materials</div>
+                <div class="cost-details">Flour, sugar, eggs, specialty ingredients</div>
+              </div>
+              <div class="cost-amount">
+                <div class="cost-value">$5,234</div>
+                <div class="cost-percentage">34.2%</div>
+              </div>
+            </div>
+            
+            <div class="cost-item">
+              <div class="cost-icon labor">Labor</div>
+              <div class="cost-info">
+                <div class="cost-name">Labor Costs</div>
+                <div class="cost-details">Salaries, wages, benefits for 4 staff</div>
+              </div>
+              <div class="cost-amount">
+                <div class="cost-value">$6,847</div>
+                <div class="cost-percentage">44.7%</div>
+              </div>
+            </div>
+            
+            <div class="cost-item">
+              <div class="cost-icon overhead">Overhead</div>
+              <div class="cost-info">
+                <div class="cost-name">Overhead</div>
+                <div class="cost-details">Rent, utilities, insurance, maintenance</div>
+              </div>
+            <div class="cost-amount">
+              <div class="cost-value">$2,189</div>
+              <div class="cost-percentage">14.3%</div>
+            </div>
+          </div>
+          
+          <div class="cost-item">
+            <div class="cost-icon marketing">Marketing</div>
+            <div class="cost-info">
+              <div class="cost-name">Marketing & Advertising</div>
+              <div class="cost-details">Social media, local ads, promotions</div>
+            </div>
+            <div class="cost-amount">
+              <div class="cost-value">$1,035</div>
+              <div class="cost-percentage">6.8%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Profit Analysis -->
+      <div class="profit-analysis">
+        <div class="chart-title">
+          <span>Profit</span> Profit Analysis by Product
+        </div>
+        <div class="profit-metrics">
+          <div class="profit-metric">
+            <div class="profit-metric-value high">72%</div>
+            <div class="profit-metric-label">Heritage Mooncake</div>
+          </div>
+          <div class="profit-metric">
+            <div class="profit-metric-value high">68%</div>
+            <div class="profit-metric-label">Thai Tea Cake</div>
+          </div>
+          <div class="profit-metric">
+            <div class="profit-metric-value medium">65%</div>
+            <div class="profit-metric-label">Chocolate Truffle</div>
+          </div>
+          <div class="profit-metric">
+            <div class="profit-metric-value medium">62%</div>
+            <div class="profit-metric-label">Pandan Custard</div>
+          </div>
+          <div class="profit-metric">
+            <div class="profit-metric-value low">58%</div>
+            <div class="profit-metric-label">Custom Cakes</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Export Section -->
+      <div class="export-section">
+        <div class="export-info">
+          <h3>Export Financial Reports</h3>
+          <p>Download detailed financial data for accounting and tax purposes</p>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <button class="btn btn-secondary" onclick="exportReport('pdf')">
+            <span>PDF</span> Export PDF
+          </button>
+          <button class="btn btn-secondary" onclick="exportReport('excel')">
+            <span>Excel</span> Export Excel
+          </button>
+          <button class="btn btn-success" onclick="exportReport('quickbooks')">
+            <span>Sync</span> Sync to QuickBooks
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Initialize Charts
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeRevenueChart();
+      initializeProductChart();
+    });
+    
+    function initializeRevenueChart() {
+      const ctx = document.getElementById('revenueChart');
+      if (ctx) {
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            datasets: [{
+              label: 'Revenue',
+              data: [10450, 11892, 12437, 13050],
+              borderColor: '#c4a647',
+              backgroundColor: 'rgba(196, 166, 71, 0.1)',
+              tension: 0.4,
+              fill: true
+            }, {
+              label: 'Profit',
+              data: [6893, 7898, 8328, 8735],
+              borderColor: '#2a6b52',
+              backgroundColor: 'rgba(42, 107, 82, 0.1)',
+              tension: 0.4,
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom'
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: { color: '#e5e7eb' },
+                ticks: {
+                  callback: function(value) {
+                    return '$' + value.toLocaleString();
+                  }
+                }
+              },
+              x: {
+                grid: { display: false }
+              }
+            }
+          }
+        });
+      }
+    }
+    
+    function initializeProductChart() {
+      const ctx = document.getElementById('productChart');
+      if (ctx) {
+        new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Heritage Mooncake', 'Thai Tea Cake', 'Chocolate Truffle', 'Pandan Custard', 'Custom Cakes'],
+            datasets: [{
+              data: [15234, 12847, 9834, 6734, 3180],
+              backgroundColor: [
+                '#c4a647',
+                '#2a6b52',
+                '#d4a574',
+                '#22c55e',
+                '#f59e0b'
+              ]
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom'
+              }
+            }
+          }
+        });
+      }
+    }
+    
+    // Date Range Functions
+    function setDateRange(range) {
+      // Remove active class from all buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Add active class to clicked button
+      event.target.classList.add('active');
+      
+      // Update data based on range
+      console.log('Setting date range to:', range);
+      // In a real app, this would fetch new data and update charts
+    }
+    
+    // Export Functions
+    function exportReport(format) {
+      const messages = {
+        pdf: 'Generating PDF financial report...',
+        excel: 'Creating Excel spreadsheet...',
+        quickbooks: 'Syncing with QuickBooks...'
+      };
+      alert(messages[format] || 'Exporting report...');
+    }
+  </script>
+</body>
+</html>

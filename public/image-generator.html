@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Generator - Sweet Layers Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #2A6B52; --primary-dark: #1F4A3A;
+      --cream: #FDF9F5; --brown: #3D2E22;
+      --gray-100: #F5EDE4; --gray-200: #E8DCD0;
+      --white: #ffffff;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--brown); }
+    
+    .header { background: var(--white); padding: 16px; border-bottom: 1px solid var(--gray-200); }
+    .header h1 { font-size: 1.25rem; }
+    .back { color: var(--primary); text-decoration: none; font-size: 0.9rem; }
+    
+    .container { max-width: 600px; margin: 0 auto; padding: 24px 16px; }
+    
+    .section { background: var(--white); padding: 20px; border-radius: 12px; margin-bottom: 16px; }
+    .section h2 { font-size: 1rem; margin-bottom: 12px; }
+    
+    select, input, textarea { width: 100%; padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px; font-size: 1rem; margin-bottom: 12px; }
+    select { background: var(--white); }
+    
+    .product-list { display: grid; gap: 8px; }
+    .product-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--gray-100); border-radius: 8px; cursor: pointer; }
+    .product-item:hover { background: var(--gray-200); }
+    .product-item.selected { background: var(--primary); color: #fff; }
+    .product-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
+    
+    .preview { width: 100%; aspect-ratio: 1; background: var(--gray-100); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; color: #999; }
+    .preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    
+    .btn { width: 100%; padding: 14px; background: var(--primary); color: #fff; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+    .btn:disabled { opacity: 0.5; }
+    .btn-reset { background: var(--gray-200); color: var(--brown); margin-top: 8px; }
+    
+    .tips { font-size: 0.85rem; color: #666; line-height: 1.6; }
+    .tips li { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="cake-shop-owner.html" class="back">← Back to Admin</a>
+    <h1>Image Generator</h1>
+  </header>
+
+  <main class="container">
+    <div class="section">
+      <h2>1. Select Product</h2>
+      <select id="productSelect" onchange="selectProduct()">
+        <option value="">Choose product...</option>
+      </select>
+      
+      <div id="productList" class="product-list"></div>
+    </div>
+
+    <div class="section">
+      <h2>2. Preview</h2>
+      <div class="preview" id="preview">
+        Select a product to see prompt
+      </div>
+      <textarea id="prompt" rows="3" placeholder="Product prompt will appear here..."></textarea>
+    </div>
+
+    <div class="section">
+      <h2>3. Generate</h2>
+      <button class="btn" id="generateBtn" onclick="openGenerator()" disabled>
+        Open Mercury Forge to Generate
+      </button>
+      <button class="btn btn-reset" onclick="resetPrompt()">
+        Reset Prompt
+      </button>
+    </div>
+
+    <div class="section">
+      <h2>Tips</h2>
+      <ul class="tips">
+        <li>Click "Open Mercury Forge" to go to image generator</li>
+        <li>Enter the prompt shown above</li>
+        <li>Click FORGE CHROMIUM to generate</li>
+        <li><strong>Important:</strong> Right-click the generated image → Save Image As...</li>
+        <li>Save to: public/images/[product-name].jpg</li>
+        <li>Update image path in shop.html</li>
+      </ul>
+    </div>
+  </main>
+
+  <script>
+    const products = [
+      { id: 1, name: 'Premium White Lotus Mooncake', prompt: 'Traditional Chinese mooncake with white lotus seed paste, golden brown pastry, food photography, white studio background, 4 pieces in box' },
+      { id: 2, name: 'Double Yolk Red Bean Mooncake', prompt: 'Chinese mooncake with red bean paste and two golden egg yolks, cut in half showing filling, food photography, white studio background' },
+      { id: 3, name: 'Black Sesame Mooncake', prompt: 'Chinese black sesame mooncake, dark golden-brown exterior, food photography, white studio background' },
+      { id: 4, name: 'Red Bean Pastry (Nankatang)', prompt: 'Chinese red bean pastry (nankatang), flaky golden brown crust, visible red bean filling, food photography, white studio' },
+      { id: 5, name: 'Taro Coconut Pastry', prompt: 'Taro coconut pastry, purple-taro layer visible, flaky pastry, food photography, white studio background' },
+      { id: 6, name: 'Salted Egg Yolk Fritter', prompt: 'Golden salted egg yolk fritter (khong thong), golden crispy exterior, food photography, white studio background' },
+      { id: 7, name: 'Pandan Custard Cake', prompt: 'Green pandan custard cake layer cake, visible pandan layers, top view, food photography, white studio' },
+      { id: 8, name: 'Mung Bean Sweet Soup', prompt: 'Chinese mung bean sweet soup (tong sui), in bowl, topped with coconut milk, food photography' },
+      { id: 9, name: 'Heritage Gift Box Set', prompt: 'Luxury Chinese pastry gift box, various items inside, ribbon packaging, premium product photography' },
+    ];
+
+    function init() {
+      const list = document.getElementById('productList');
+      const select = document.getElementById('productSelect');
+      
+      products.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = p.name;
+        select.appendChild(opt);
+        
+        const item = document.createElement('div');
+        item.className = 'product-item';
+        item.dataset.id = p.id;
+        item.innerHTML = `<span>${p.name}</span>`;
+        item.onclick = () => selectProduct(p.id);
+        list.appendChild(item);
+      });
+    }
+
+    function selectProduct(id) {
+      const pid = id || document.getElementById('productSelect').value;
+      const product = products.find(p => p.id == pid);
+      
+      if (!product) return;
+      
+      document.querySelectorAll('.product-item').forEach(el => {
+        el.classList.toggle('selected', el.dataset.id == pid);
+      });
+      
+      document.getElementById('prompt').value = product.prompt;
+      document.getElementById('preview').innerHTML = 'Product: ' + product.name;
+      document.getElementById('generateBtn').disabled = false;
+    }
+
+    function openGenerator() {
+      const prompt = document.getElementById('prompt').value;
+      if (prompt) {
+        // Open Mercury Forge with prompt
+        window.open('https://image-generator.sv9.workers.dev/', '_blank');
+      }
+    }
+
+    function resetPrompt() {
+      const product = products.find(p => p.id == document.getElementById('productSelect').value);
+      if (product) {
+        document.getElementById('prompt').value = product.prompt;
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>

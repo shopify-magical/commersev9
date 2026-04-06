@@ -1,0 +1,208 @@
+name: Sweet Layers CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+# Required secrets for full functionality:
+# - SNYK_TOKEN: For security vulnerability scanning
+# - LHCI_GITHUB_APP_TOKEN: For Lighthouse CI integration
+# - SLACK_WEBHOOK_URL: For deployment notifications
+# - MONITORING_TOKEN: For deployment health monitoring
+
+jobs:
+  # Build and Test Job
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: |
+        npm ci
+        
+    - name: Run TypeScript build
+      run: |
+        npm run build
+        
+    - name: Run tests
+      run: |
+        npm run test
+        
+    - name: Run linting
+      run: |
+        npm run lint
+        
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-files
+        path: dist/
+        
+    - name: Upload test coverage
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+
+  # Security Scan Job
+  security-scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Run security audit
+      run: |
+        npm audit --audit-level moderate
+        
+    - name: Run Snyk security scan
+      uses: snyk/actions/node@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      continue-on-error: true # Continue even if Snyk token not set
+        
+    - name: Run CodeQL analysis
+      uses: github/codeql-action/analyze@v2
+
+  # Performance Test Job
+  performance-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Start application
+      run: |
+        npm start &
+        sleep 10
+        
+    - name: Run Lighthouse CI
+      run: |
+        npm install -g @lhci/cli
+        lhci autorun
+      env:
+        LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+      continue-on-error: true # Continue even if LHCI token not set
+        
+    - name: Run Web Vitals test
+      run: |
+        npm run test:performance
+
+  # Deploy to Staging Job
+  deploy-staging:
+    needs: [build-and-test, security-scan, performance-test]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build for production
+      run: npm run build
+      
+    - name: Deploy to staging
+      run: |
+        npm run deploy:staging
+        
+    - name: Run smoke tests
+      run: |
+        npm run test:smoke
+
+  # Deploy to Production Job
+  deploy-production:
+    needs: [build-and-test, security-scan, performance-test]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build for production
+      run: npm run build
+      
+    - name: Deploy to production
+      run: |
+        npm run deploy
+        
+    - name: Run production smoke tests
+      run: |
+        npm run test:smoke
+        
+    - name: Notify deployment
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#deployments'
+        text: 'Sweet Layers deployed to production!'
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      continue-on-error: true # Continue even if Slack webhook not set
+
+  # Monitor Deployment Job
+  monitor-deployment:
+    needs: deploy-production
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Health check
+      run: |
+        curl -f https://sweetlayers.com/health || exit 1
+        
+    - name: Check critical paths
+      run: |
+        curl -f https://sweetlayers.com/
+        curl -f https://sweetlayers.com/shop.html
+        curl -f https://sweetlayers.com/manifest.json
+        
+    - name: Run uptime test
+      run: |
+        npm run test:uptime
+        
+    - name: Send monitoring report
+      run: |
+        curl -X POST https://api.monitoring.com/report \
+          -H "Authorization: Bearer ${{ secrets.MONITORING_TOKEN }}" \
+          -d '{"status": "healthy", "deployment": "${{ github.sha }}"}'
+      continue-on-error: true # Continue even if monitoring token not set

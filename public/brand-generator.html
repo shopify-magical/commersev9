@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brand Image Generator - Sweet Layers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #2A6B52; --primary-dark: #1F4A3A;
+      --accent: #C4A647;
+      --cream: #FDF9F5; --brown: #3D2E22;
+      --gray-100: #F5EDE4; --gray-200: #E8DCD0;
+      --white: #ffffff;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--brown); }
+    
+    .header { background: var(--white); padding: 16px; border-bottom: 1px solid var(--gray-200); text-align: center; }
+    .brand { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--primary); }
+    
+    .container { max-width: 700px; margin: 0 auto; padding: 20px 16px; }
+    
+    .section { background: var(--white); padding: 20px; border-radius: 12px; margin-bottom: 16px; }
+    .section h2 { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 12px; }
+    
+    .vibe-check { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .vibe-tag { padding: 6px 12px; background: var(--gray-100); border-radius: 100px; font-size: 0.8rem; }
+    
+    .product-select { width: 100%; padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px; font-size: 1rem; background: var(--white); margin-bottom: 12px; }
+    
+    .prompt-box { 
+      width: 100%; padding: 14px; border: 2px solid var(--accent); border-radius: 8px; font-size: 0.95rem; 
+      min-height: 100px; font-family: inherit; line-height: 1.6; background: #FFFBF5;
+    }
+    
+    .tips { font-size: 0.85rem; color: #666; line-height: 1.7; }
+    .tips li { margin-bottom: 6px; }
+    .tips strong { color: var(--primary); }
+    
+    .actions { display: flex; gap: 8px; margin-top: 12px; }
+    .btn { flex: 1; padding: 14px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-secondary { background: var(--gray-200); color: var(--brown); }
+    
+    .copy-feedback { text-align: center; padding: 8px; color: var(--primary); font-size: 0.9rem; display: none; }
+    .copy-feedback.show { display: block; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="brand">Sweet Layers — Brand Generator</div>
+  </header>
+
+  <main class="container">
+    <div class="section">
+      <h2>Your Brand Identity</h2>
+      <div class="vibe-check">
+        <span class="vibe-tag">Warm Heritage</span>
+        <span class="vibe-tag">Handcrafted</span>
+        <span class="vibe-tag">Nostalgic</span>
+        <span class="vibe-tag">Premium</span>
+        <span class="vibe-tag">Thai-Chinese</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Select Product</h2>
+      <select class="product-select" id="productSelect" onchange="showPrompt()">
+        <option value="">Choose your product...</option>
+      </select>
+
+      <h2 style="margin-top: 16px;">Your Unique Prompt</h2>
+      <textarea class="prompt-box" id="prompt" placeholder="Select a product to generate unique prompt..."></textarea>
+      
+      <div class="actions">
+        <button class="btn btn-primary" onclick="openForge()">Open Mercury Forge</button>
+        <button class="btn btn-secondary" onclick="copyPrompt()">Copy Prompt</button>
+      </div>
+      <div class="copy-feedback" id="copyFeedback">✓ Copied! Paste into Mercury Forge</div>
+    </div>
+
+    <div class="section">
+      <h2>Why This Works</h2>
+      <ul class="tips">
+        <li>✓ <strong>Describes YOUR brand</strong> - warm, nostalgic, handcrafted</li>
+        <li>✓ <strong>Specific details</strong> - "golden-brown skin with embossed pattern"</li>
+        <li>✓ <strong>Emotion & memory</strong> - "grandmother kitchen", "Mid-Autumn"</li>
+        <li>✓ <strong>Not generic</strong> - no "white studio background" spam</li>
+        <li>✓ <strong>Unique vibe</strong> - sets you apart from others</li>
+      </ul>
+    </div>
+  </main>
+
+  <script src="js/brand-prompts.js"></script>
+  <script>
+    const products = PRODUCTS;
+    
+    // Populate select
+    const select = document.getElementById('productSelect');
+    products.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.name;
+      opt.textContent = p.name;
+      select.appendChild(opt);
+    });
+    
+    function showPrompt() {
+      const name = document.getElementById('productSelect').value;
+      const product = products.find(p => p.name === name);
+      if (product) {
+        document.getElementById('prompt').value = product.prompt;
+      }
+    }
+    
+    function openForge() {
+      window.open('https://image-generator.sv9.workers.dev/', '_blank');
+    }
+    
+    function copyPrompt() {
+      const prompt = document.getElementById('prompt').value;
+      navigator.clipboard.writeText(prompt);
+      const feedback = document.getElementById('copyFeedback');
+      feedback.classList.add('show');
+      setTimeout(() => feedback.classList.remove('show'), 2000);
+    }
+  </script>
+</body>
+</html>

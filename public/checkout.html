@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ชำระเงิน - Sweet Layers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #2A6B52; --primary-dark: #1F4A3A; --primary-light: #E8F5F0;
+      --accent: #C4A647; --accent-dark: #B3941A;
+      --cream: #FDF9F5; --brown: #3D2E22; --brown-light: #5A4535;
+      --gray-100: #F5EDE4; --gray-200: #E8DCD0; --gray-300: #D4C4B5;
+      --gray-400: #B8A08A; --gray-500: #9A7D6A; --white: #ffffff;
+      --success: #10B981; --error: #EF4444;
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --shadow-md: 0 4px 16px rgba(13,42,34,0.08);
+    }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--cream);
+      color: var(--brown);
+      line-height: 1.5;
+    }
+    
+    .checkout-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      padding: 16px 0;
+    }
+    .header-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--brown);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: var(--primary);
+    }
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--success);
+    }
+
+    .checkout-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 32px;
+    }
+
+    /* Form Section */
+    .checkout-form h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .form-section {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-family: inherit;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .form-group textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    /* Payment Methods */
+    .payment-methods {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .payment-method {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .payment-method:hover,
+    .payment-method.active {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+    .payment-method input {
+      accent-color: var(--primary);
+    }
+    .payment-method-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    .payment-method-info {
+      flex: 1;
+    }
+    .payment-method-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .payment-method-desc {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+    }
+
+    /* QR Section */
+    .qr-section {
+      display: none;
+      text-align: center;
+      padding: 24px;
+      background: var(--primary-light);
+      border-radius: var(--radius-md);
+      margin-top: 16px;
+    }
+    .qr-section.show {
+      display: block;
+    }
+    .qr-code {
+      width: 250px;
+      height: 250px;
+      background: var(--white);
+      margin: 0 auto 16px;
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+    .qr-code img {
+      width: 100%;
+      height: 100%;
+    }
+    .qr-amount {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .qr-phone {
+      color: var(--gray-500);
+      font-size: 0.9rem;
+    }
+    .qr-note {
+      margin-top: 12px;
+      font-size: 0.85rem;
+      color: var(--gray-500);
+    }
+
+    /* Slip Upload */
+    .slip-upload {
+      margin-top: 16px;
+      padding: 20px;
+      border: 2px dashed var(--gray-300);
+      border-radius: var(--radius-md);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .slip-upload:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+    .slip-upload input {
+      display: none;
+    }
+    .slip-upload-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+    .slip-preview {
+      max-width: 200px;
+      margin: 12px auto 0;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Order Summary */
+    .order-summary {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      height: fit-content;
+      position: sticky;
+      top: 20px;
+    }
+    .summary-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 20px;
+    }
+    .summary-items {
+      margin-bottom: 20px;
+    }
+    .summary-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .summary-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+    }
+    .summary-item-info {
+      flex: 1;
+    }
+    .summary-item-name {
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+    .summary-item-qty {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+    }
+    .summary-item-price {
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .summary-row.total {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      padding-top: 16px;
+      border-top: 2px solid var(--gray-200);
+      margin-top: 16px;
+    }
+    .place-order-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.2s;
+    }
+    .place-order-btn:hover { background: var(--primary-dark); }
+    .place-order-btn:disabled {
+      background: var(--gray-300);
+      cursor: not-allowed;
+    }
+
+    /* Success Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.show {
+      display: flex;
+    }
+    .success-modal {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--success);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 24px;
+    }
+    .success-modal h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+    }
+    .success-modal p {
+      color: var(--gray-500);
+      margin-bottom: 24px;
+    }
+    .order-id {
+      background: var(--primary-light);
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      font-family: monospace;
+      font-size: 1.1rem;
+      color: var(--primary);
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .checkout-container {
+        grid-template-columns: 1fr;
+      }
+      .order-summary {
+        position: static;
+        order: -1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="checkout-header">
+    <div class="header-container">
+      <a href="/cart.html" class="back-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        กลับตะกร้า
+      </a>
+      <div class="logo">Sweet Layers</div>
+      <div class="secure-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        ปลอดภัย 100%
+      </div>
+    </div>
+  </header>
+
+  <main class="checkout-container">
+    <!-- Left: Form -->
+    <div class="checkout-form">
+      <!-- Customer Info -->
+      <div class="form-section">
+        <h2>ข้อมูลลูกค้า</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">ชื่อ-นามสกุล *</label>
+            <input type="text" id="name" placeholder="สมชาย ใจดี" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">เบอร์โทรศัพท์ *</label>
+            <input type="tel" id="phone" placeholder="08xxxxxxxx" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">อีเมล (ไม่บังคับ)</label>
+          <input type="email" id="email" placeholder="example@email.com">
+        </div>
+      </div>
+
+      <!-- Shipping -->
+      <div class="form-section">
+        <h2>ที่อยู่จัดส่ง</h2>
+        <div class="form-group">
+          <label for="address">ที่อยู่ *</label>
+          <textarea id="address" placeholder="บ้านเลขที่ ถนน ตำบล อำเภอ" required></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="province">จังหวัด *</label>
+            <input type="text" id="province" placeholder="กรุงเทพมหานคร" required>
+          </div>
+          <div class="form-group">
+            <label for="postal">รหัสไปรษณีย์ *</label>
+            <input type="text" id="postal" placeholder="10110" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="note">หมายเหตุ (ไม่บังคับ)</label>
+          <textarea id="note" placeholder="เช่น ส่งช่วงบ่าย, โทรก่อนส่ง"></textarea>
+        </div>
+      </div>
+
+      <!-- Payment -->
+      <div class="form-section">
+        <h2>วิธีชำระเงิน</h2>
+        <div class="payment-methods">
+          <label class="payment-method active" onclick="selectPayment('promptpay')">
+            <input type="radio" name="payment" value="promptpay" checked>
+            <div class="payment-method-icon">Pay</div>
+            <div class="payment-method-info">
+              <div class="payment-method-name">พร้อมเพย์ (PromptPay)</div>
+              <div class="payment-method-desc">สแกน QR Code ผ่านแอพธนาคาร</div>
+            </div>
+          </label>
+          
+          <label class="payment-method" onclick="selectPayment('cod')">
+            <input type="radio" name="payment" value="cod">
+            <div class="payment-method-icon">Cash</div>
+            <div class="payment-method-info">
+              <div class="payment-method-name">เก็บเงินปลายทาง</div>
+              <div class="payment-method-desc">ชำระเมื่อได้รับสินค้า (+20 บาท)</div>
+            </div>
+          </label>
+        </div>
+
+        <!-- QR Code Section -->
+        <div class="qr-section" id="qrSection">
+          <div class="qr-code">
+            <img id="qrImage" src="" alt="PromptPay QR">
+          </div>
+          <div class="qr-amount" id="qrAmount">฿0</div>
+          <div class="qr-phone">บัญชี: 0840871065</div>
+          <div class="qr-note">สแกน QR ด้วยแอพธนาคาร แล้วอัพโหลดสลิปด้านล่าง</div>
+          
+          <label class="slip-upload" id="slipUpload">
+            <input type="file" id="slipInput" accept="image/*" onchange="handleSlipUpload(this)">
+            <div class="slip-upload-icon">Upload</div>
+            <div>คลิกเพื่ออัพโหลดสลิป</div>
+            <div style="font-size: 0.8rem; color: var(--gray-500);">รองรับ JPG, PNG</div>
+            <img id="slipPreview" class="slip-preview" style="display: none;">
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Summary -->
+    <aside class="order-summary">
+      <h3 class="summary-title">สรุปคำสั่งซื้อ</h3>
+      <div class="summary-items" id="summaryItems">
+        <!-- Items loaded by JS -->
+      </div>
+      <div class="summary-row">
+        <span>ยอดสินค้า</span>
+        <span id="subtotal">฿0</span>
+      </div>
+      <div class="summary-row">
+        <span>ค่าจัดส่ง</span>
+        <span id="shipping">฿50</span>
+      </div>
+      <div class="summary-row total">
+        <span>ยอดรวม</span>
+        <span id="total">฿0</span>
+      </div>
+      <button class="place-order-btn" id="placeOrderBtn" onclick="placeOrder()">
+        สั่งซื้อสินค้า
+      </button>
+    </aside>
+  </main>
+
+  <!-- Success Modal -->
+  <div class="modal-overlay" id="successModal">
+    <div class="success-modal">
+      <div class="success-icon">✓</div>
+      <h2>สั่งซื้อสำเร็จ!</h2>
+      <p>ขอบคุณสำหรับคำสั่งซื้อ เราจะจัดส่งสินค้าให้เร็วที่สุด</p>
+      <div class="order-id" id="orderId">ORDER-123456</div>
+      <button class="place-order-btn" onclick="location.href='/shop.html'">
+        เลือกซื้อสินค้าต่อ
+      </button>
+    </div>
+  </div>
+
+  <script src="js/member-system.js"></script>
+  <script>
+    const API_BASE = window.location.hostname.includes('pages.dev')
+      ? 'https://bizcommerz-agentic-engine.aekbuffalo.workers.dev'
+      : window.location.origin;
+
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    let paymentMethod = 'promptpay';
+    let slipImage = null;
+    let orderTotal = 0;
+
+    function renderSummary() {
+      const itemsContainer = document.getElementById('summaryItems');
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const shipping = paymentMethod === 'cod' ? 70 : (subtotal > 500 ? 0 : 50);
+      orderTotal = subtotal + shipping;
+
+      itemsContainer.innerHTML = cart.map(item => `
+        <div class="summary-item">
+          <img src="${item.image}" alt="${item.name}">
+          <div class="summary-item-info">
+            <div class="summary-item-name">${item.name}</div>
+            <div class="summary-item-qty">x${item.qty}</div>
+          </div>
+          <div class="summary-item-price">฿${(item.price * item.qty).toFixed(0)}</div>
+        </div>
+      `).join('');
+
+      document.getElementById('subtotal').textContent = `฿${subtotal.toFixed(0)}`;
+      document.getElementById('shipping').textContent = shipping === 0 ? 'ฟรี' : `฿${shipping}`;
+      document.getElementById('total').textContent = `฿${orderTotal.toFixed(0)}`;
+
+      // Generate QR if PromptPay selected
+      if (paymentMethod === 'promptpay') {
+        generatePromptPayQR(orderTotal);
+      }
+    }
+
+    function selectPayment(method) {
+      paymentMethod = method;
+      document.querySelectorAll('.payment-method').forEach(el => {
+        el.classList.toggle('active', el.querySelector(`input[value="${method}"]`));
+      });
+      
+      const qrSection = document.getElementById('qrSection');
+      if (method === 'promptpay') {
+        qrSection.classList.add('show');
+        generatePromptPayQR(orderTotal);
+      } else {
+        qrSection.classList.remove('show');
+      }
+      
+      renderSummary();
+    }
+
+    async function generatePromptPayQR(amount) {
+      try {
+        const res = await fetch(`${API_BASE}/payment/promptpay`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount: amount,
+            orderId: `cake_${Date.now()}`,
+            customer: document.getElementById('name')?.value || 'Customer'
+          })
+        });
+        
+        const data = await res.json();
+        if (data.qrUrl) {
+          document.getElementById('qrImage').src = data.qrUrl;
+          document.getElementById('qrAmount').textContent = `฿${amount.toFixed(0)}`;
+        }
+      } catch (err) {
+        console.error('QR generation failed:', err);
+      }
+    }
+
+    function handleSlipUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        slipImage = e.target.result;
+        document.getElementById('slipPreview').src = slipImage;
+        document.getElementById('slipPreview').style.display = 'block';
+        document.querySelector('.slip-upload div:not(.slip-preview)').style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function placeOrder() {
+      const btn = document.getElementById('placeOrderBtn');
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const address = document.getElementById('address').value;
+      
+      if (!name || !phone || !address) {
+        alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+        return;
+      }
+
+      if (paymentMethod === 'promptpay' && !slipImage) {
+        alert('กรุณาอัพโหลดสลิปการโอนเงิน');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'กำลังสั่งซื้อ...';
+
+      // Submit order
+      const orderData = {
+        customer: name,
+        phone,
+        email: document.getElementById('email').value,
+        address: `${address} ${document.getElementById('province').value} ${document.getElementById('postal').value}`,
+        note: document.getElementById('note').value,
+        items: cart.map(item => item.name),
+        total: orderTotal,
+        payment: paymentMethod,
+        tenantId: 'default'
+      };
+
+      try {
+        // Create order
+        const orderRes = await fetch(`${API_BASE}/triggers/order`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderData)
+        });
+
+        const orderResult = await orderRes.json();
+
+        // If PromptPay, verify slip
+        if (paymentMethod === 'promptpay' && slipImage) {
+          await fetch(`${API_BASE}/payment/verify-slip`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              imageBase64: slipImage,
+              paymentId: orderResult.orderId,
+              expectedAmount: orderTotal
+            })
+          });
+        }
+
+        // Show success
+        document.getElementById('orderId').textContent = orderResult.orderId || `ORDER-${Date.now()}`;
+        document.getElementById('successModal').classList.add('show');
+        
+        // Save order to member system
+        if (typeof memberSystem !== 'undefined') {
+          memberSystem.saveOrder({
+            orderId: orderResult.orderId,
+            items: cart.map(i => i.name),
+            total: orderTotal,
+            status: 'Processing'
+          });
+        }
+        
+        // Clear cart
+        localStorage.removeItem('cart');
+        
+      } catch (err) {
+        alert('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
+        btn.disabled = false;
+        btn.textContent = 'สั่งซื้อสินค้า';
+      }
+    }
+
+    // Init
+    if (cart.length === 0) {
+      location.href = '/shop.html';
+    }
+    renderSummary();
+    selectPayment('promptpay');
+  </script>
+</body>
+</html>

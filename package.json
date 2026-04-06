@@ -1,0 +1,37 @@
+{
+  "name": "agentic-engine",
+  "version": "1.0.0",
+  "description": "Autonomous agentic engine with decision-making, planning, execution, and self-improvement",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "server": "tsx src/server.ts",
+    "server:prod": "NODE_ENV=production tsx src/server.ts",
+    "dev": "tsx src/index.ts",
+    "test": "tsx --test tests/unit/*.test.ts tests/integration/*.test.ts",
+    "test:unit": "tsx --test tests/unit/*.test.ts",
+    "test:integration": "tsx --test tests/integration/*.test.ts",
+    "test:performance": "lhci autorun --config=lighthouserc.js",
+    "test:smoke": "node scripts/smoke-test.js",
+    "test:uptime": "node scripts/uptime-test.js",
+    "bench": "tsx tests/benchmarks/performance.ts",
+    "lint": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "deploy": "wrangler deploy",
+    "deploy:staging": "wrangler deploy --env staging",
+    "wrangler:dev": "wrangler dev",
+    "screenshots": "node screenshots.js",
+    "screenshots:install": "npm install playwright && npx playwright install chromium"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "tsx": "^4.7.0",
+    "@types/node": "^20.0.0",
+    "wrangler": "^3.100.0",
+    "playwright": "^1.40.0",
+    "@lhci/cli": "^0.12.0"
+  }
+}

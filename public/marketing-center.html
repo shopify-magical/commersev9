@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sweet Layers - Marketing Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary: #c4a647;
+      --primary-dark: #a68c3a;
+      --primary-light: #f4e5b8;
+      --secondary: #2a6b52;
+      --accent: #d4a574;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bg: #fefdf9;
+      --card-bg: #ffffff;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'Inter', -apple-system, sans-serif; 
+      background: var(--bg); 
+      color: var(--text); 
+    }
+    
+    .marketing-layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .marketing-sidebar {
+      background: var(--card-bg);
+      border-right: 1px solid var(--border);
+      padding: 20px;
+    }
+    
+    .marketing-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+    
+    .marketing-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+    }
+    
+    .marketing-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .marketing-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+    
+    .marketing-nav-item:hover {
+      background: var(--bg);
+      color: var(--primary);
+    }
+    
+    .marketing-nav-item.active {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+    
+    /* Main Content */
+    .marketing-main {
+      padding: 20px;
+    }
+    
+    .marketing-header {
+      margin-bottom: 30px;
+    }
+    
+    .marketing-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    
+    .marketing-subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+    
+    /* Campaign Overview */
+    .campaign-overview {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .campaign-stat-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .campaign-stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+    }
+    
+    .campaign-stat-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    
+    .campaign-stat-label {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    
+    .campaign-stat-change {
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 20px;
+    }
+    
+    .campaign-stat-change.positive {
+      background: rgba(34, 197, 94, 0.1);
+      color: var(--success);
+    }
+    
+    .campaign-stat-change.negative {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+    }
+    
+    /* Active Campaigns */
+    .active-campaigns {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 30px;
+    }
+    
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .campaign-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .campaign-item {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      border-left: 4px solid var(--primary);
+      transition: all 0.2s;
+    }
+    
+    .campaign-item:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow);
+    }
+    
+    .campaign-item.success {
+      border-left-color: var(--success);
+    }
+    
+    .campaign-item.warning {
+      border-left-color: var(--warning);
+    }
+    
+    .campaign-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 16px;
+      font-size: 1.5rem;
+    }
+    
+    .campaign-icon.email {
+      background: rgba(196, 166, 71, 0.1);
+      color: var(--primary);
+    }
+    
+    .campaign-icon.social {
+      background: rgba(42, 107, 82, 0.1);
+      color: var(--secondary);
+    }
+    
+    .campaign-icon.sms {
+      background: rgba(212, 165, 116, 0.1);
+      color: var(--accent);
+    }
+    
+    .campaign-info {
+      flex: 1;
+    }
+    
+    .campaign-name {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .campaign-details {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    
+    .campaign-metrics {
+      display: flex;
+      gap: 16px;
+      font-size: 0.875rem;
+    }
+    
+    .campaign-metric {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .campaign-metric strong {
+      color: var(--primary);
+    }
+    
+    .campaign-status {
+      text-align: right;
+    }
+    
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    
+    .status-badge.active {
+      background: var(--success);
+      color: white;
+    }
+    
+    .status-badge.scheduled {
+      background: var(--warning);
+      color: white;
+    }
+    
+    .status-badge.draft {
+      background: var(--border);
+      color: var(--text-muted);
+    }
+    
+    .campaign-performance {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+    
+    /* Marketing Channels */
+    .channels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .channel-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: all 0.2s;
+    }
+    
+    .channel-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+    
+    .channel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    
+    .channel-title {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .channel-status {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+    
+    .channel-status.inactive {
+      background: var(--text-muted);
+    }
+    
+    .channel-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .channel-stat {
+      text-align: center;
+      padding: 12px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+    }
+    
+    .channel-stat-value {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    .channel-stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    
+    .channel-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .channel-btn {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .channel-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+    
+    /* Content Calendar */
+    .content-calendar {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 30px;
+    }
+    
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-top: 16px;
+    }
+    
+    .calendar-header {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-align: center;
+      padding: 8px;
+      color: var(--text-muted);
+    }
+    
+    .calendar-day {
+      aspect-ratio: 1;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .calendar-day:hover {
+      background: var(--bg);
+      border-color: var(--primary);
+    }
+    
+    .calendar-day.has-content {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+    
+    .calendar-day-number {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    
+    .calendar-day-indicator {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--primary);
+      margin-top: 2px;
+    }
+    
+    /* Quick Actions */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+    
+    .action-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .action-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+      border-color: var(--primary);
+    }
+    
+    .action-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--primary-light);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+      font-size: 1.5rem;
+    }
+    
+    .action-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .action-description {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+    
+    /* Charts */
+    .charts-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .chart-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    
+    .chart-container {
+      position: relative;
+      height: 300px;
+    }
+    
+    /* Buttons */
+    .btn {
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      border: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+    
+    .btn-secondary {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--border);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .marketing-layout {
+        grid-template-columns: 1fr;
+      }
+      
+      .marketing-sidebar {
+        display: none;
+      }
+      
+      .campaign-overview,
+      .channels-grid,
+      .quick-actions,
+      .charts-section {
+        grid-template-columns: 1fr;
+      }
+      
+      .calendar-grid {
+        gap: 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="marketing-layout">
+    <!-- Sidebar -->
+    <aside class="marketing-sidebar">
+      <div class="marketing-logo">
+        <div class="marketing-logo-icon">Marketing</div>
+        <div>
+          <div style="font-weight: 600;">Marketing Center</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);">Sweet Layers</div>
+        </div>
+      </div>
+      
+      <nav class="marketing-nav">
+        <a href="cake-shop-owner.html" class="marketing-nav-item">
+          <span>Dashboard</span> Dashboard
+        </a>
+        <a href="#" class="marketing-nav-item active">
+          <span>Marketing</span> Marketing Center
+        </a>
+        <a href="#" class="marketing-nav-item">
+          <span>Analytics</span> Analytics
+        </a>
+        <a href="#" class="marketing-nav-item">
+          <span>Customers</span> Customers
+        </a>
+        <a href="#" class="marketing-nav-item">
+          <span>Financial</span> Financial
+        </a>
+      </nav>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="marketing-main">
+      <!-- Header -->
+      <header class="marketing-header">
+        <h1 class="marketing-title">Marketing Center</h1>
+        <p class="marketing-subtitle">Manage campaigns, track performance, and grow your customer base</p>
+      </header>
+      
+      <!-- Campaign Overview -->
+      <div class="campaign-overview">
+        <div class="campaign-stat-card">
+          <div class="campaign-stat-value">8</div>
+          <div class="campaign-stat-label">Active Campaigns</div>
+          <span class="campaign-stat-change positive">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+            +2 this week
+          </span>
+        </div>
+        
+        <div class="campaign-stat-card">
+          <div class="campaign-stat-value">24.7%</div>
+          <div class="campaign-stat-label">Conversion Rate</div>
+          <span class="campaign-stat-change positive">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+            +3.2% improvement
+          </span>
+        </div>
+        
+        <div class="campaign-stat-card">
+          <div class="campaign-stat-value">$4.82</div>
+          <div class="campaign-stat-label">Cost per Acquisition</div>
+          <span class="campaign-stat-change positive">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+            -$0.45 vs last month
+          </span>
+        </div>
+        
+        <div class="campaign-stat-card">
+          <div class="campaign-stat-value">$127</div>
+          <div class="campaign-stat-label">Avg Customer Value</div>
+          <span class="campaign-stat-change positive">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+            +$18 LTV growth
+          </span>
+        </div>
+      </div>
+      
+      <!-- Active Campaigns -->
+      <div class="active-campaigns">
+        <div class="section-title">
+          <span>Active</span> Active Campaigns
+        </div>
+        <div class="campaign-list">
+          <div class="campaign-item success">
+            <div class="campaign-icon email">Email</div>
+            <div class="campaign-info">
+              <div class="campaign-name">Mooncake Festival Special</div>
+              <div class="campaign-details">Email campaign targeting past mooncake customers</div>
+              <div class="campaign-metrics">
+                <div class="campaign-metric">
+                  <span>Sent</span> <strong>2,847</strong> sent
+                </div>
+                <div class="campaign-metric">
+                  <span>Open</span> <strong>68%</strong> open
+                </div>
+                <div class="campaign-metric">
+                  <span>Convert</span> <strong>12%</strong> converted
+                </div>
+              </div>
+            </div>
+            <div class="campaign-status">
+              <div class="status-badge active">Active</div>
+              <div class="campaign-performance">342 orders generated</div>
+            </div>
+          </div>
+          
+          <div class="campaign-item">
+            <div class="campaign-icon social">Social</div>
+            <div class="campaign-info">
+              <div class="campaign-name">Instagram Weekend Showcase</div>
+              <div class="campaign-details">Visual campaign featuring new cake designs</div>
+              <div class="campaign-metrics">
+                <div class="campaign-metric">
+                  <span>Views</span> <strong>12.4k</strong> views
+                </div>
+                <div class="campaign-metric">
+                  <span>Likes</span> <strong>847</strong> likes
+                </div>
+                <div class="campaign-metric">
+                  <span>Orders</span> <strong>89</strong> orders
+                </div>
+              </div>
+            </div>
+            <div class="campaign-status">
+              <div class="status-badge active">Active</div>
+              <div class="campaign-performance">$7,234 revenue</div>
+            </div>
+          </div>
+          
+          <div class="campaign-item warning">
+            <div class="campaign-icon sms">SMS</div>
+            <div class="campaign-info">
+              <div class="campaign-name">Flash Sale - Today Only</div>
+              <div class="campaign-details">SMS blast for 20% off Thai Tea cakes</div>
+              <div class="campaign-metrics">
+                <div class="campaign-metric">
+                  <span>Sent</span> <strong>1,247</strong> sent
+                </div>
+                <div class="campaign-metric">
+                  <span>Read</span> <strong>94%</strong> read
+                </div>
+                <div class="campaign-metric">
+                  <span>Convert</span> <strong>8%</strong> converted
+                </div>
+              </div>
+            </div>
+            <div class="campaign-status">
+              <div class="status-badge scheduled">Scheduled</div>
+              <div class="campaign-performance">Starts at 2:00 PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Marketing Channels -->
+      <div class="section-title">
+        <span>Performance</span> Marketing Channels Performance
+      </div>
+      <div class="channels-grid">
+        <div class="channel-card">
+          <div class="channel-header">
+            <div class="channel-title">
+              <span>Email</span> Email Marketing
+            </div>
+            <div class="channel-status"></div>
+          </div>
+          <div class="channel-stats">
+            <div class="channel-stat">
+              <div class="channel-stat-value">68%</div>
+              <div class="channel-stat-label">Open Rate</div>
+            </div>
+            <div class="channel-stat">
+              <div class="channel-stat-value">12%</div>
+              <div class="channel-stat-label">CTR</div>
+            </div>
+            <div class="channel-stat">
+              <div class="channel-stat-value">4.2%</div>
+              <div class="channel-stat-label">Conversion</div>
+            </div>
+            <div class="channel-stat">
+              <div class="channel-stat-value">$2.1</div>
+              <div class="channel-stat-label">CPA</div>
+            </div>
+          </div>
+          <div class="channel-actions">
+            <button class="channel-btn" onclick="manageChannel('email')">Manage</button>
+            <button class="channel-btn" onclick="viewAnalytics('email')">Analytics</button>
+          </div>
+        </div>
+        
+        <div class="channel-card">
+          <div class="channel-header">
+            <div class="channel-title">
+              <span>Social</span> Social Media
+            </div>
+            <div class="channel-status"></div>
+          </div>
+          <div class="channel-stats">
+            <div class="channel-stat">
+              <div class="channel-stat-value">24.5k</div>
+              <div class="channel-stat-label">Followers</div>
+            </div>
+            <div class="channel-stat">
+              <div class="channel-stat-value">3.2%</div>
+              <div class="channel-stat-label">Engagement</div>
+            </div>
+            <div class="channel-stat">
+              <div class="channel-stat-value">2.8%</div>
+              <div class="channel-stat-label">Conversion</div>
+            </div>
+            <div class="channel-stat">
+              <div class="channel-stat-value">$3.7</div>
+              <div class="channel-stat-label">CPA</div>
+            </div>
+          </div>
+          <div class="channel-actions">
+            <button class="channel-btn" onclick="manageChannel('social')">Manage</button>
+            <button class="channel-btn" onclick="viewAnalytics('social')">Analytics</button>
+          </div>
+        </div>
+        
+        <div class="channel-card">
+          <div class="channel-header">
+            <div class="channel-title">
+              <span>SMS</span> SMS Marketing
+            </div>
+            <div class="channel-status inactive"></div>
+          </div>
+          <div class="channel-stats">
+            <div class="channel-stat">
+              <div class="channel-stat-value">94%</div>
+              <div class="channel-stat-label">Read Rate</div>
+            </div>
+            <div class="channel-stat">
+              <div class="channel-stat-value">8.7%</div>
+              <div class="channel-stat-label">CTR</div>
+            </div>
+            <div class="channel-stat">
+              <div class="channel-stat-value">6.2%</div>
+              <div class="channel-stat-label">Conversion</div>
+            </div>
+            <div class="channel-stat">
+              <div class="channel-stat-value">$1.8</div>
+              <div class="channel-stat-label">CPA</div>
+            </div>
+          </div>
+          <div class="channel-actions">
+            <button class="channel-btn" onclick="manageChannel('sms')">Manage</button>
+            <button class="channel-btn" onclick="viewAnalytics('sms')">Analytics</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Content Calendar -->
+      <div class="content-calendar">
+        <div class="section-title">
+          <span>Calendar</span> Content Calendar
+        </div>
+        <div class="calendar-grid">
+          <div class="calendar-header">Sun</div>
+          <div class="calendar-header">Mon</div>
+          <div class="calendar-header">Tue</div>
+          <div class="calendar-header">Wed</div>
+          <div class="calendar-header">Thu</div>
+          <div class="calendar-header">Fri</div>
+          <div class="calendar-header">Sat</div>
+          
+          <div class="calendar-day">
+            <div class="calendar-day-number">28</div>
+          </div>
+          <div class="calendar-day">
+            <div class="calendar-day-number">29</div>
+          </div>
+          <div class="calendar-day">
+            <div class="calendar-day-number">30</div>
+          </div>
+          <div class="calendar-day">
+            <div class="calendar-day-number">31</div>
+          </div>
+          <div class="calendar-day">
+            <div class="calendar-day-number">1</div>
+          </div>
+          <div class="calendar-day has-content">
+            <div class="calendar-day-number">2</div>
+            <div class="calendar-day-indicator"></div>
+          </div>
+          <div class="calendar-day">
+            <div class="calendar-day-number">3</div>
+          </div>
+          
+          <div class="calendar-day">
+            <div class="calendar-day-number">4</div>
+          </div>
+          <div class="calendar-day has-content">
+            <div class="calendar-day-number">5</div>
+            <div class="calendar-day-indicator"></div>
+          </div>
+          <div class="calendar-day">
+            <div class="calendar-day-number">6</div>
+          </div>
+          <div class="calendar-day">
+            <div class="calendar-day-number">7</div>
+          </div>
+          <div class="calendar-day has-content">
+            <div class="calendar-day-number">8</div>
+            <div class="calendar-day-indicator"></div>
+          </div>
+          <div class="calendar-day">
+            <div class="calendar-day-number">9</div>
+          </div>
+          <div class="calendar-day">
+            <div class="calendar-day-number">10</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Quick Actions -->
+      <div class="section-title">
+        <span>Actions</span> Quick Actions
+      </div>
+      <div class="quick-actions">
+        <div class="action-card" onclick="createCampaign()">
+          <div class="action-icon">Create</div>
+          <div class="action-title">Create Campaign</div>
+          <div class="action-description">Launch a new marketing campaign</div>
+        </div>
+        
+        <div class="action-card" onclick="schedulePost()">
+          <div class="action-icon">Schedule</div>
+          <div class="action-title">Schedule Post</div>
+          <div class="action-description">Plan social media content</div>
+        </div>
+        
+        <div class="action-card" onclick="segmentAudience()">
+          <div class="action-icon">Segment</div>
+          <div class="action-title">Segment Audience</div>
+          <div class="action-description">Create customer segments</div>
+        </div>
+        
+        <div class="action-card" onclick="generateReport()">
+          <div class="action-icon">Report</div>
+          <div class="action-title">Generate Report</div>
+          <div class="action-description">Marketing performance insights</div>
+        </div>
+      </div>
+      
+      <!-- Charts Section -->
+      <div class="charts-section">
+        <div class="chart-card">
+          <div class="section-title">
+            <span>Trend</span> Campaign Performance Trend
+          </div>
+          <div class="chart-container">
+            <canvas id="campaignChart"></canvas>
+          </div>
+        </div>
+        
+        <div class="chart-card">
+          <div class="section-title">
+            <span>Performance</span> Channel Performance
+          </div>
+          <div class="chart-container">
+            <canvas id="channelChart"></canvas>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Action Buttons -->
+      <div style="display: flex; gap: 12px;">
+        <button class="btn btn-primary" onclick="createCampaign()">
+          <span>New</span> New Campaign
+        </button>
+        <button class="btn btn-secondary" onclick="viewAnalytics()">
+          <span>Analytics</span> View Analytics
+        </button>
+        <button class="btn btn-secondary" onclick="exportReport()">
+          <span>Export</span> Export Report
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Initialize Charts
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeCampaignChart();
+      initializeChannelChart();
+    });
+    
+    function initializeCampaignChart() {
+      const ctx = document.getElementById('campaignChart');
+      if (ctx) {
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            datasets: [{
+              label: 'Conversions',
+              data: [89, 124, 156, 198],
+              borderColor: '#c4a647',
+              backgroundColor: 'rgba(196, 166, 71, 0.1)',
+              tension: 0.4,
+              fill: true
+            }, {
+              label: 'Revenue',
+              data: [2340, 3120, 3890, 4720],
+              borderColor: '#2a6b52',
+              backgroundColor: 'rgba(42, 107, 82, 0.1)',
+              tension: 0.4,
+              fill: true,
+              yAxisID: 'y1'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom'
+              }
+            },
+            scales: {
+              y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
+                grid: { color: '#e5e7eb' }
+              },
+              y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                grid: { drawOnChartArea: false },
+                ticks: {
+                  callback: function(value) {
+                    return '$' + value;
+                  }
+                }
+              },
+              x: {
+                grid: { display: false }
+              }
+            }
+          }
+        });
+      }
+    }
+    
+    function initializeChannelChart() {
+      const ctx = document.getElementById('channelChart');
+      if (ctx) {
+        new Chart(ctx, {
+          type: 'radar',
+          data: {
+            labels: ['Reach', 'Engagement', 'Conversion', 'Cost', 'ROI', 'Retention'],
+            datasets: [{
+              label: 'Email',
+              data: [85, 68, 72, 90, 78, 82],
+              borderColor: '#c4a647',
+              backgroundColor: 'rgba(196, 166, 71, 0.2)'
+            }, {
+              label: 'Social',
+              data: [72, 82, 65, 75, 68, 70],
+              borderColor: '#2a6b52',
+              backgroundColor: 'rgba(42, 107, 82, 0.2)'
+            }, {
+              label: 'SMS',
+              data: [65, 94, 78, 85, 82, 75],
+              borderColor: '#d4a574',
+              backgroundColor: 'rgba(212, 165, 116, 0.2)'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom'
+              }
+            },
+            scales: {
+              r: {
+                beginAtZero: true,
+                max: 100
+              }
+            }
+          }
+        });
+      }
+    }
+    
+    // Action Functions
+    function createCampaign() {
+      alert('Opening campaign creator...');
+    }
+    
+    function schedulePost() {
+      alert('Opening content scheduler...');
+    }
+    
+    function segmentAudience() {
+      alert('Opening audience segmenter...');
+    }
+    
+    function generateReport() {
+      alert('Generating marketing report...');
+    }
+    
+    function manageChannel(channel) {
+      alert(`Managing ${channel} marketing channel...`);
+    }
+    
+    function viewAnalytics(channel) {
+      alert(`Viewing ${channel} analytics...`);
+    }
+    
+    function viewAnalytics() {
+      alert('Opening comprehensive analytics dashboard...');
+    }
+    
+    function exportReport() {
+      alert('Exporting marketing performance report...');
+    }
+  </script>
+</body>
+</html>

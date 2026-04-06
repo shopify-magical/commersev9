@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sweet Layers - Business Owner Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary: #c4a647;
+      --primary-dark: #a68c3a;
+      --primary-light: #f4e5b8;
+      --secondary: #2a6b52;
+      --accent: #d4a574;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bg: #fefdf9;
+      --card-bg: #ffffff;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'Inter', -apple-system, sans-serif; 
+      background: var(--bg); 
+      color: var(--text); 
+      line-height: 1.6; 
+    }
+    
+    .app { display: flex; min-height: 100vh; }
+    
+    /* Sidebar */
+    .sidebar { 
+      width: 280px; 
+      background: var(--card-bg); 
+      border-right: 1px solid var(--border);
+      display: flex; 
+      flex-direction: column;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+    }
+    
+    .logo { 
+      padding: 24px; 
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.8rem;
+      box-shadow: 0 4px 12px rgba(196, 166, 71, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .logo-icon::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transform: rotate(45deg);
+      animation: shine 3s infinite;
+    }
+    
+    @keyframes shine {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+    
+    .logo-text h1 { font-size: 1.25rem; font-weight: 700; color: var(--text); }
+    .logo-text p { font-size: 0.75rem; color: var(--text-muted); }
+    
+    .nav { padding: 16px; flex: 1; }
+    .nav-section { 
+      margin-bottom: 24px; 
+    }
+    .nav-section-title { 
+      font-size: 0.75rem; 
+      font-weight: 600; 
+      color: var(--text-muted); 
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 0 12px 8px;
+    }
+    
+    .nav-item { 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      padding: 12px; 
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.875rem;
+      margin-bottom: 4px;
+    }
+    
+    .nav-item:hover { background: var(--bg); color: var(--primary); }
+    .nav-item.active { background: var(--primary-light); color: var(--primary-dark); }
+    .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; }
+    
+    /* Main Content */
+    .main { 
+      flex: 1; 
+      margin-left: 280px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Header */
+    .header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    
+    .header-left { display: flex; align-items: center; gap: 16px; }
+    .header-title { font-size: 1.5rem; font-weight: 700; }
+    
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    
+    /* Header Icons */
+    .header-icons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 16px;
+    }
+    
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    
+    .icon-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+    
+    .icon-btn svg {
+      width: 20px;
+      height: 20px;
+      color: var(--text);
+    }
+    
+    .icon-btn:hover svg {
+      color: var(--primary);
+    }
+    
+    .notification-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--danger);
+      color: white;
+      font-size: 0.625rem;
+      font-weight: 600;
+      padding: 2px 5px;
+      border-radius: 10px;
+      min-width: 16px;
+      text-align: center;
+    }
+    
+    /* Search Dropdown */
+    .search-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 8px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      width: 320px;
+      max-height: 400px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none;
+    }
+    
+    .search-dropdown.active {
+      display: block;
+    }
+    
+    .search-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      outline: none;
+    }
+    
+    .search-input:focus {
+      border-color: var(--primary);
+    }
+    
+    .search-results {
+      padding: 8px;
+    }
+    
+    .search-result-item {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .search-result-item:hover {
+      background: var(--bg);
+    }
+    
+    .search-result-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      font-size: 0.875rem;
+    }
+    
+    .search-result-info {
+      flex: 1;
+    }
+    
+    .search-result-title {
+      font-weight: 500;
+      font-size: 0.875rem;
+      margin-bottom: 2px;
+    }
+    
+    .search-result-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    
+    /* Chat Widget */
+    .chat-widget {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+    
+    .chat-toggle {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-lg);
+      transition: all 0.3s;
+      border: none;
+      position: relative;
+    }
+    
+    .chat-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 25px rgba(196, 166, 71, 0.4);
+    }
+    
+    .chat-toggle svg {
+      width: 24px;
+      height: 24px;
+      color: white;
+    }
+    
+    .chat-toggle::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 50%;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .chat-toggle:hover::before {
+      opacity: 0.3;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.1); opacity: 0.1; }
+      100% { transform: scale(1); opacity: 0.3; }
+    }
+    
+    .chat-panel {
+      position: absolute;
+      bottom: 70px;
+      right: 0;
+      width: 360px;
+      height: 480px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    .chat-panel.active {
+      display: flex;
+    }
+    
+    .chat-header {
+      padding: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+    
+    .chat-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: shimmer 3s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    .chat-title {
+      font-weight: 600;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .chat-status {
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: blink 2s infinite;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .chat-close {
+      width: 24px;
+      height: 24px;
+      border: none;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: white;
+    }
+    
+    .chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      background: var(--bg);
+    }
+    
+    .chat-message {
+      margin-bottom: 12px;
+      display: flex;
+      gap: 8px;
+    }
+    
+    .chat-message.user {
+      flex-direction: row-reverse;
+    }
+    
+    .chat-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+      flex-shrink: 0;
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .chat-message.user .chat-avatar {
+      background: linear-gradient(135deg, var(--secondary), var(--accent));
+    }
+    
+    .chat-bubble {
+      max-width: 70%;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      line-height: 1.4;
+    }
+    
+    .chat-message:not(.user) .chat-bubble {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+    }
+    
+    .chat-message.user .chat-bubble {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .chat-input-area {
+      padding: 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+    }
+    
+    .chat-input {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      outline: none;
+    }
+    
+    .chat-input:focus {
+      border-color: var(--primary);
+    }
+    
+    .chat-send {
+      width: 36px;
+      height: 36px;
+      background: var(--primary);
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: white;
+      transition: background 0.2s;
+    }
+    
+    .chat-send:hover {
+      background: var(--primary-dark);
+    }
+    
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+    }
+    
+    .user-menu:hover { background: var(--bg); }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+    
+    /* Content Area */
+    .content { padding: 24px; flex: 1; }
+    
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+    }
+    
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    
+    .stat-change {
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 20px;
+    }
+    
+    .stat-change.positive {
+      background: rgba(34, 197, 94, 0.1);
+      color: var(--success);
+    }
+    
+    .stat-change.negative {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+    }
+    
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+    }
+    
+    .card-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .card-title { font-size: 1.125rem; font-weight: 600; }
+    
+    .card-body { padding: 24px; }
+    
+    /* Grid Layouts */
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    
+    /* Order Queue */
+    .order-queue {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .order-item {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      border-left: 4px solid var(--primary);
+      transition: all 0.2s;
+    }
+    
+    .order-item:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow);
+    }
+    
+    .order-item.urgent {
+      border-left-color: var(--danger);
+      background: rgba(239, 68, 68, 0.05);
+    }
+    
+    .order-item.ready {
+      border-left-color: var(--success);
+      background: rgba(34, 197, 94, 0.05);
+    }
+    
+    .order-info { flex: 1; }
+    .order-customer { font-weight: 600; margin-bottom: 4px; }
+    .order-details { font-size: 0.875rem; color: var(--text-muted); }
+    .order-time { font-size: 0.75rem; color: var(--text-muted); }
+    
+    .order-status {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .order-status.pending { 
+      background: var(--warning); 
+      color: white; 
+    }
+    .order-status.baking { 
+      background: var(--primary); 
+      color: white; 
+    }
+    .order-status.ready { 
+      background: var(--success); 
+      color: white; 
+    }
+    
+    /* Quick Actions */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      color: var(--text);
+    }
+    
+    .action-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    
+    .action-btn svg {
+      width: 24px;
+      height: 24px;
+      color: var(--primary);
+    }
+    
+    .action-content h4 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    
+    .action-content p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    
+    /* Inventory Alert */
+    .inventory-alert {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+    }
+    
+    .inventory-alert svg {
+      width: 20px;
+      height: 20px;
+      color: var(--danger);
+      flex-shrink: 0;
+    }
+    
+    .inventory-alert-content {
+      flex: 1;
+      font-size: 0.875rem;
+    }
+    
+    .inventory-alert-title {
+      font-weight: 600;
+      color: var(--danger);
+      margin-bottom: 2px;
+    }
+    
+    /* Chart Container */
+    .chart-container {
+      position: relative;
+      height: 300px;
+    }
+    
+    /* Buttons */
+    .btn {
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      border: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover { background: var(--primary-dark); }
+    
+    .btn-secondary {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    
+    .btn-secondary:hover { background: var(--border); }
+    
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; position: relative; height: auto; }
+      .main { margin-left: 0; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .quick-actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-icon">Cake</div>
+        <div class="logo-text">
+          <h1>Sweet Layers</h1>
+          <p>Business Dashboard</p>
+        </div>
+      </div>
+      
+      <nav class="nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a class="nav-item active" onclick="showSection('dashboard')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Dashboard
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a class="nav-item" onclick="showSection('orders')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            Order Management
+          </a>
+          <a class="nav-item" onclick="showSection('kitchen')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            Kitchen Operations
+          </a>
+          <a class="nav-item" onclick="showSection('inventory')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            Inventory
+          </a>
+          <a class="nav-item" onclick="showSection('staff')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Staff Management
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Business</div>
+          <a class="nav-item" onclick="showSection('customers')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Customer Insights
+          </a>
+          <a class="nav-item" onclick="showSection('financial')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Financial Reports
+          </a>
+          <a class="nav-item" onclick="showSection('marketing')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Marketing Center
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Analytics</div>
+          <a class="nav-item" onclick="showSection('analytics')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            Performance Analytics
+          </a>
+          <a class="nav-item" onclick="showSection('reports')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            Business Reports
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Settings</div>
+          <a class="nav-item" onclick="showSection('settings')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Shop Settings
+          </a>
+        </div>
+      </nav>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <h1 class="header-title" id="pageTitle">Business Dashboard</h1>
+        </div>
+        <div class="header-right">
+          <div class="header-icons">
+            <!-- Search/Filter Icon -->
+            <div style="position: relative;">
+              <button class="icon-btn" onclick="toggleSearch()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="m21 21-4.35-4.35"/>
+                </svg>
+                <span class="notification-badge">3</span>
+              </button>
+              
+              <!-- Search Dropdown -->
+              <div class="search-dropdown" id="searchDropdown">
+                <div class="search-header">
+                  <input type="text" class="search-input" placeholder="Search orders, customers, products..." onkeyup="performSearch(this.value)">
+                </div>
+                <div class="search-results" id="searchResults">
+                  <div class="search-result-item" onclick="goToOrder('ORD-2847')">
+                    <div class="search-result-icon">Order</div>
+                    <div class="search-result-info">
+                      <div class="search-result-title">Order #ORD-2847</div>
+                      <div class="search-result-desc">Sarah Chen • $127.00 • Processing</div>
+                    </div>
+                  </div>
+                  <div class="search-result-item" onclick="goToCustomer('sarah-chen')">
+                    <div class="search-result-icon">User</div>
+                    <div class="search-result-info">
+                      <div class="search-result-title">Sarah Chen</div>
+                      <div class="search-result-desc">VIP Customer • 12 orders • $1,247 total</div>
+                    </div>
+                  </div>
+                  <div class="search-result-item" onclick="goToProduct('mooncake')">
+                    <div class="search-result-icon">Product</div>
+                    <div class="search-result-info">
+                      <div class="search-result-title">Heritage Mooncake</div>
+                      <div class="search-result-desc">342 orders • $58.00 each • 4.9 rating</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Notifications Icon -->
+            <button class="icon-btn" onclick="toggleNotifications()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              </svg>
+              <span class="notification-badge">5</span>
+            </button>
+            
+            <!-- Settings Icon -->
+            <button class="icon-btn" onclick="toggleSettings()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 1v6m0 6v6m4.22-13.22 4.24 4.24M1.54 1.54l4.24 4.24M1 12h6m6 0h6m-13.22 4.22 4.24-4.24M20.46 20.46l-4.24-4.24"/>
+              </svg>
+            </button>
+          </div>
+          
+          <button class="btn btn-primary" onclick="addNewOrder()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Order
+          </button>
+          <div class="user-menu">
+            <div class="user-avatar">OW</div>
+            <span style="font-weight: 500;">Shop Owner</span>
+          </div>
+        </div>
+      </header>
+      
+      <!-- Content -->
+      <div class="content" id="mainContent">
+        <!-- Dashboard content will be rendered here -->
+      </div>
+    </main>
+  </div>
+  
+  <!-- Chat Widget -->
+  <div class="chat-widget">
+    <div class="chat-panel" id="chatPanel">
+      <div class="chat-header">
+        <div class="chat-title">
+          <div class="chat-status"></div>
+          Sweet Layers AI
+        </div>
+        <button class="chat-close" onclick="toggleChat()">✕</button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-message">
+          <div class="chat-avatar">Cake</div>
+          <div class="chat-bubble">
+            Hello! I'm your Sweet Layers AI assistant. I can help you with:
+            <br>• Order management and tracking
+            <br>• Customer insights and recommendations  
+            <br>• Inventory and kitchen operations
+            <br>• Financial reports and analytics
+            <br><br>How can I assist you today?
+          </div>
+        </div>
+        <div class="chat-message user">
+          <div class="chat-avatar">User</div>
+          <div class="chat-bubble">
+            Show me today's urgent orders
+          </div>
+        </div>
+        <div class="chat-message">
+          <div class="chat-avatar">Cake</div>
+          <div class="chat-bubble">
+            You have <strong>3 urgent orders</strong> today:
+            <br><br>
+            <strong>Sarah Chen</strong> - Custom Wedding Cake (3 tiers) - Due: 2:00 PM
+            <br><strong>Michael Wong</strong> - Thai Tea Cake Batch (6 pcs) - Due: 4:00 PM  
+            <br><strong>Lisa Park</strong> - Birthday Cake with custom message - Due: 3:00 PM
+            <br><br>
+            Would you like me to prioritize these in the kitchen schedule?
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <input type="text" class="chat-input" placeholder="Type your message..." onkeypress="handleChatInput(event)">
+        <button class="chat-send" onclick="sendChatMessage()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22,2 15,22 11,13 2,9 22,2"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <button class="chat-toggle" onclick="toggleChat()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <span class="notification-badge" style="position: absolute; top: -2px; right: -2px;">2</span>
+    </button>
+  </div>
+
+  <script>
+    // Initialize Dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+      renderDashboard();
+      startRealTimeUpdates();
+    });
+    
+    // Show Section
+    function showSection(section) {
+      // Update active nav item
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      event.target.closest('.nav-item').classList.add('active');
+      
+      switch(section) {
+        case 'dashboard':
+          renderDashboard();
+          break;
+        case 'orders':
+          renderOrderManagement();
+          break;
+        case 'kitchen':
+          renderKitchenOperations();
+          break;
+        case 'inventory':
+          renderInventory();
+          break;
+        case 'staff':
+          renderStaffManagement();
+          break;
+        case 'customers':
+          renderCustomerInsights();
+          break;
+        case 'financial':
+          renderFinancialReports();
+          break;
+        case 'marketing':
+          renderMarketingCenter();
+          break;
+        case 'analytics':
+          renderPerformanceAnalytics();
+          break;
+        case 'reports':
+          renderBusinessReports();
+          break;
+        case 'settings':
+          renderShopSettings();
+          break;
+      }
+    }
+    
+    // Render Dashboard
+    function renderDashboard() {
+      document.getElementById('pageTitle').textContent = 'Business Dashboard';
+      const content = document.getElementById('mainContent');
+      
+      content.innerHTML = `
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-label">Today's Revenue</span>
+            <div class="stat-value">$2,847</div>
+            <span class="stat-change positive">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+              +18% from yesterday
+            </span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Orders Today</span>
+            <div class="stat-value">47</div>
+            <span class="stat-change positive">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+              +12% from average
+            </span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Active Orders</span>
+            <div class="stat-value">12</div>
+            <span class="stat-change positive">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+              On track
+            </span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Customer Rating</span>
+            <div class="stat-value">4.8</div>
+            <span class="stat-change positive">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+              +0.2 this week
+            </span>
+          </div>
+        </div>
+        
+        <!-- Main Content Grid -->
+        <div class="grid-2">
+          <!-- Order Queue -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Order Queue</h3>
+              <span style="color: var(--text-muted); font-size: 0.875rem;">12 active</span>
+            </div>
+            <div class="card-body">
+              <div class="order-queue">
+                <div class="order-item urgent">
+                  <div class="order-info">
+                    <div class="order-customer">Sarah Chen</div>
+                    <div class="order-details">Custom Wedding Cake - 3 tiers</div>
+                    <div class="order-time">Due: 2:00 PM</div>
+                  </div>
+                  <span class="order-status pending">Urgent</span>
+                </div>
+                <div class="order-item">
+                  <div class="order-info">
+                    <div class="order-customer">Michael Wong</div>
+                    <div class="order-details">Heritage Mooncake Box (6pcs)</div>
+                    <div class="order-time">Due: 4:00 PM</div>
+                  </div>
+                  <span class="order-status baking">Baking</span>
+                </div>
+                <div class="order-item ready">
+                  <div class="order-info">
+                    <div class="order-customer">Lisa Park</div>
+                    <div class="order-details">Thai Tea Cake + Pandan Custard</div>
+                    <div class="order-time">Ready for pickup</div>
+                  </div>
+                  <span class="order-status ready">Ready</span>
+                </div>
+                <div class="order-item">
+                  <div class="order-info">
+                    <div class="order-customer">David Liu</div>
+                    <div class="order-details">Chocolate Truffle Collection</div>
+                    <div class="order-time">Due: 6:00 PM</div>
+                  </div>
+                  <span class="order-status pending">Pending</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Quick Actions -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Quick Actions</h3>
+            </div>
+            <div class="card-body">
+              <div class="quick-actions">
+                <button class="action-btn" onclick="addNewOrder()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  <div class="action-content">
+                    <h4>Add Manual Order</h4>
+                    <p>Create order for phone/in-person</p>
+                  </div>
+                </button>
+                <button class="action-btn" onclick="updateInventory()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                  <div class="action-content">
+                    <h4>Update Inventory</h4>
+                    <p>Add new ingredients/supplies</p>
+                  </div>
+                </button>
+                <button class="action-btn" onclick="viewSchedule()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  <div class="action-content">
+                    <h4>View Schedule</h4>
+                    <p>Today's baking & delivery timeline</p>
+                  </div>
+                </button>
+                <button class="action-btn" onclick="generateReport()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  <div class="action-content">
+                    <h4>Daily Report</h4>
+                    <p>Generate today's business report</p>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Bottom Section -->
+        <div class="grid-2">
+          <!-- Inventory Alerts -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Inventory Alerts</h3>
+              <span style="color: var(--danger); font-size: 0.875rem;">3 items low</span>
+            </div>
+            <div class="card-body">
+              <div class="inventory-alert">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <div class="inventory-alert-content">
+                  <div class="inventory-alert-title">Black Sesame Paste</div>
+                  <div>Only 2kg remaining - Order more</div>
+                </div>
+              </div>
+              <div class="inventory-alert">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <div class="inventory-alert-content">
+                  <div class="inventory-alert-title">Premium Butter</div>
+                  <div>5kg remaining - Reorder needed</div>
+                </div>
+              </div>
+              <div class="inventory-alert">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <div class="inventory-alert-content">
+                  <div class="inventory-alert-title">Cake Boxes (Large)</div>
+                  <div>Only 8 boxes left - Stock low</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Sales Chart -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Weekly Sales Trend</h3>
+              <select style="padding: 6px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.875rem;">
+                <option>This Week</option>
+                <option>Last Week</option>
+                <option>Last Month</option>
+              </select>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="salesChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Initialize Sales Chart
+      setTimeout(() => {
+        const ctx = document.getElementById('salesChart');
+        if (ctx) {
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+              datasets: [{
+                label: 'Revenue',
+                data: [2100, 2450, 2847, 2650, 3100, 3800, 3200],
+                borderColor: '#c4a647',
+                backgroundColor: 'rgba(196, 166, 71, 0.1)',
+                tension: 0.4,
+                fill: true
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  grid: { color: '#e5e7eb' },
+                  ticks: {
+                    callback: function(value) {
+                      return '$' + value;
+                    }
+                  }
+                },
+                x: {
+                  grid: { display: false }
+                }
+              }
+            }
+          });
+        }
+      }, 100);
+    }
+    
+    // Placeholder functions for other sections
+    function renderOrderManagement() {
+      document.getElementById('pageTitle').textContent = 'Order Management';
+      const content = document.getElementById('mainContent');
+      content.innerHTML = `
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Order Management</h3>
+          </div>
+          <div class="card-body">
+            <p>Order management interface coming soon...</p>
+          </div>
+        </div>
+      `;
+    }
+    
+    function renderKitchenOperations() {
+      document.getElementById('pageTitle').textContent = 'Kitchen Operations';
+      const content = document.getElementById('mainContent');
+      content.innerHTML = `
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Kitchen Operations</h3>
+          </div>
+          <div class="card-body">
+            <p>Kitchen operations interface coming soon...</p>
+          </div>
+        </div>
+      `;
+    }
+    
+    function renderInventory() {
+      document.getElementById('pageTitle').textContent = 'Inventory Management';
+      const content = document.getElementById('mainContent');
+      content.innerHTML = `
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Inventory Management</h3>
+          </div>
+          <div class="card-body">
+            <p>Inventory management interface coming soon...</p>
+          </div>
+        </div>
+      `;
+    }
+    
+    function renderStaffManagement() {
+      document.getElementById('pageTitle').textContent = 'Staff Management';
+      const content = document.getElementById('mainContent');
+      content.innerHTML = `
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Staff Management</h3>
+          </div>
+          <div class="card-body">
+            <p>Staff management interface coming soon...</p>
+          </div>
+        </div>
+      `;
+    }
+    
+    function renderCustomerInsights() {
+      document.getElementById('pageTitle').textContent = 'Customer Insights';
+      const content = document.getElementById('mainContent');
+      content.innerHTML = `
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Customer Insights</h3>
+          </div>
+          <div class="card-body">
+            <p>Customer insights interface coming soon...</p>
+          </div>
+        </div>
+      `;
+    }
+    
+    function renderFinancialReports() {
+      document.getElementById('pageTitle').textContent = 'Financial Reports';
+      const content = document.getElementById('mainContent');
+      content.innerHTML = `
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Financial Reports</h3>
+          </div>
+          <div class="card-body">
+            <p>Financial reports interface coming soon...</p>
+          </div>
+        </div>
+      `;
+    }
+    
+    function renderMarketingCenter() {
+      document.getElementById('pageTitle').textContent = 'Marketing Center';
+      const content = document.getElementById('mainContent');
+      content.innerHTML = `
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Marketing Center</h3>
+          </div>
+          <div class="card-body">
+            <p>Marketing center interface coming soon...</p>
+          </div>
+        </div>
+      `;
+    }
+    
+    function renderPerformanceAnalytics() {
+      document.getElementById('pageTitle').textContent = 'Performance Analytics';
+      const content = document.getElementById('mainContent');
+      content.innerHTML = `
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Performance Analytics</h3>
+          </div>
+          <div class="card-body">
+            <p>Performance analytics interface coming soon...</p>
+          </div>
+        </div>
+      `;
+    }
+    
+    function renderBusinessReports() {
+      document.getElementById('pageTitle').textContent = 'Business Reports';
+      const content = document.getElementById('mainContent');
+      content.innerHTML = `
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Business Reports</h3>
+          </div>
+          <div class="card-body">
+            <p>Business reports interface coming soon...</p>
+          </div>
+        </div>
+      `;
+    }
+    
+    function renderShopSettings() {
+      document.getElementById('pageTitle').textContent = 'Shop Settings';
+      const content = document.getElementById('mainContent');
+      content.innerHTML = `
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Shop Settings</h3>
+          </div>
+          <div class="card-body">
+            <p>Shop settings interface coming soon...</p>
+          </div>
+        </div>
+      `;
+    }
+    
+    // Action Functions
+    function addNewOrder() {
+      alert('Add New Order - Feature coming soon!');
+    }
+    
+    function updateInventory() {
+      alert('Update Inventory - Feature coming soon!');
+    }
+    
+    function viewSchedule() {
+      alert('View Schedule - Feature coming soon!');
+    }
+    
+    function generateReport() {
+      alert('Generate Report - Feature coming soon!');
+    }
+    
+    // Real-time Updates Simulation
+    function startRealTimeUpdates() {
+      setInterval(() => {
+        // Update stats randomly
+        const revenueElement = document.querySelector('.stat-value');
+        if (revenueElement && Math.random() > 0.7) {
+          const currentRevenue = parseInt(revenueElement.textContent.replace('$', '').replace(',', ''));
+          const newRevenue = currentRevenue + Math.floor(Math.random() * 100) - 20;
+          revenueElement.textContent = '$' + newRevenue.toLocaleString();
+        }
+      }, 5000);
+    }
+    
+    // Search/Filter Functions
+    function toggleSearch() {
+      const dropdown = document.getElementById('searchDropdown');
+      dropdown.classList.toggle('active');
+      
+      // Close other dropdowns
+      document.getElementById('searchDropdown').classList.add('active');
+      
+      // Focus on search input
+      if (dropdown.classList.contains('active')) {
+        setTimeout(() => {
+          dropdown.querySelector('.search-input').focus();
+        }, 100);
+      }
+    }
+    
+    function performSearch(query) {
+      const resultsContainer = document.getElementById('searchResults');
+      
+      if (query.length < 2) {
+        resultsContainer.innerHTML = `
+          <div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 0.875rem;">
+            Type at least 2 characters to search...
+          </div>
+        `;
+        return;
+      }
+      
+      // Simulate search results
+      const mockResults = [
+        {
+          type: 'order',
+          icon: 'Order',
+          title: `Order matching "${query}"`,
+          desc: 'Customer • Amount • Status',
+          id: 'search-order'
+        },
+        {
+          type: 'customer', 
+          icon: 'User',
+          title: `Customer matching "${query}"`,
+          desc: 'Orders • Total spent • Status',
+          id: 'search-customer'
+        },
+        {
+          type: 'product',
+          icon: 'Product', 
+          title: `Product matching "${query}"`,
+          desc: 'Orders • Price • Rating',
+          id: 'search-product'
+        }
+      ];
+      
+      resultsContainer.innerHTML = mockResults.map(result => `
+        <div class="search-result-item" onclick="goToSearchResult('${result.id}')">
+          <div class="search-result-icon">${result.icon}</div>
+          <div class="search-result-info">
+            <div class="search-result-title">${result.title}</div>
+            <div class="search-result-desc">${result.desc}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function goToOrder(orderId) {
+      console.log('Going to order:', orderId);
+      // Navigate to order management page
+      window.location.href = 'order-management.html';
+    }
+    
+    function goToCustomer(customerId) {
+      console.log('Going to customer:', customerId);
+      // Navigate to customer insights page
+      window.location.href = 'customer-insights.html';
+    }
+    
+    function goToProduct(productId) {
+      console.log('Going to product:', productId);
+      // Navigate to product details or kitchen operations
+      window.location.href = 'kitchen-operations.html';
+    }
+    
+    function goToSearchResult(resultId) {
+      console.log('Going to search result:', resultId);
+      // Handle navigation based on result type
+    }
+    
+    // Notification Functions
+    function toggleNotifications() {
+      alert('Notifications panel coming soon! This would show order updates, alerts, and system notifications.');
+    }
+    
+    function toggleSettings() {
+      alert('Settings panel coming soon! This would include shop preferences, integrations, and account settings.');
+    }
+    
+    // Chat Functions
+    function toggleChat() {
+      const chatPanel = document.getElementById('chatPanel');
+      chatPanel.classList.toggle('active');
+      
+      // Remove notification badge when opened
+      if (chatPanel.classList.contains('active')) {
+        const badge = document.querySelector('.chat-toggle .notification-badge');
+        if (badge) badge.style.display = 'none';
+      }
+    }
+    
+    function sendChatMessage() {
+      const input = document.querySelector('.chat-input');
+      const message = input.value.trim();
+      
+      if (!message) return;
+      
+      const messagesContainer = document.getElementById('chatMessages');
+      
+      // Add user message
+      const userMessage = document.createElement('div');
+      userMessage.className = 'chat-message user';
+      userMessage.innerHTML = `
+        <div class="chat-avatar">User</div>
+        <div class="chat-bubble">${message}</div>
+      `;
+      messagesContainer.appendChild(userMessage);
+      
+      // Clear input
+      input.value = '';
+      
+      // Simulate AI response
+      setTimeout(() => {
+        const aiMessage = document.createElement('div');
+        aiMessage.className = 'chat-message';
+        aiMessage.innerHTML = `
+          <div class="chat-avatar">Cake</div>
+          <div class="chat-bubble">
+            I'm processing your request about "${message}". Let me help you with that...
+            <br><br>
+            This is a demo response. In the full implementation, I would provide specific assistance based on your question.
+          </div>
+        `;
+        messagesContainer.appendChild(aiMessage);
+        
+        // Scroll to bottom
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }, 1000);
+      
+      // Scroll to bottom
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+    
+    function handleChatInput(event) {
+      if (event.key === 'Enter') {
+        sendChatMessage();
+      }
+    }
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+      const searchDropdown = document.getElementById('searchDropdown');
+      const searchBtn = event.target.closest('.icon-btn');
+      
+      if (!searchBtn || !searchBtn.onclick || !searchBtn.onclick.toString().includes('toggleSearch')) {
+        searchDropdown.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

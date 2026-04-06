@@ -1,0 +1,40 @@
+#:schema node_modules/wrangler/config-schema.json
+name = "bizcommerz-agentic-engine"
+main = "src/worker.ts"
+compatibility_date = "2025-03-20"
+compatibility_flags = ["nodejs_compat"]
+
+[observability]
+enabled = true
+
+# Environment variables
+[vars]
+ENGINE_NAME = "BizCommerzAgenticEngine"
+LOG_LEVEL = "info"
+ENABLE_LEARNING = "true"
+
+# Secrets (set via wrangler secret put)
+# - API_TOKEN
+# - WEBHOOK_SECRET
+
+# Durable Objects (for state management)
+[[durable_objects.bindings]]
+name = "ENGINE_STATE"
+class_name = "EngineState"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["EngineState"]
+
+# KV Namespaces - create via wrangler first:
+# wrangler kv:namespace create "QUOTES_KV"
+# wrangler kv:namespace create "ORDERS_KV"
+# [[kv_namespaces]]
+# binding = "QUOTES_KV"
+# id = "<your-kv-id>"
+# preview_id = "<your-preview-id>"
+# 
+# [[kv_namespaces]]
+# binding = "ORDERS_KV"
+# id = "<your-kv-id>"
+# preview_id = "<your-preview-id>"

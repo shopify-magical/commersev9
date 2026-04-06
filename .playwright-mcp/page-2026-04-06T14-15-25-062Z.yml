@@ -1,0 +1,91 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e6]:
+      - link "Mercury" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - img [ref=e8]
+        - heading "Mercury" [level=1] [ref=e11]
+      - navigation [ref=e12]:
+        - link "GENERATE" [ref=e13] [cursor=pointer]:
+          - /url: /
+          - img [ref=e14]
+          - text: GENERATE
+        - link "GALLERY" [ref=e16] [cursor=pointer]:
+          - /url: /gallery
+          - img [ref=e17]
+          - text: GALLERY
+        - link "ABOUT" [ref=e21] [cursor=pointer]:
+          - /url: /about
+          - img [ref=e22]
+          - text: ABOUT
+  - main [ref=e24]:
+    - generic [ref=e25]:
+      - generic [ref=e28]:
+        - img [ref=e29]
+        - heading "Mercury" [level=1] [ref=e32]
+      - main [ref=e33]:
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - generic [ref=e36]:
+              - button "IMAGE" [ref=e37] [cursor=pointer]:
+                - img [ref=e38]
+                - text: IMAGE
+              - button "VIDEO" [ref=e42] [cursor=pointer]:
+                - img [ref=e43]
+                - text: VIDEO
+            - generic [ref=e45]:
+              - button "✦ GENERATE" [ref=e46] [cursor=pointer]
+              - button "EDIT" [ref=e47] [cursor=pointer]:
+                - img [ref=e48]
+                - text: EDIT
+              - button "WEBCAM" [ref=e51] [cursor=pointer]:
+                - img [ref=e52]
+                - text: WEBCAM
+            - generic [ref=e55]:
+              - button "FLUX" [ref=e56] [cursor=pointer]
+              - button "SDXL" [ref=e57] [cursor=pointer]
+            - generic [ref=e58]:
+              - button "1:1" [ref=e59] [cursor=pointer]
+              - button "9:16" [ref=e60] [cursor=pointer]
+              - button "16:9" [ref=e61] [cursor=pointer]
+            - generic [ref=e62]:
+              - textbox "Describe your chrome vision..." [ref=e63]: Traditional Chinese mooncake golden brown lotus seed paste food photography white background
+              - generic [ref=e64]: Cmd+Enter
+            - button "✦ ROLL OPTIMIZED PROMPT" [ref=e65] [cursor=pointer]
+            - button "FORGE CHROMIUM" [ref=e67] [cursor=pointer]:
+              - img [ref=e128]
+              - text: FORGE CHROMIUM
+            - generic [ref=e70]:
+              - button "CLEAR" [ref=e71] [cursor=pointer]
+              - button "RETRY" [ref=e72] [cursor=pointer]:
+                - img [ref=e73]
+                - text: RETRY
+          - generic [ref=e78]:
+            - generic [ref=e80]:
+              - generic [ref=e81]:
+                - generic [ref=e83]: ◈
+                - generic [ref=e84]: Chrome Preview
+              - generic [ref=e98]:
+                - button "OCR - Extract Text" [ref=e99] [cursor=pointer]:
+                  - img [ref=e100]
+                - button "FINAL MAGICK SKILL - Ultimate Enhancement" [ref=e105] [cursor=pointer]:
+                  - img [ref=e106]
+                - button [ref=e111] [cursor=pointer]:
+                  - img [ref=e112]
+            - generic [ref=e115]:
+              - generic [ref=e116]:
+                - paragraph [ref=e117]:
+                  - generic [ref=e118]: ◈
+                  - text: Recent
+                - button "CLEAR ALL" [ref=e119] [cursor=pointer]
+              - generic [ref=e120]:
+                - button [ref=e130] [cursor=pointer]
+                - button [ref=e121] [cursor=pointer]
+      - generic [ref=e93]:
+        - paragraph [ref=e94]: ◈ Mercury ◈
+        - paragraph [ref=e95]: Chrome Excellence
+      - region "Notifications alt+T":
+        - list:
+          - listitem [ref=e131]:
+            - img [ref=e133]
+            - generic [ref=e136]: Image generated!

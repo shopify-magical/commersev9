@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found | BookingGo</title>
+  <link rel="stylesheet" href="/css/shared.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: linear-gradient(135deg, #2A6B52 0%, #1F4A3A 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .error-container {
+      text-align: center;
+      max-width: 600px;
+      background: white;
+      border-radius: 24px;
+      padding: 60px 40px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    
+    .error-code {
+      font-size: 8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #2A6B52 0%, #C4A647 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+      margin-bottom: 16px;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .error-title {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--brown, #3D2E22);
+      margin-bottom: 16px;
+    }
+    
+    .error-message {
+      font-size: 1rem;
+      color: var(--gray-500, #9A7D6A);
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+    
+    .error-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+    }
+    
+    .btn-primary {
+      background: var(--primary, #2A6B52);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--primary-dark, #1F4A3A);
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      background: var(--gray-100, #F5EDE4);
+      color: var(--brown, #3D2E22);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--gray-200, #E8DCD0);
+    }
+    
+    .error-illustration {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 32px;
+      position: relative;
+    }
+    
+    .error-illustration svg {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .suggested-links {
+      margin-top: 40px;
+      padding-top: 32px;
+      border-top: 1px solid var(--gray-200, #E8DCD0);
+    }
+    
+    .suggested-links h3 {
+      font-size: 0.9rem;
+      color: var(--gray-500, #9A7D6A);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .suggested-links ul {
+      list-style: none;
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .suggested-links a {
+      color: var(--primary, #2A6B52);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+    
+    .suggested-links a:hover {
+      background: var(--primary-light, #E8F5F0);
+    }
+    
+    .search-box {
+      margin: 24px 0;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .search-box input {
+      width: 100%;
+      padding: 14px 20px;
+      border: 2px solid var(--gray-200, #E8DCD0);
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    
+    .search-box input:focus {
+      border-color: var(--primary, #2A6B52);
+    }
+    
+    @media (max-width: 600px) {
+      .error-container {
+        padding: 40px 24px;
+      }
+      
+      .error-code {
+        font-size: 6rem;
+      }
+      
+      .error-title {
+        font-size: 1.5rem;
+      }
+      
+      .error-actions {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="error-container">
+    <div class="error-illustration">
+      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="80" fill="#E8F5F0"/>
+        <path d="M70 80C70 74.4772 74.4772 70 80 70H120C125.523 70 130 74.4772 130 80V140H70V80Z" fill="#2A6B52"/>
+        <rect x="85" y="95" width="30" height="30" rx="4" fill="#C4A647"/>
+        <path d="M100 125V140" stroke="#3D2E22" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="100" cy="55" r="15" fill="#3D2E22"/>
+        <path d="M100 40C100 40 95 45 95 55C95 65 100 70 100 70" stroke="#2A6B52" stroke-width="3" stroke-linecap="round"/>
+        <path d="M60 140L50 160" stroke="#C4A647" stroke-width="4" stroke-linecap="round"/>
+        <path d="M140 140L150 160" stroke="#C4A647" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="50" cy="50" r="8" fill="#C4A647" opacity="0.5"/>
+        <circle cx="150" cy="50" r="8" fill="#C4A647" opacity="0.5"/>
+        <circle cx="50" cy="150" r="6" fill="#2A6B52" opacity="0.3"/>
+        <circle cx="150" cy="150" r="6" fill="#2A6B52" opacity="0.3"/>
+      </svg>
+    </div>
+    
+    <h1 class="error-code">404</h1>
+    <h2 class="error-title">Page Not Found</h2>
+    <p class="error-message">
+      Oops! The page you're looking for seems to have wandered off. 
+      It might have been moved, deleted, or never existed in the first place.
+    </p>
+    
+    <div class="search-box">
+      <input type="text" placeholder="Search for what you need..." id="searchInput">
+    </div>
+    
+    <div class="error-actions">
+      <a href="/" class="btn btn-primary" data-route>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        Go Home
+      </a>
+      <a href="/all-pages.html" class="btn btn-secondary" data-route>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="8" y1="6" x2="21" y2="6"/>
+          <line x1="8" y1="12" x2="21" y2="12"/>
+          <line x1="8" y1="18" x2="21" y2="18"/>
+          <line x1="3" y1="6" x2="3.01" y2="6"/>
+          <line x1="3" y1="12" x2="3.01" y2="12"/>
+          <line x1="3" y1="18" x2="3.01" y2="18"/>
+        </svg>
+        View All Pages
+      </a>
+    </div>
+    
+    <div class="suggested-links">
+      <h3>Popular Destinations</h3>
+      <ul>
+        <li><a href="/shop.html" data-route>Shop</a></li>
+        <li><a href="/dashboard.html" data-route>Dashboard</a></li>
+        <li><a href="/booking-dashboard.html" data-route>Bookings</a></li>
+        <li><a href="/contact.html" data-route>Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  
+  <script src="/js/shared.js"></script>
+  <script src="/js/router.js"></script>
+  <script src="/js/routes.js"></script>
+  
+  <script>
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        const query = e.target.value;
+        if (query) {
+          showToast(`Searching for "${query}"...`);
+          // In real app, redirect to search results
+          setTimeout(() => {
+            window.location.href = `/shop.html?search=${encodeURIComponent(query)}`;
+          }, 500);
+        }
+      }
+    });
+    
+    // Track 404 errors for analytics
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'page_not_found', {
+        page_path: window.location.pathname,
+        page_location: window.location.href,
+        referrer: document.referrer
+      });
+    }
+  </script>
+</body>
+</html>

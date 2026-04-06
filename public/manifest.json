@@ -1,0 +1,42 @@
+{
+  "name": "Sweet Layers — Artisan Cake Shop",
+  "short_name": "Sweet Layers",
+  "description": "Premium artisan Chinese pastries, mooncakes, and cakes. Order online for delivery.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FDF9F5",
+  "theme_color": "#2A6B52",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/images/mooncake-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/mooncake-generated.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/mooncake-generated.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["food", "shopping"],
+  "screenshots": [
+    {
+      "src": "/images/hero-pastry.webp",
+      "sizes": "1200x675",
+      "type": "image/webp",
+      "form_factor": "wide"
+    }
+  ]
+}

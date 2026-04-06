@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สินค้าทั้งหมด - Sweet Layers</title>
+  <meta name="description" content="ขนมไข่ ขนมเปี๊ยะ มูนเค้ก สดใหม่ทุกวัน สั่งง่าย ส่งไว">
+  
+  <!-- Preconnect hints for faster external resource loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://bizcommerz-agentic-engine.aekbuffalo.workers.dev">
+  
+  <!-- Preload critical fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Critical CSS inline for faster first paint -->
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #2A6B52; --primary-dark: #1F4A3A; --primary-light: #E8F5F0;
+      --accent: #C4A647; --accent-dark: #B3941A;
+      --cream: #FDF9F5; --brown: #3D2E22; --brown-light: #5A4535;
+      --gray-100: #F5EDE4; --gray-200: #E8DCD0; --gray-300: #D4C4B5;
+      --gray-400: #B8A08A; --gray-500: #9A7D6A; --white: #ffffff;
+      --shadow-sm: 0 1px 3px rgba(13,42,34,0.06);
+      --shadow-md: 0 4px 16px rgba(13,42,34,0.08);
+      --radius-sm: 8px; --radius-md: 12px;
+    }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--cream);
+      color: var(--brown);
+      line-height: 1.5;
+    }
+    
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      z-index: 100;
+      padding: 12px 0;
+    }
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+    }
+    .nav-links a {
+      color: var(--brown);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .cart-btn {
+      position: relative;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+    .cart-badge {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--accent);
+      color: var(--white);
+      font-size: 0.65rem;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Hero Section */
+    .shop-hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--white);
+      padding: 40px 16px;
+      text-align: center;
+    }
+    .shop-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+    .shop-hero p { opacity: 0.9; }
+
+    /* Shop Container */
+    .shop-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 16px;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 24px;
+    }
+
+    /* Sidebar Filters */
+    .filters {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      height: fit-content;
+      position: sticky;
+      top: 80px;
+    }
+    .filter-section {
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .filter-section:last-child { border-bottom: none; }
+    .filter-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .filter-options label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 0;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .filter-options input {
+      accent-color: var(--primary);
+    }
+
+    /* Product Grid */
+    .products-section {
+      width: 100%;
+    }
+    .products-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .products-count {
+      font-size: 0.9rem;
+      color: var(--gray-500);
+    }
+    .sort-select {
+      padding: 8px 12px;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      background: var(--white);
+    }
+    
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    
+    /* Skeleton Loading */
+    .skeleton-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .skeleton-image {
+      aspect-ratio: 1;
+      background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    .skeleton-content {
+      padding: 12px;
+    }
+    .skeleton-title {
+      height: 16px;
+      background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    .skeleton-meta {
+      height: 12px;
+      width: 60%;
+      background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+    .skeleton-price {
+      height: 20px;
+      width: 40%;
+      background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 4px;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    
+    .product-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+      will-change: transform;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    /* Product Image Zoom */
+    .product-image {
+      aspect-ratio: 1;
+      background: var(--gray-100);
+      position: relative;
+      overflow: hidden;
+      cursor: zoom-in;
+    }
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.4s ease;
+    }
+    .product-image img.loaded {
+      opacity: 1;
+    }
+    .product-image:hover img.loaded {
+      transform: scale(1.15);
+    }
+    .product-image.zoomed {
+      cursor: zoom-out;
+    }
+    .product-image.zoomed img {
+      transform: scale(2);
+      transition: transform 0.3s ease;
+    }
+    .product-image-placeholder {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    .product-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: var(--accent);
+      color: var(--white);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .product-info {
+      padding: 12px;
+    }
+    .product-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .product-meta {
+      font-size: 0.75rem;
+      color: var(--gray-500);
+      margin-bottom: 8px;
+    }
+    .product-price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .product-price {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .add-cart-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .add-cart-btn:hover { background: var(--primary-dark); }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--brown);
+      color: var(--white);
+      padding: 12px 24px;
+      border-radius: 100px;
+      font-size: 0.875rem;
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 1000;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .shop-container {
+        grid-template-columns: 1fr;
+      }
+      .filters {
+        display: none;
+      }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <a href="/" class="logo">
+        <span>CAKE</span>
+        <span>Sweet Layers</span>
+      </a>
+      <nav class="nav-links">
+        <a href="/">หน้าแรก</a>
+        <a href="/shop.html">สินค้า</a>
+        <a href="/blog.html">บล็อก</a>
+        <a href="/about.html">เกี่ยวกับ</a>
+        <a href="/contact.html">ติดต่อ</a>
+      </nav>
+      <div class="header-actions">
+        <button class="cart-btn" onclick="location.href='/cart.html'">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span class="cart-badge" id="cartCount">0</span>
+        </button>
+        <a href="/login.html" class="btn-login">เข้าสู่ระบบ</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="shop-hero">
+    <h1>สินค้าทั้งหมด</h1>
+    <p>ขนมสดใหม่ทุกวัน พร้อมส่งถึงบ้านคุณ</p>
+  </section>
+
+  <!-- Shop Content -->
+  <div class="shop-container">
+    <!-- Filters -->
+    <aside class="filters">
+      <div class="filter-section">
+        <div class="filter-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/>
+          </svg>
+          หมวดหมู่
+        </div>
+        <div class="filter-options">
+          <label><input type="checkbox" value="mooncakes" onchange="filterProducts()"> Mooncakes</label>
+          <label><input type="checkbox" value="cakes" onchange="filterProducts()"> Cakes</label>
+          <label><input type="checkbox" value="pastries" onchange="filterProducts()"> Pastries</label>
+          <label><input type="checkbox" value="egg-yolk" onchange="filterProducts()"> Egg Yolk</label>
+          <label><input type="checkbox" value="bundles" onchange="filterProducts()"> Gift Sets</label>
+        </div>
+      </div>
+      
+      <div class="filter-section">
+        <div class="filter-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2a10 10 0 1 0 10 10H12V2z"/>
+          </svg>
+          ราคา
+        </div>
+        <div class="filter-options">
+          <label><input type="radio" name="price" value="0-200" onchange="filterProducts()"> 0 - 200 THB</label>
+          <label><input type="radio" name="price" value="200-500" onchange="filterProducts()"> 200 - 500 THB</label>
+          <label><input type="radio" name="price" value="500+" onchange="filterProducts()"> 500+ THB</label>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Products -->
+    <section class="products-section">
+      <div class="products-header">
+        <span class="products-count">แสดง <strong id="productCount">0</strong> สินค้า</span>
+        <select class="sort-select" onchange="sortProducts(this.value)">
+          <option value="popular">Popular</option>
+          <option value="newest">Newest</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="price-high">Price: High to Low</option>
+        </select>
+      </div>
+      
+      <div class="products-grid" id="productsGrid">
+        <!-- Products will be loaded by JS -->
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // Use requestIdleCallback for non-critical initialization
+    const rIC = window.requestIdleCallback || (cb => setTimeout(cb, 1));
+    
+    const API_BASE = window.location.hostname.includes('pages.dev')
+      ? 'https://bizcommerz-agentic-engine.aekbuffalo.workers.dev'
+      : window.location.origin;
+
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    let products = [];
+    let imageObserver;
+
+    // Product data - using clean stock images
+    const productData = [
+      { id: 1, name: 'Premium White Lotus Mooncake', category: 'mooncakes', price: 89, image: 'images/mooncake-traditional.jpg', badge: 'Best Seller', meta: '4 pcs/box' },
+      { id: 2, name: 'Double Yolk Red Bean Mooncake', category: 'mooncakes', price: 129, image: 'images/mooncake-traditional.jpg', badge: 'Premium', meta: '4 pcs/box' },
+      { id: 3, name: 'Red Bean Pastry (Nankatang)', category: 'pastries', price: 45, image: 'images/red-bean.jpg', badge: '', meta: '2 pcs' },
+      { id: 4, name: 'Taro Coconut Pastry', category: 'pastries', price: 55, image: 'images/taro-coconut.jpg', badge: 'Popular', meta: '2 pcs' },
+      { id: 5, name: 'Salted Egg Yolk Fritter', category: 'egg-yolk', price: 35, image: 'images/salted-egg.jpg', badge: '', meta: '1 pc' },
+      { id: 6, name: 'Pandan Custard Cake', category: 'cakes', price: 299, image: 'images/pandan-custard.jpg', badge: '', meta: '1 lb' },
+      { id: 7, name: 'Heritage Gift Box Set', category: 'bundles', price: 499, image: 'images/heritage-bakery.jpg', badge: '20% Off', meta: '8 pcs Bundle' },
+      { id: 8, name: 'Mini Assorted Pastry Set', category: 'pastries', price: 199, image: 'images/pastry-arrangement.jpg', badge: '', meta: '6 pcs/box' },
+      { id: 9, name: 'Black Sesame Mooncake', category: 'mooncakes', price: 99, image: 'images/black-sesame.jpg', badge: 'New', meta: '4 pcs/box' },
+      { id: 10, name: 'Mung Bean Sweet Soup', category: 'desserts', price: 65, image: 'images/mung-bean.jpg', badge: '', meta: '1 bowl' },
+      { id: 11, name: 'Salted Egg Pastry', category: 'egg-yolk', price: 75, image: 'images/salted-egg.jpg', badge: 'Hot', meta: '2 pcs' },
+      { id: 12, name: 'Taro Coconut Roll', category: 'pastries', price: 85, image: 'images/taro-coconut.jpg', badge: '', meta: '2 pcs' },
+      { id: 13, name: 'Red Bean Sweet Soup', category: 'desserts', price: 55, image: 'images/red-bean.jpg', badge: '', meta: '1 bowl' },
+      { id: 14, name: 'Pandan Layer Cake', category: 'cakes', price: 349, image: 'images/pandan-custard.jpg', badge: 'New', meta: '1.5 lb' },
+    ];
+
+    // Create Intersection Observer for lazy loading images
+    function createImageObserver() {
+      if ('IntersectionObserver' in window) {
+        return new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              const src = img.dataset.src;
+              if (src) {
+                img.src = src;
+                img.removeAttribute('data-src');
+                img.onload = () => img.classList.add('loaded');
+              }
+              imageObserver.unobserve(img);
+            }
+          });
+        }, {
+          rootMargin: '50px 0px',
+          threshold: 0.01
+        });
+      }
+      return null;
+    }
+
+    // Render skeleton loading cards
+    function renderSkeletons(count = 8) {
+      const grid = document.getElementById('productsGrid');
+      grid.innerHTML = Array(count).fill(0).map(() => `
+        <div class="skeleton-card">
+          <div class="skeleton-image"></div>
+          <div class="skeleton-content">
+            <div class="skeleton-title"></div>
+            <div class="skeleton-meta"></div>
+            <div class="skeleton-price"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Render products with optimized lazy loading
+    function renderProducts(productsToRender) {
+      const grid = document.getElementById('productsGrid');
+      document.getElementById('productCount').textContent = productsToRender.length;
+      
+      if (!productsToRender.length) {
+        grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--gray-500);">No products found</p>';
+        return;
+      }
+      
+      grid.innerHTML = productsToRender.map(p => `
+        <article class="product-card" onclick="location.href='/product.html?id=${p.id}'">
+          <div class="product-image" onmouseenter="startZoom(this)" onmouseleave="endZoom(this)" onmousemove="moveZoom(event, this)">
+            <div class="product-image-placeholder"></div>
+            <img data-src="${p.image}" alt="${p.name}" loading="lazy" decoding="async" onload="this.classList.add('loaded')">
+            ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">${p.name}</h3>
+            <p class="product-meta">${p.meta}</p>
+            <div class="product-price-row">
+              <span class="product-price">฿${p.price}</span>
+              <button class="add-cart-btn" onclick="event.stopPropagation(); addToCart(${p.id})" aria-label="เพิ่ม ${p.name} ลงตะกร้า">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+
+      // Observe all images for lazy loading
+      if (imageObserver) {
+        grid.querySelectorAll('img[data-src]').forEach(img => imageObserver.observe(img));
+      } else {
+        // Fallback: load all images immediately
+        grid.querySelectorAll('img[data-src]').forEach(img => {
+          img.src = img.dataset.src;
+          img.onload = () => img.classList.add('loaded');
+        });
+      }
+    }
+
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+      
+      const existing = cart.find(item => item.id === productId);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ id: product.id, name: product.name, price: product.price, qty: 1 });
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartCount();
+      showToast(`เพิ่ม ${product.name} ลงตะกร้า`);
+    }
+
+    function updateCartCount() {
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById('cartCount').textContent = count;
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+
+    function filterProducts() {
+      const checkedCategories = Array.from(document.querySelectorAll('.filter-options input[type="checkbox"]:checked')).map(cb => cb.value);
+      const priceRange = document.querySelector('input[name="price"]:checked')?.value;
+      
+      let filtered = [...products];
+      
+      if (checkedCategories.length > 0) {
+        filtered = filtered.filter(p => checkedCategories.includes(p.category));
+      }
+      
+      if (priceRange) {
+        if (priceRange === '0-200') filtered = filtered.filter(p => p.price <= 200);
+        else if (priceRange === '200-500') filtered = filtered.filter(p => p.price > 200 && p.price <= 500);
+        else if (priceRange === '500+') filtered = filtered.filter(p => p.price > 500);
+      }
+      
+      // Use requestAnimationFrame for smooth UI updates
+      requestAnimationFrame(() => renderProducts(filtered));
+    }
+
+    function sortProducts(sortType) {
+      let sorted = [...products];
+      switch(sortType) {
+        case 'price-low': sorted.sort((a, b) => a.price - b.price); break;
+        case 'price-high': sorted.sort((a, b) => b.price - a.price); break;
+        case 'newest': sorted.reverse(); break;
+        default: // popular - default order
+      }
+      requestAnimationFrame(() => renderProducts(sorted));
+    }
+
+    // Product Image Zoom Functions
+    function startZoom(container) {
+      const img = container.querySelector('img');
+      if (!img.classList.contains('loaded')) return;
+      container.classList.add('zoomed');
+    }
+
+    function endZoom(container) {
+      container.classList.remove('zoomed');
+      const img = container.querySelector('img');
+      img.style.transformOrigin = 'center center';
+    }
+
+    function moveZoom(e, container) {
+      if (!container.classList.contains('zoomed')) return;
+      const img = container.querySelector('img');
+      const rect = container.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      img.style.transformOrigin = `${x}% ${y}%`;
+    }
+
+    // Initialize
+    rIC(() => {
+      imageObserver = createImageObserver();
+      products = productData;
+      renderProducts(products);
+      updateCartCount();
+    });
+  </script>
+</body>
+</html>

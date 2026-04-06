@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sweet Layers - Kitchen Operations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #c4a647;
+      --primary-dark: #a68c3a;
+      --secondary: #2a6b52;
+      --accent: #d4a574;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bg: #fefdf9;
+      --card-bg: #ffffff;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'Inter', -apple-system, sans-serif; 
+      background: var(--bg); 
+      color: var(--text); 
+    }
+    
+    .kitchen-layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .kitchen-sidebar {
+      background: var(--card-bg);
+      border-right: 1px solid var(--border);
+      padding: 20px;
+    }
+    
+    .kitchen-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+    
+    .kitchen-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+    }
+    
+    .kitchen-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .kitchen-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+    
+    .kitchen-nav-item:hover {
+      background: var(--bg);
+      color: var(--primary);
+    }
+    
+    .kitchen-nav-item.active {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+    
+    /* Main Content */
+    .kitchen-main {
+      padding: 20px;
+    }
+    
+    .kitchen-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .kitchen-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    
+    .kitchen-time {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    /* Production Board */
+    .production-board {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .station-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    
+    .station-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    
+    .station-title {
+      font-weight: 600;
+      font-size: 1.125rem;
+    }
+    
+    .station-status {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .station-status.active {
+      background: var(--success);
+      color: white;
+    }
+    
+    .station-status.idle {
+      background: var(--warning);
+      color: white;
+    }
+    
+    .station-status.offline {
+      background: var(--danger);
+      color: white;
+    }
+    
+    /* Task List */
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .task-item {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      border-left: 4px solid var(--primary);
+      transition: all 0.2s;
+    }
+    
+    .task-item:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow);
+    }
+    
+    .task-item.urgent {
+      border-left-color: var(--danger);
+      background: rgba(239, 68, 68, 0.05);
+    }
+    
+    .task-item.in-progress {
+      border-left-color: var(--warning);
+      background: rgba(245, 158, 11, 0.05);
+    }
+    
+    .task-item.completed {
+      border-left-color: var(--success);
+      background: rgba(34, 197, 94, 0.05);
+      opacity: 0.7;
+    }
+    
+    .task-checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--primary);
+      border-radius: 4px;
+      margin-right: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .task-checkbox.checked {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .task-info {
+      flex: 1;
+    }
+    
+    .task-name {
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+    
+    .task-details {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+    
+    .task-time {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    
+    /* Recipe Cards */
+    .recipe-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .recipe-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+    
+    .recipe-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+    
+    .recipe-image {
+      height: 120px;
+      background: linear-gradient(135deg, var(--primary-light), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+    }
+    
+    .recipe-content {
+      padding: 16px;
+    }
+    
+    .recipe-name {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .recipe-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    
+    .recipe-progress {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .progress-bar {
+      flex: 1;
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      transition: width 0.3s ease;
+    }
+    
+    .progress-text {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    /* Quality Control */
+    .quality-checklist {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    
+    .quality-title {
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .checklist-items {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .checklist-checkbox {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--primary);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .checklist-text {
+      flex: 1;
+      font-size: 0.875rem;
+    }
+    
+    /* Quick Stats */
+    .kitchen-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .kitchen-stat {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+    
+    .kitchen-stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+    
+    .kitchen-stat-label {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+    
+    /* Buttons */
+    .btn {
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      border: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+    
+    .btn-secondary {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--border);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .kitchen-layout {
+        grid-template-columns: 1fr;
+      }
+      
+      .kitchen-sidebar {
+        display: none;
+      }
+      
+      .production-board,
+      .recipe-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="kitchen-layout">
+    <!-- Sidebar -->
+    <aside class="kitchen-sidebar">
+      <div class="kitchen-logo">
+        <div class="kitchen-logo-icon">Kitchen</div>
+        <div>
+          <div style="font-weight: 600;">Kitchen Ops</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);">Sweet Layers</div>
+        </div>
+      </div>
+      
+      <nav class="kitchen-nav">
+        <a href="cake-shop-owner.html" class="kitchen-nav-item">
+          <span>Dashboard</span> Dashboard
+        </a>
+        <a href="#" class="kitchen-nav-item active">
+          <span>Kitchen</span> Kitchen Operations
+        </a>
+        <a href="#" class="kitchen-nav-item">
+          <span>Inventory</span> Inventory
+        </a>
+        <a href="#" class="kitchen-nav-item">
+          <span>Staff</span> Staff
+        </a>
+        <a href="#" class="kitchen-nav-item">
+          <span>Recipes</span> Recipes
+        </a>
+      </nav>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="kitchen-main">
+      <!-- Header -->
+      <header class="kitchen-header">
+        <div>
+          <h1 class="kitchen-title">Kitchen Operations</h1>
+          <p style="color: var(--text-muted);">Real-time production management</p>
+        </div>
+        <div class="kitchen-time" id="currentTime">--:--</div>
+      </header>
+      
+      <!-- Quick Stats -->
+      <div class="kitchen-stats">
+        <div class="kitchen-stat">
+          <div class="kitchen-stat-value">8</div>
+          <div class="kitchen-stat-label">Active Orders</div>
+        </div>
+        <div class="kitchen-stat">
+          <div class="kitchen-stat-value">3</div>
+          <div class="kitchen-stat-label">In Baking</div>
+        </div>
+        <div class="kitchen-stat">
+          <div class="kitchen-stat-value">2</div>
+          <div class="kitchen-stat-label">Ready for Pickup</div>
+        </div>
+        <div class="kitchen-stat">
+          <div class="kitchen-stat-value">45m</div>
+          <div class="kitchen-stat-label">Avg. Bake Time</div>
+        </div>
+      </div>
+      
+      <!-- Production Board -->
+      <div class="production-board">
+        <!-- Baking Station -->
+        <div class="station-card">
+          <div class="station-header">
+            <div class="station-title">Baking Station</div>
+            <div class="station-status active">Active</div>
+          </div>
+          <div class="task-list">
+            <div class="task-item urgent">
+              <div class="task-checkbox" onclick="toggleTask(this)"></div>
+              <div class="task-info">
+                <div class="task-name">Heritage Mooncake Batch</div>
+                <div class="task-details">12 pieces - Custom order</div>
+              </div>
+              <div class="task-time">2:15 PM</div>
+            </div>
+            <div class="task-item in-progress">
+              <div class="task-checkbox" onclick="toggleTask(this)"></div>
+              <div class="task-info">
+                <div class="task-name">Thai Tea Cakes</div>
+                <div class="task-details">6 pieces - Regular order</div>
+              </div>
+              <div class="task-time">3:30 PM</div>
+            </div>
+            <div class="task-item">
+              <div class="task-checkbox" onclick="toggleTask(this)"></div>
+              <div class="task-info">
+                <div class="task-name">Chocolate Truffle</div>
+                <div class="task-details">4 pieces - Wedding order</div>
+              </div>
+              <div class="task-time">4:45 PM</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Decorating Station -->
+        <div class="station-card">
+          <div class="station-header">
+            <div class="station-title">Decorating Station</div>
+            <div class="station-status active">Active</div>
+          </div>
+          <div class="task-list">
+            <div class="task-item in-progress">
+              <div class="task-checkbox" onclick="toggleTask(this)"></div>
+              <div class="task-info">
+                <div class="task-name">Wedding Cake Finishing</div>
+                <div class="task-details">3-tier - Floral design</div>
+              </div>
+              <div class="task-time">Now</div>
+            </div>
+            <div class="task-item">
+              <div class="task-checkbox" onclick="toggleTask(this)"></div>
+              <div class="task-info">
+                <div class="task-name">Birthday Cake Decoration</div>
+                <div class="task-details">Custom message - "Happy 30th"</div>
+              </div>
+              <div class="task-time">3:00 PM</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Packaging Station -->
+        <div class="station-card">
+          <div class="station-header">
+            <div class="station-title">Packaging Station</div>
+            <div class="station-status idle">Idle</div>
+          </div>
+          <div class="task-list">
+            <div class="task-item completed">
+              <div class="task-checkbox checked" onclick="toggleTask(this)">✓</div>
+              <div class="task-info">
+                <div class="task-name">Pandan Custard Box</div>
+                <div class="task-details">6 pieces - Ready for pickup</div>
+              </div>
+              <div class="task-time">Completed</div>
+            </div>
+            <div class="task-item">
+              <div class="task-checkbox" onclick="toggleTask(this)"></div>
+              <div class="task-info">
+                <div class="task-name">Gift Box Assembly</div>
+                <div class="task-details">Mixed assortment - 8 pieces</div>
+              </div>
+              <div class="task-time">Waiting</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Recipe Cards -->
+      <h2 style="margin-bottom: 20px;">Today's Recipes</h2>
+      <div class="recipe-grid">
+        <div class="recipe-card">
+          <div class="recipe-image">Mooncake</div>
+          <div class="recipe-content">
+            <div class="recipe-name">Heritage Mooncake</div>
+            <div class="recipe-meta">
+              <span>Batch: 12 pcs</span>
+              <span>Time: 45m</span>
+            </div>
+            <div class="recipe-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 75%;"></div>
+              </div>
+              <span class="progress-text">75%</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="recipe-card">
+          <div class="recipe-image">Tea Cake</div>
+          <div class="recipe-content">
+            <div class="recipe-name">Thai Tea Cake</div>
+            <div class="recipe-meta">
+              <span>Batch: 6 pcs</span>
+              <span>Time: 30m</span>
+            </div>
+            <div class="recipe-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 40%;"></div>
+              </div>
+              <span class="progress-text">40%</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="recipe-card">
+          <div class="recipe-image">Chocolate</div>
+          <div class="recipe-content">
+            <div class="recipe-name">Chocolate Truffle</div>
+            <div class="recipe-meta">
+              <span>Batch: 4 pcs</span>
+              <span>Time: 60m</span>
+            </div>
+            <div class="recipe-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 20%;"></div>
+              </div>
+              <span class="progress-text">20%</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="recipe-card">
+          <div class="recipe-image">Pandan</div>
+          <div class="recipe-content">
+            <div class="recipe-name">Pandan Custard</div>
+            <div class="recipe-meta">
+              <span>Batch: 8 pcs</span>
+              <span>Time: 25m</span>
+            </div>
+            <div class="recipe-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 100%;"></div>
+              </div>
+              <span class="progress-text">100%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Quality Control -->
+      <div class="quality-checklist">
+        <div class="quality-title">
+          <span>QC</span> Quality Control Checklist
+        </div>
+        <div class="checklist-items">
+          <div class="checklist-item">
+            <div class="checklist-checkbox" onclick="toggleChecklist(this)"></div>
+            <div class="checklist-text">All ingredients at room temperature</div>
+          </div>
+          <div class="checklist-item">
+            <div class="checklist-checkbox" onclick="toggleChecklist(this)"></div>
+            <div class="checklist-text">Oven preheated to correct temperature</div>
+          </div>
+          <div class="checklist-item">
+            <div class="checklist-checkbox" onclick="toggleChecklist(this)"></div>
+            <div class="checklist-text">Food safety protocols followed</div>
+          </div>
+          <div class="checklist-item">
+            <div class="checklist-checkbox" onclick="toggleChecklist(this)"></div>
+            <div class="checklist-text">Quality standards met for all products</div>
+          </div>
+          <div class="checklist-item">
+            <div class="checklist-checkbox" onclick="toggleChecklist(this)"></div>
+            <div class="checklist-text">Packaging materials inspected</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Action Buttons -->
+      <div style="display: flex; gap: 12px;">
+        <button class="btn btn-primary" onclick="startNewBatch()">
+          <span>Batch</span> Start New Batch
+        </button>
+        <button class="btn btn-secondary" onclick="viewRecipes()">
+          <span>Recipes</span> View Recipes
+        </button>
+        <button class="btn btn-secondary" onclick="qualityReport()">
+          <span>Report</span> Quality Report
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Update current time
+    function updateTime() {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('en-US', { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        hour12: false 
+      });
+      document.getElementById('currentTime').textContent = timeString;
+    }
+    
+    updateTime();
+    setInterval(updateTime, 1000);
+    
+    // Toggle task completion
+    function toggleTask(checkbox) {
+      checkbox.classList.toggle('checked');
+      const taskItem = checkbox.closest('.task-item');
+      
+      if (checkbox.classList.contains('checked')) {
+        checkbox.innerHTML = '✓';
+        taskItem.classList.remove('urgent', 'in-progress');
+        taskItem.classList.add('completed');
+      } else {
+        checkbox.innerHTML = '';
+        taskItem.classList.remove('completed');
+      }
+    }
+    
+    // Toggle checklist item
+    function toggleChecklist(checkbox) {
+      checkbox.classList.toggle('checked');
+      if (checkbox.classList.contains('checked')) {
+        checkbox.innerHTML = '✓';
+        checkbox.style.background = 'var(--primary)';
+        checkbox.style.color = 'white';
+      } else {
+        checkbox.innerHTML = '';
+        checkbox.style.background = 'transparent';
+        checkbox.style.color = 'transparent';
+      }
+    }
+    
+    // Action functions
+    function startNewBatch() {
+      alert('Starting new batch production...');
+    }
+    
+    function viewRecipes() {
+      alert('Opening recipe book...');
+    }
+    
+    function qualityReport() {
+      alert('Generating quality control report...');
+    }
+    
+    // Simulate real-time updates
+    function simulateProduction() {
+      // Update progress bars randomly
+      const progressBars = document.querySelectorAll('.progress-fill');
+      progressBars.forEach(bar => {
+        if (Math.random() > 0.8) {
+          const currentWidth = parseInt(bar.style.width);
+          if (currentWidth < 100) {
+            const newWidth = Math.min(100, currentWidth + 5);
+            bar.style.width = newWidth + '%';
+            bar.closest('.recipe-content').querySelector('.progress-text').textContent = newWidth + '%';
+          }
+        }
+      });
+    }
+    
+    // Update every 5 seconds
+    setInterval(simulateProduction, 5000);
+  </script>
+</body>
+</html>

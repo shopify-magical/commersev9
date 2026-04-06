@@ -70,6 +70,34 @@ export default {
       });
     }
 
+    // Check route first before initializing engine
+    const isApiRoute = url.pathname.startsWith('/api') || 
+      url.pathname.startsWith('/health') || 
+      url.pathname.startsWith('/workers') ||
+      url.pathname.startsWith('/triggers') ||
+      url.pathname.startsWith('/export') ||
+      url.pathname.startsWith('/chat') ||
+      url.pathname.startsWith('/agent') ||
+      url.pathname.startsWith('/payment') ||
+      url.pathname.startsWith('/auth') ||
+      url.pathname.startsWith('/stats') ||
+      url.pathname.startsWith('/onboard') ||
+      url.pathname.startsWith('/ws');
+
+    // Root HTML page - let Workers Sites try to serve, or return simple message
+    if (url.pathname === '/' || url.pathname === '/index.html') {
+      return new Response('Redirecting to static site...', { 
+        status: 302,
+        headers: { 'Location': '/shop.html' }
+      });
+    }
+
+    // For other non-API routes, try to serve static files
+    if (!isApiRoute) {
+      return new Response('Not Found', { status: 404 });
+    }
+
+    // For API routes, ensure engine is initialized
     const eng = getEngine(env);
     const startTime = Date.now();
 
@@ -79,7 +107,6 @@ export default {
       if (url.pathname === '/health' && method === 'GET') {
         return jsonResponse({
           status: eng.isRunning() ? 'healthy' : 'stopped',
-          uptime: Date.now() - startTime,
           timestamp: Date.now(),
           version: '1.0.0',
           service: 'Agentic Engine (Cloudflare Workers)',
@@ -848,8 +875,12 @@ export default {
 
       // ========== END AGENTIC DASHBOARD API ==========
 
-      // 404
-      return jsonResponse({ error: 'Not found', path: url.pathname }, 404, corsHeaders(origin));
+      // 404 for unhandled API routes
+      console.log('API route not handled:', url.pathname);
+      return new Response(JSON.stringify({ error: 'Not found', path: url.pathname }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) }
+      });
 
     } catch (err) {
       return jsonResponse({

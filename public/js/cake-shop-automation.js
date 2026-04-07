@@ -34,9 +34,15 @@ class CakeShopAutomation {
   }
 
   async init() {
-    console.log('🎂 Initializing Cake Shop Automation Engine...');
+    console.log('AgenticDashboardEngine' in window ? 'AgenticDashboardEngine available' : 'AgenticDashboardEngine not available');
+    console.log('AgenticEngine' in window ? 'AgenticEngine available' : 'AgenticEngine not available');
     
     try {
+      // Check if AgenticDashboardEngine is available
+      if (typeof AgenticDashboardEngine === 'undefined') {
+        throw new Error('AgenticDashboardEngine not loaded');
+      }
+      
       // Initialize unified agentic engine
       this.engine = new AgenticDashboardEngine({
         apiEndpoint: 'https://bizcommerz-agentic-engine.aekbuffalo.workers.dev/api/agentic',
@@ -59,16 +65,23 @@ class CakeShopAutomation {
       // Save customer profile
       this.saveCustomerProfile();
 
-      console.log('✅ Cake Shop Automation ready!');
+      console.log('AgenticDashboardEngine initialized successfully!');
 
     } catch (err) {
       console.error('Failed to initialize automation:', err);
+      console.log('Falling back to offline mode...');
       this.initOfflineMode();
     }
   }
 
   // ========== FLOW 1: WELCOME SEQUENCE ==========
   startWelcomeSequence() {
+    // Check if agent is available
+    if (!this.agent) {
+      console.log('Agent not available, skipping welcome sequence');
+      return;
+    }
+    
     // Submit welcome automation goal
     this.agent.submitGoal(
       'Execute welcome sequence for returning customer',
@@ -130,6 +143,12 @@ class CakeShopAutomation {
 
   // ========== FLOW 2: BEHAVIOR TRACKING & PERSONALIZATION ==========
   setupBehaviorTracking() {
+    // Check if agent is available
+    if (!this.agent) {
+      console.log('Agent not available, skipping behavior tracking');
+      return;
+    }
+    
     // Track cake interactions
     document.addEventListener('click', (e) => {
       const cakeElement = e.target.closest('[data-cake]');

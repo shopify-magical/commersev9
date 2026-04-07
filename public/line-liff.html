@@ -299,19 +299,32 @@
   <script src="js/line-integration.js"></script>
   <script>
     // LIFF Configuration
-    const LIFF_ID = '2008523083-1KKafaGY'; // เปลี่ยนเป็น LIFF ID ของคุณ
+    const LIFF_ID = '2008523083-1KKafaGY'; // Your LIFF ID
+    const LINE_CHANNEL_ID = '2008523083';
+    const LINE_CHANNEL_SECRET = '65f763d0af5e321d166cdeff84198182';
+    const LINE_ACCESS_TOKEN = 'f2d21879e9a8f2fdad6625c726a2f5bd';
     
-    // Products data
+    // Products data - using existing images
     const featuredProducts = [
-      { id: 1, name: 'เค้กช็อกโกแลต', price: 450, image: '/images/chocolate-cake.jpg' },
-      { id: 2, name: 'เค้กสตรอเบอร์รี่', price: 480, image: '/images/strawberry-cake.jpg' },
-      { id: 3, name: 'เค้กมัทฉะ', price: 520, image: '/images/matcha-cake.jpg' },
-      { id: 4, name: 'เค้กวานิลลา', price: 420, image: '/images/vanilla-cake.jpg' }
+      { id: 1, name: 'เค้กช็อกโกแลต', price: 450, image: '/images/mooncake-traditional.webp' },
+      { id: 2, name: 'เค้กสตรอเบอร์รี่', price: 480, image: '/images/pandan-custard.webp' },
+      { id: 3, name: 'เค้กมัทฉะ', price: 520, image: '/images/black-sesame.webp' },
+      { id: 4, name: 'เค้กวานิลลา', price: 420, image: '/images/red-bean.webp' }
     ];
 
     // Initialize LIFF
     async function initializeLIFF() {
       try {
+        // Check if liff is available (might not load due to CSP or not in LINE)
+        if (typeof liff === 'undefined') {
+          console.log('LIFF not available, running in browser mode');
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('main-content').style.display = 'block';
+          loadCart();
+          loadProducts();
+          return;
+        }
+        
         await liff.init({ liffId: LIFF_ID });
         
         if (liff.isLoggedIn()) {

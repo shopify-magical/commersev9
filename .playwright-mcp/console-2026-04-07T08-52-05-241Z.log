@@ -1,0 +1,25 @@
+[     966ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap:0
+[    1465ms] [ERROR] Loading the script 'https://unpkg.com/web-vitals@3/dist/web-vitals.iife.js' violates the following Content Security Policy directive: "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://*.googletagmanager.com https://static.line-scdn.net". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been blocked. @ https://main.bizcommerz-cake-shop.pages.dev/js/analytics.js:59
+[    1535ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://www.googletagmanager.com/gtag/js?id=G-4ZS9L9R9BQ:0
+[    1603ms] ReferenceError: UnifiedChatWidget is not defined
+    at https://main.bizcommerz-cake-shop.pages.dev/js/mascot-chat-widget.js:14:32
+[    1946ms] Identifier 'EventBus' has already been declared
+[    1947ms] Identifier 'EventBus' has already been declared
+[    2821ms] [LOG] Starting Sweet Layers Live Automation... @ https://main.bizcommerz-cake-shop.pages.dev/:3150
+[    2830ms] [LOG] 🎂 Initializing Cake Shop Automation Engine... @ https://main.bizcommerz-cake-shop.pages.dev/js/cake-shop-automation.js:36
+[    2834ms] [ERROR] Failed to initialize automation: ReferenceError: AgenticDashboardEngine is not defined
+    at CakeShopAutomation.init (https://main.bizcommerz-cake-shop.pages.dev/js/cake-shop-automation.js:41:25)
+    at HTMLDocument.initCakeShopAutomation (https://main.bizcommerz-cake-shop.pages.dev/:3155:30) @ https://main.bizcommerz-cake-shop.pages.dev/js/cake-shop-automation.js:64
+[    2836ms] [LOG] 🔧 Cake Shop running in offline mode @ https://main.bizcommerz-cake-shop.pages.dev/js/cake-shop-automation.js:518
+[    2843ms] [LOG] 🎭 Initializing Mascot Chat Widget... @ https://main.bizcommerz-cake-shop.pages.dev/:3174
+[    2844ms] [ERROR] Failed to initialize mascot chat: ReferenceError: MascotChatWidget is not defined
+    at initMascotChatWidget (https://main.bizcommerz-cake-shop.pages.dev/:3178:33)
+    at HTMLDocument.initCakeShopAutomation (https://main.bizcommerz-cake-shop.pages.dev/:3158:9) @ https://main.bizcommerz-cake-shop.pages.dev/:3198
+[    2846ms] [LOG] Sweet Layers Automation LIVE! Customer journey tracking active. @ https://main.bizcommerz-cake-shop.pages.dev/:3162
+[    2847ms] [LOG] 🎭 Mascot Chat Widget with Advanced Filtering active! @ https://main.bizcommerz-cake-shop.pages.dev/:3163
+[    2847ms] [LOG] Enhanced AI Chat ready for ordering and tasks! @ https://main.bizcommerz-cake-shop.pages.dev/:3164
+[    2879ms] ReferenceError: AgenticEngine is not defined
+    at initAIAssistant (https://main.bizcommerz-cake-shop.pages.dev/:2866:7)
+    at HTMLDocument.<anonymous> (https://main.bizcommerz-cake-shop.pages.dev/:3667:7)
+[    3548ms] [LOG] [SW] Service Worker registered: ServiceWorkerRegistration @ https://main.bizcommerz-cake-shop.pages.dev/:4396
+[    6158ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://main.bizcommerz-cake-shop.pages.dev/favicon.ico:0

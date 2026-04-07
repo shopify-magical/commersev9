@@ -1,0 +1,7 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]: 🎂 Sweet Layers
+    - generic [ref=e5]: สั่งเค้กง่ายๆ ผ่าน LINE
+  - generic [ref=e6]:
+    - generic [ref=e7]: ❌ เกิดข้อผิดพลาดในการเชื่อมต่อ
+    - button "ลองใหม่" [ref=e8]

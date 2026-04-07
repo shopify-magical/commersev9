@@ -240,15 +240,15 @@ class MascotChatWidget extends UnifiedChatWidget {
   }
 
   handleFilteredMessage(type, originalContent) {
-    // Show mascot reaction to filtered content
-    this.showMascotReaction('filtered');
+    if (this.filterSystem.onFilterEvent) {
+      this.filterSystem.onFilterEvent(type, originalContent, 'blocked');
+    }
 
-    // Log filtered message for moderation
+    this.showMascotReaction('filtered');
     this.logFilteredMessage(type, originalContent);
   }
 
   updateFilteringMetrics(type, original, filtered) {
-    // Update filtering statistics (could be sent to analytics)
     const metrics = {
       type,
       originalLength: original.length,
@@ -257,10 +257,86 @@ class MascotChatWidget extends UnifiedChatWidget {
       sessionId: this.state.userSession.sessionId
     };
 
-    // Store locally or send to analytics
     if (window.AnalyticsSuite) {
       window.AnalyticsSuite.track('chat_filter_applied', metrics);
     }
+
+    if (this.filterSystem.onFilterEvent) {
+      this.filterSystem.onFilterEvent(type, original, 'filtered');
+    }
+  }
+
+  // ===== AUTOMATION FLOW =====
+  processAutomationCommand(message) {
+    const lowerMsg = message.toLowerCase();
+    
+    const patterns = {
+      'order': /^(order|สั่งซื้อ|ซื้อ)\s*(\d+)?\s*(.+)/i,
+      'track': /^(track|ติดตาม|สถานะ)\s*(.*)/i,
+      'cancel': /^(cancel|ยกเลิก)\s*(.*)/i,
+      'help': /^(help|ช่วย|help)\s*(.*)?/i,
+      'cake': /(cake|เค้ก|ขนมเค้ก)/i,
+      'pastry': /(pastry|ขนมปัง|เบเกอรี่)/i
+    };
+
+    for (const [action, pattern] of Object.entries(patterns)) {
+      if (pattern.test(lowerMsg)) {
+        this.triggerAutomationFlow(action, message);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  triggerAutomationFlow(action, message) {
+    console.log(`🤖 Automation Flow: ${action}`, message);
+
+    const automationActions = {
+      'order': {
+        type: 'auto-fill',
+        formSelector: '#order-form',
+        data: { orderIntent: message }
+      },
+      'track': {
+        type: 'navigate',
+        path: '/order-management.html'
+      },
+      'cancel': {
+        type: 'show-panel',
+        panel: 'cancel-order',
+        data: { orderId: this.extractOrderId(message) }
+      },
+      'help': {
+        type: 'suggest',
+        message: 'How can I help you today?',
+        actions: [
+          { label: '🍰 Browse Cakes', action: () => this.triggerAutomationFlow('cake', '') },
+          { label: '🛒 My Orders', action: () => this.triggerAutomationFlow('track', '') }
+        ]
+      },
+      'cake': {
+        type: 'navigate',
+        path: '/shop.html?category=cakes'
+      },
+      'pastry': {
+        type: 'navigate',
+        path: '/shop.html?category=pastries'
+      }
+    };
+
+    const automationAction = automationActions[action];
+    if (automationAction && window.AgenticEngine) {
+      window.AgenticEngine.handleAgentAction(automationAction);
+    }
+
+    if (this.onAutomationTrigger) {
+      this.onAutomationTrigger(action, automationAction);
+    }
+  }
+
+  extractOrderId(message) {
+    const match = message.match(/(?:order|คำสั่งซื้อ)\s*#?(\w+)/i);
+    return match ? match[1] : null;
   }
 
   setupRateLimiting() {
@@ -780,25 +856,36 @@ class MascotChatWidget extends UnifiedChatWidget {
   }
 
   addMessage(type, content, options = {}) {
-    // Add mascot reaction based on message type
     if (type === 'user') {
       this.showMascotReaction('thinking');
+      if (this.processAutomationCommand && this.processAutomationCommand(content)) {
+        return;
+      }
+      if (this.onMessageSent) {
+        this.onMessageSent(content);
+      }
     } else if (type === 'assistant') {
       this.showMascotReaction('happy');
+      if (this.onBotResponse) {
+        this.onBotResponse(content);
+      }
     }
 
-    // Call parent method
     super.addMessage(type, content, options);
   }
 
   sendMessage() {
-    // Show mascot thinking animation
     this.showMascotReaction('thinking');
 
-    // Call parent method
+    const input = document.querySelector('#chatInput');
+    const message = input?.value?.trim();
+    
     super.sendMessage();
 
-    // Show mascot response reaction
+    if (message && this.onMessageSent) {
+      this.onMessageSent(message);
+    }
+
     setTimeout(() => {
       this.showMascotReaction('happy');
     }, 500);
@@ -816,6 +903,69 @@ class MascotChatWidget extends UnifiedChatWidget {
       clearTimeout(timeout);
       timeout = setTimeout(later, wait);
     };
+  }
+}
+
+// ===== CORE ENGINE INTEGRATION =====
+class ChatbotEngineBridge {
+  constructor(chatWidget) {
+    this.chatWidget = chatWidget;
+    this.engine = null;
+    this.connected = false;
+  }
+
+  connect(engine) {
+    this.engine = engine;
+    this.connected = true;
+    console.log('🔗 Chatbot connected to Agentic Dashboard Engine');
+    this.setupEventBridge();
+  }
+
+  setupEventBridge() {
+    if (!this.engine) return;
+
+    const widget = this.chatWidget;
+    const agent = this.engine.agent;
+    const events = this.engine.events;
+
+    widget.filterSystem.onFilterEvent = (filterType, message, action) => {
+      if (agent) {
+        agent.submitObservation({
+          type: 'chat_filter',
+          data: {
+            filterType,
+            message: message.substring(0, 100),
+            action,
+            timestamp: Date.now()
+          }
+        });
+      }
+
+      events.emit('chat:filter', { filterType, message, action });
+    };
+
+    widget.onMessageSent = (message) => {
+      if (agent) {
+        agent.submitObservation({
+          type: 'chat_message',
+          data: {
+            message,
+            timestamp: Date.now()
+          }
+        });
+      }
+
+      events.emit('chat:message', { message, type: 'user' });
+    };
+
+    widget.onBotResponse = (response) => {
+      events.emit('chat:response', { response, type: 'assistant' });
+    };
+  }
+
+  triggerAutomation(action) {
+    if (!this.engine) return;
+    this.engine.handleAgentAction(action);
   }
 }
 

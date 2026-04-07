@@ -559,38 +559,7 @@ class DashboardAgent {
   }
 }
 
-// Simple EventBus
-class EventBus {
-  constructor() {
-    this.events = new Map();
-  }
-
-  on(event, handler) {
-    if (!this.events.has(event)) {
-      this.events.set(event, new Set());
-    }
-    this.events.get(event).add(handler);
-    return () => this.off(event, handler);
-  }
-
-  off(event, handler) {
-    this.events.get(event)?.delete(handler);
-  }
-
-  emit(event, data) {
-    this.events.get(event)?.forEach(handler => {
-      try {
-        handler(data);
-      } catch (err) {
-        console.error('Event handler error:', err);
-      }
-    });
-  }
-
-  removeAllListeners() {
-    this.events.clear();
-  }
-}
+// Use global EventBus from shared.js
 
 // Export
 window.DashboardAgent = DashboardAgent;

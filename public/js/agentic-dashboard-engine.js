@@ -79,7 +79,10 @@ class AgenticDashboardEngine {
     // 5. Setup cross-component event wiring
     this.setupEventWiring();
 
-    // 6. Start the engine
+    // 6. Setup Chatbot Engine Bridge
+    await this.setupChatbotBridge();
+
+    // 7. Start the engine
     await this.start();
 
     this.state.initialized = true;
@@ -133,6 +136,32 @@ class AgenticDashboardEngine {
     this.agent?.events.on('insight', (insight) => {
       this.ui.showInsight(insight);
     });
+
+    // Chatbot events
+    this.events.on('chat:filter', (data) => {
+      console.log('📊 Chat filter event:', data);
+    });
+
+    this.events.on('chat:message', (data) => {
+      this.agent?.submitObservation({
+        type: 'chat_interaction',
+        data
+      });
+    });
+  }
+
+  async setupChatbotBridge() {
+    if (typeof MascotChatWidget !== 'undefined') {
+      this.chatbotBridge = new ChatbotEngineBridge(null);
+      console.log('🤖 Chatbot Engine Bridge initialized');
+    }
+  }
+
+  connectChatbot(chatWidget) {
+    if (this.chatbotBridge) {
+      this.chatbotBridge.connect(this);
+      this.chatbotBridge.chatWidget = chatWidget;
+    }
   }
 
   async start() {
@@ -611,38 +640,7 @@ class AgenticSync {
   }
 }
 
-// Simple EventBus implementation
-class EventBus {
-  constructor() {
-    this.events = new Map();
-  }
-
-  on(event, handler) {
-    if (!this.events.has(event)) {
-      this.events.set(event, new Set());
-    }
-    this.events.get(event).add(handler);
-    return () => this.off(event, handler);
-  }
-
-  off(event, handler) {
-    this.events.get(event)?.delete(handler);
-  }
-
-  emit(event, data) {
-    this.events.get(event)?.forEach(handler => {
-      try {
-        handler(data);
-      } catch (err) {
-        console.error('Event handler error:', err);
-      }
-    });
-  }
-
-  removeAllListeners() {
-    this.events.clear();
-  }
-}
+// Use global EventBus from shared.js
 
 // Export
 window.AgenticDashboardEngine = AgenticDashboardEngine;

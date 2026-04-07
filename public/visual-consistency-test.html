@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Consistency Testing - Sweet Layers</title>
+    
+    <!-- UNIFIED DESIGN SYSTEM -->
+    <link rel="stylesheet" href="css/design-system.css">
+    <script src="js/theme-provider.js"></script>
+    
+    <style>
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-lg);
+        }
+        
+        .test-section {
+            margin-bottom: var(--spacing-3xl);
+            padding: var(--spacing-lg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            background: var(--color-surface);
+        }
+        
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .test-results {
+            margin-top: var(--spacing-md);
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+        }
+        
+        .test-status {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            font-weight: var(--font-weight-medium);
+        }
+        
+        .test-status.passed {
+            background: var(--color-success-light);
+            color: var(--color-success);
+        }
+        
+        .test-status.failed {
+            background: var(--color-error-light);
+            color: var(--color-error);
+        }
+        
+        .test-status.skipped {
+            background: var(--color-warning-light);
+            color: var(--color-warning);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--color-border);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            margin: var(--spacing-md) 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--brand-primary);
+            transition: width var(--transition-normal);
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+            margin: var(--spacing-lg) 0;
+        }
+        
+        .summary-card {
+            padding: var(--spacing-md);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+        
+        .summary-value {
+            font-size: var(--text-3xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--brand-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .summary-label {
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+        }
+        
+        .theme-controls {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin: var(--spacing-md) 0;
+        }
+        
+        .test-log {
+            background: var(--neutral-900);
+            color: var(--neutral-100);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            max-height: 300px;
+            overflow-y: auto;
+            margin: var(--spacing-md) 0;
+        }
+        
+        .log-entry {
+            margin-bottom: var(--spacing-xs);
+            padding: var(--spacing-xs);
+            border-radius: var(--radius-sm);
+        }
+        
+        .log-entry.info {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .log-entry.success {
+            background: rgba(34, 197, 94, 0.1);
+        }
+        
+        .log-entry.error {
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .log-entry.warning {
+            background: rgba(245, 158, 11, 0.1);
+        }
+    </style>
+</head>
+<body class="theme-provider">
+    <div class="test-container">
+        <header class="test-section">
+            <h1 class="text-4xl font-bold">Visual Consistency Testing</h1>
+            <p class="text-secondary">Automated testing for Sweet Layers design system</p>
+        </header>
+
+        <!-- Theme Controls -->
+        <section class="test-section">
+            <div class="test-header">
+                <h2 class="text-2xl font-semibold">Theme Controls</h2>
+            </div>
+            
+            <div class="theme-controls">
+                <button class="btn btn-primary" onclick="setTheme('light')">Light Theme</button>
+                <button class="btn btn-secondary" onclick="setTheme('dark')">Dark Theme</button>
+                <button class="btn btn-accent" onclick="setTheme('high-contrast')">High Contrast</button>
+                <button class="btn btn-secondary" onclick="toggleTheme()">Toggle Theme</button>
+            </div>
+        </section>
+
+        <!-- Test Controls -->
+        <section class="test-section">
+            <div class="test-header">
+                <h2 class="text-2xl font-semibold">Test Controls</h2>
+            </div>
+            
+            <div class="theme-controls">
+                <button class="btn btn-primary" onclick="runAllTests()">Run All Tests</button>
+                <button class="btn btn-secondary" onclick="runColorTests()">Color Tests</button>
+                <button class="btn btn-secondary" onclick="runTypographyTests()">Typography Tests</button>
+                <button class="btn btn-secondary" onclick="runComponentTests()">Component Tests</button>
+                <button class="btn btn-secondary" onclick="runAccessibilityTests()">Accessibility Tests</button>
+                <button class="btn btn-accent" onclick="clearResults()">Clear Results</button>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+        </section>
+
+        <!-- Test Results Summary -->
+        <section class="test-section" id="summarySection" style="display: none;">
+            <div class="test-header">
+                <h2 class="text-2xl font-semibold">Test Results Summary</h2>
+                <span class="test-status" id="overallStatus">Running...</span>
+            </div>
+            
+            <div class="summary-cards" id="summaryCards">
+                <!-- Summary cards will be populated dynamically -->
+            </div>
+        </section>
+
+        <!-- Detailed Test Results -->
+        <section class="test-section" id="resultsSection" style="display: none;">
+            <div class="test-header">
+                <h2 class="text-2xl font-semibold">Detailed Results</h2>
+            </div>
+            
+            <div class="test-results" id="testResults">
+                <!-- Test results will be populated dynamically -->
+            </div>
+        </section>
+
+        <!-- Test Log -->
+        <section class="test-section">
+            <div class="test-header">
+                <h2 class="text-2xl font-semibold">Test Log</h2>
+                <button class="btn btn-sm btn-secondary" onclick="clearLog()">Clear Log</button>
+            </div>
+            
+            <div class="test-log" id="testLog">
+                <div class="log-entry info">Visual Consistency Tester initialized</div>
+            </div>
+        </section>
+
+        <!-- Component Samples -->
+        <section class="test-section">
+            <div class="test-header">
+                <h2 class="text-2xl font-semibold">Component Samples</h2>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-lg">
+                <!-- Buttons -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-sm">Buttons</h3>
+                    <div class="space-y-sm">
+                        <button class="btn btn-primary">Primary Button</button>
+                        <button class="btn btn-secondary">Secondary Button</button>
+                        <button class="btn btn-accent">Accent Button</button>
+                    </div>
+                </div>
+                
+                <!-- Cards -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-sm">Cards</h3>
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="text-lg font-semibold">Sample Card</h4>
+                            <p class="text-secondary">This is a sample card component for testing visual consistency.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Forms -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-sm">Forms</h3>
+                    <div class="form-group">
+                        <label class="form-label">Sample Input</label>
+                        <input type="text" class="form-input" placeholder="Enter text...">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Visual Consistency Tester -->
+    <script src="js/visual-consistency-tester.js"></script>
+    
+    <script>
+        let currentTestResults = null;
+        let testProgress = 0;
+
+        // Initialize tester
+        document.addEventListener('DOMContentLoaded', async () => {
+            await window.visualConsistencyTester.init();
+            logMessage('Tester initialized successfully', 'success');
+        });
+
+        // Theme controls
+        function setTheme(theme) {
+            if (window.themeProvider) {
+                window.themeProvider.setTheme(theme);
+                logMessage(`Theme changed to ${theme}`, 'info');
+            }
+        }
+
+        function toggleTheme() {
+            if (window.themeProvider) {
+                window.themeProvider.toggleTheme();
+                const currentTheme = window.themeProvider.getTheme();
+                logMessage(`Theme toggled to ${currentTheme}`, 'info');
+            }
+        }
+
+        // Test controls
+        async function runAllTests() {
+            logMessage('Starting all tests...', 'info');
+            updateProgress(0);
+            showResults(false);
+
+            try {
+                currentTestResults = await window.visualConsistencyTester.runTests();
+                displayResults(currentTestResults);
+                logMessage('All tests completed', 'success');
+                updateProgress(100);
+            } catch (error) {
+                logMessage(`Test execution failed: ${error.message}`, 'error');
+                updateProgress(0);
+            }
+        }
+
+        async function runColorTests() {
+            logMessage('Running color consistency tests...', 'info');
+            try {
+                const results = await window.visualConsistencyTester.testColorConsistency();
+                displaySingleTestResults('Color Consistency', results);
+                logMessage('Color tests completed', 'success');
+            } catch (error) {
+                logMessage(`Color tests failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function runTypographyTests() {
+            logMessage('Running typography consistency tests...', 'info');
+            try {
+                const results = await window.visualConsistencyTester.testTypographyConsistency();
+                displaySingleTestResults('Typography Consistency', results);
+                logMessage('Typography tests completed', 'success');
+            } catch (error) {
+                logMessage(`Typography tests failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function runComponentTests() {
+            logMessage('Running component style tests...', 'info');
+            try {
+                const results = await window.visualConsistencyTester.testComponentStyles();
+                displaySingleTestResults('Component Styles', results);
+                logMessage('Component tests completed', 'success');
+            } catch (error) {
+                logMessage(`Component tests failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function runAccessibilityTests() {
+            logMessage('Running accessibility compliance tests...', 'info');
+            try {
+                const results = await window.visualConsistencyTester.testAccessibilityCompliance();
+                displaySingleTestResults('Accessibility Compliance', results);
+                logMessage('Accessibility tests completed', 'success');
+            } catch (error) {
+                logMessage(`Accessibility tests failed: ${error.message}`, 'error');
+            }
+        }
+
+        function clearResults() {
+            currentTestResults = null;
+            document.getElementById('summarySection').style.display = 'none';
+            document.getElementById('resultsSection').style.display = 'none';
+            document.getElementById('testResults').innerHTML = '';
+            updateProgress(0);
+            logMessage('Results cleared', 'info');
+        }
+
+        // Display functions
+        function displayResults(testData) {
+            const { results, summary } = testData;
+            
+            // Update summary
+            displaySummary(summary);
+            
+            // Update detailed results
+            displayDetailedResults(results);
+            
+            // Show results sections
+            showResults(true);
+        }
+
+        function displaySummary(summary) {
+            const summaryCards = document.getElementById('summaryCards');
+            const overallStatus = document.getElementById('overallStatus');
+            
+            summaryCards.innerHTML = `
+                <div class="summary-card">
+                    <div class="summary-value">${summary.totalTests}</div>
+                    <div class="summary-label">Total Tests</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">${summary.passed}</div>
+                    <div class="summary-label">Passed</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">${summary.failed}</div>
+                    <div class="summary-label">Failed</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">${summary.passRate.toFixed(1)}%</div>
+                    <div class="summary-label">Pass Rate</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">${summary.duration.toFixed(0)}ms</div>
+                    <div class="summary-label">Duration</div>
+                </div>
+            `;
+            
+            overallStatus.textContent = summary.failed === 0 ? 'PASSED' : 'FAILED';
+            overallStatus.className = `test-status ${summary.failed === 0 ? 'passed' : 'failed'}`;
+        }
+
+        function displayDetailedResults(results) {
+            const testResults = document.getElementById('testResults');
+            let html = '';
+            
+            Object.entries(results).forEach(([testName, result]) => {
+                html += `
+                    <div class="test-section">
+                        <div class="test-header">
+                            <h3 class="text-xl font-semibold">${formatTestName(testName)}</h3>
+                            <span class="test-status ${result.status}">${result.status.toUpperCase()}</span>
+                        </div>
+                        
+                        ${result.error ? `<p class="text-error">Error: ${result.error}</p>` : ''}
+                        ${result.duration ? `<p class="text-tertiary">Duration: ${result.duration.toFixed(2)}ms</p>` : ''}
+                        
+                        ${result.result ? formatSubTestResults(result.result) : ''}
+                    </div>
+                `;
+            });
+            
+            testResults.innerHTML = html;
+        }
+
+        function displaySingleTestResults(testName, results) {
+            const testResults = document.getElementById('testResults');
+            
+            let html = `
+                <div class="test-section">
+                    <div class="test-header">
+                        <h3 class="text-xl font-semibold">${testName}</h3>
+                    </div>
+                    ${formatSubTestResults(results)}
+                </div>
+            `;
+            
+            testResults.innerHTML = html;
+            document.getElementById('resultsSection').style.display = 'block';
+        }
+
+        function formatSubTestResults(results) {
+            let html = '<div class="space-y-md">';
+            
+            Object.entries(results).forEach(([subTestName, result]) => {
+                const status = typeof result === 'object' ? result.status : 'unknown';
+                html += `
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">${formatTestName(subTestName)}</span>
+                        <span class="test-status ${status}">${status.toUpperCase()}</span>
+                    </div>
+                    ${result.error ? `<p class="text-error text-sm">${result.error}</p>` : ''}
+                    ${result.contrast ? `<p class="text-tertiary text-sm">Contrast: ${result.contrast.toFixed(2)}</p>` : ''}
+                `;
+            });
+            
+            html += '</div>';
+            return html;
+        }
+
+        function formatTestName(name) {
+            return name.split('-').map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' ');
+        }
+
+        function showResults(show) {
+            document.getElementById('summarySection').style.display = show ? 'block' : 'none';
+            document.getElementById('resultsSection').style.display = show ? 'block' : 'none';
+        }
+
+        function updateProgress(percent) {
+            document.getElementById('progressBar').style.width = `${percent}%`;
+        }
+
+        function logMessage(message, type = 'info') {
+            const log = document.getElementById('testLog');
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${timestamp}] ${message}`;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function clearLog() {
+            document.getElementById('testLog').innerHTML = '';
+            logMessage('Log cleared', 'info');
+        }
+
+        // Auto-run tests on page load (optional)
+        // setTimeout(runAllTests, 1000);
+    </script>
+</body>
+</html>

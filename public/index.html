@@ -2666,60 +2666,11 @@
   <!-- TOAST -->
   <div class="toast" id="toast"></div>
 
-  <!-- AI ASSISTANT -->
-  <div class="ai-assistant-container">
-    <div class="ai-chat-bubble pulse" id="aiChatBubble" onclick="toggleAIChat()">
-      <div class="mooncake-icon">
-        <img src="images/mooncake-icon-optimized.svg" alt="Cake" width="36" height="36" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
-      </div>
-      <div class="chat-badge" id="chatBadge">1</div>
-      <div class="sales-pulse"></div>
-    </div>
-  </div>
-
-  <div class="ai-chat-window" id="aiChatWindow">
-    <div class="ai-chat-header">
-      <div class="ai-chat-header-left">
-        <div class="ai-avatar">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-          </svg>
-        </div>
-        <div class="ai-status">
-          <span class="ai-name">Cake Assistant</span>
-          <span class="ai-state"><span class="ai-state-dot"></span> AI Powered</span>
-        </div>
-      </div>
-      <button class="ai-close-btn" onclick="toggleAIChat()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-      </button>
-    </div>
-    <div class="ai-chat-messages" id="aiChatMessages">
-      <div class="ai-message ai">
-        <div class="ai-message-bubble">
-          Hi! I'm your AI Cake Assistant. I can help you find the perfect cake, answer questions about our bakery, and provide personalized recommendations. How can I help you today?
-        </div>
-        <div class="ai-message-time">Just now</div>
-      </div>
-    </div>
-    <div class="ai-suggestion-chips" id="aiSuggestionChips">
-      <span class="ai-suggestion-chip" onclick="sendAIMessage('Show me bestsellers')">Show bestsellers</span>
-      <span class="ai-suggestion-chip" onclick="sendAIMessage('Gluten-free options')">Gluten-free</span>
-      <span class="ai-suggestion-chip" onclick="sendAIMessage('Gift boxes under $50')">Gifts under $50</span>
-      <span class="ai-suggestion-chip" onclick="sendAIMessage('What are your hours?')">Store hours</span>
-    </div>
-    <div class="ai-chat-input-area">
-      <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Ask about cakes, flavors, orders..." onkeypress="if(event.key==='Enter')sendAIChat()">
-      <button class="ai-send-btn" onclick="sendAIChat()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-      </button>
-    </div>
-  </div>
+  <!-- AUTONOMOUS SWEET LAYERS ASSISTANT -->
+  <link rel="stylesheet" href="css/autonomous-assistant.css">
+  <script src="js/autonomous-sweet-layers-assistant.js"></script>
 
   <script src="js/shared.js"></script>
-  <script src="js/unified-chat-widget.js"></script>
-  <script src="js/mascot-chat-widget.js"></script>
   <script src="js/agentic-engine.js"></script>
   <script src="js/dashboard-agent.js"></script>
   <script src="js/agentic-dashboard-engine.js"></script>
@@ -3267,66 +3218,61 @@
         cakeAutomation = new CakeShopAutomation();
         await cakeAutomation.init();
 
-        // Initialize Mascot Chat Widget with advanced filtering
-        initMascotChatWidget();
+        // Initialize Autonomous Sweet Layers Assistant
+        await initAutonomousAssistant();
 
         // Setup AI chat with automation context
         setupAIChatWithAutomation();
 
         console.log('Sweet Layers Automation LIVE! Customer journey tracking active.');
-        console.log('🎭 Mascot Chat Widget with Advanced Filtering active!');
-        console.log('Enhanced AI Chat ready for ordering and tasks!');
+        console.log('Autonomous Sweet Layers Assistant with AI core active!');
+        console.log('Enhanced AI Chat ready for ordering and recommendations!');
 
       } catch (err) {
         console.error('Failed to start cake automation:', err);
       }
     }
 
-    // Initialize Mascot Chat Widget
-    async function initMascotChatWidget() {
+    // Initialize Autonomous Sweet Layers Assistant
+    async function initAutonomousAssistant() {
       try {
-        console.log('🎭 Initializing Mascot Chat Widget...');
+        console.log('Initializing Autonomous Sweet Layers Assistant...');
 
-        window.mascotChat = new MascotChatWidget({
+        window.sweetLayersAssistant = new AutonomousSweetLayersAssistant({
           character: 'mooncake',
-          personality: 'friendly',
+          personality: 'friendly-professional',
           animations: true,
-          voiceEnabled: false,
-          filteringEnabled: true,
-          mascotConfig: {
-            character: 'mooncake',
-            personality: 'friendly',
-            animations: true
-          }
+          enableVoice: false,
+          enableFiltering: true,
+          enableOrders: true,
+          enableRecommendations: true,
+          apiEndpoint: 'https://bizcommerz-agentic-engine.aekbuffalo.workers.dev/api/agentic',
+          wsEndpoint: 'wss://bizcommerz-agentic-engine.aekbuffalo.workers.dev/ws'
         });
 
-        await window.mascotChat.init();
+        await window.sweetLayersAssistant.init();
 
-        // Connect chatbot to engines for automation flow
+        // Connect to agentic engines if available
         if (window.AgenticEngine) {
-          // Connect to main Agentic Engine
-          window.mascotChat.onAutomationTrigger = (action, data) => {
+          window.sweetLayersAssistant.onAutomationTrigger = (action, data) => {
             window.AgenticEngine.submitGoal(
-              `Process chatbot automation: ${action}`,
+              `Process autonomous assistant action: ${action}`,
               Priority.MEDIUM,
-              { source: 'chatbot', action, data }
+              { source: 'autonomous_assistant', action, data }
             );
           };
-          console.log('🤖 Chatbot connected to AgenticEngine!');
+          console.log('Autonomous Assistant connected to AgenticEngine!');
         }
 
         if (window.AgenticDashboardEngine) {
-          // Connect to Dashboard Engine
-          window.AgenticDashboardEngine.connectChatbot(window.mascotChat);
-          console.log('📊 Chatbot connected to AgenticDashboardEngine!');
+          window.AgenticDashboardEngine.connectChatbot(window.sweetLayersAssistant);
+          console.log('Autonomous Assistant connected to AgenticDashboardEngine!');
         }
 
-        enhanceAIChatWithMascot();
-
-        console.log('🎭 Mascot Chat Widget initialized successfully!');
+        console.log('Autonomous Sweet Layers Assistant initialized successfully!');
 
       } catch (err) {
-        console.error('Failed to initialize mascot chat:', err);
+        console.error('Failed to initialize autonomous assistant:', err);
       }
     }
 

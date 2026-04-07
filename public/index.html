@@ -2670,11 +2670,22 @@
   <link rel="stylesheet" href="css/design-system.css">
   <script src="js/theme-provider.js"></script>
   
+  <!-- Hide agentic dashboard panels globally -->
+  <style>
+    #agent-insights, #agent-goals, #connection-status, .agent-panel, .connection-indicator {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+  </style>
+  
   <!-- AUTONOMOUS SWEET LAYERS ASSISTANT -->
   <link rel="stylesheet" href="css/autonomous-assistant.css">
   <script src="js/autonomous-sweet-layers-assistant.js"></script>
 
   <script src="js/shared.js"></script>
+  <script src="js/router.js"></script>
   <script src="js/agentic-engine.js"></script>
   <script src="js/dashboard-agent.js"></script>
   <script src="js/agentic-dashboard-engine.js"></script>
@@ -2930,6 +2941,12 @@
 
     // Initialize AI Assistant
     function initAIAssistant() {
+      // Check if AgenticEngine is available
+      if (typeof AgenticEngine === 'undefined') {
+        console.warn('AgenticEngine not available, AI assistant running in offline mode');
+        return;
+      }
+
       // Create Agentic Engine instance
       aiEngine = new AgenticEngine({
         name: 'CakeAssistant',
@@ -3268,7 +3285,7 @@
           console.log('Autonomous Assistant connected to AgenticEngine!');
         }
 
-        if (window.AgenticDashboardEngine) {
+        if (window.AgenticDashboardEngine && typeof window.AgenticDashboardEngine.connectChatbot === 'function') {
           window.AgenticDashboardEngine.connectChatbot(window.sweetLayersAssistant);
           console.log('Autonomous Assistant connected to AgenticDashboardEngine!');
         }
@@ -3846,13 +3863,17 @@
 
     // ─── TOGGLE CHIP ───
     function toggleChip(el, type) {
+      console.log(`Toggling chip: ${type} - ${el.dataset.value}`);
       el.classList.toggle('selected');
       const val = el.dataset.value;
       if (el.classList.contains('selected')) {
         if (!filters[type].includes(val)) filters[type].push(val);
+        console.log(`Added ${val} to ${type} filter`);
       } else {
         filters[type] = filters[type].filter(v => v !== val);
+        console.log(`Removed ${val} from ${type} filter`);
       }
+      console.log(`Current ${type} filters:`, filters[type]);
     }
 
     // ─── TOGGLE CHECKBOX ───
@@ -3905,12 +3926,14 @@
 
     // ─── FILTER MODAL ───
     function openFilter() {
+      console.log('Opening filter modal...');
       document.getElementById('filterOverlay').classList.add('open');
       document.getElementById('filterModal').classList.add('open');
       document.body.style.overflow = 'hidden';
     }
 
     function closeFilter() {
+      console.log('Closing filter modal...');
       document.getElementById('filterOverlay').classList.remove('open');
       document.getElementById('filterModal').classList.remove('open');
       document.body.style.overflow = '';
@@ -3918,6 +3941,7 @@
 
     // ─── APPLY FILTERS ───
     function applyFilters() {
+      console.log('Applying filters...', filters);
       renderCakes();
       updateActiveChips();
       closeFilter();
@@ -4353,38 +4377,37 @@
   <!-- Footer Styles -->
   <style>
     .site-footer {
-      background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-primary-dark) 100%);
-      color: var(--color-text-inverse);
-      padding: var(--spacing-3xl) var(--spacing-lg) var(--spacing-lg);
-      margin-top: var(--spacing-3xl);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--white);
+      padding: 48px 24px 24px;
+      margin-top: 60px;
     }
     
     .footer-content {
-      max-width: var(--container-xl);
+      max-width: var(--width-xl);
       margin: 0 auto;
       display: grid;
       grid-template-columns: auto 1fr;
-      gap: var(--spacing-3xl);
+      gap: 60px;
       align-items: start;
     }
     
     .footer-brand {
       display: flex;
       align-items: center;
-      gap: var(--spacing-md);
+      gap: 16px;
     }
     
     .footer-logo {
       width: 56px;
       height: 56px;
-      background: var(--color-surface);
-      border-radius: var(--radius-lg);
+      background: var(--accent);
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
-      font-weight: bold;
-      color: var(--brand-primary);
+      font-size: 1.8rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
     
     .footer-brand-text h3 {

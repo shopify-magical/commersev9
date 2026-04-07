@@ -352,9 +352,32 @@ class DashboardUIManager {
   }
 
   init() {
-    this.createInsightPanel();
-    this.createGoalsPanel();
-    this.createConnectionIndicator();
+    // Remove any existing panels first
+    this.removeExistingPanels();
+    
+    // Panels disabled to prevent UI clutter
+    // this.createInsightPanel();
+    // this.createGoalsPanel();
+    // this.createConnectionIndicator();
+    console.log('AgenticDashboardEngine initialized with panels disabled');
+  }
+
+  removeExistingPanels() {
+    // Remove any existing panels that might be in the DOM
+    const panelsToRemove = [
+      'agent-insights',
+      'agent-goals', 
+      'connection-status',
+      'dashboard-loader'
+    ];
+    
+    panelsToRemove.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.remove();
+        console.log(`Removed existing panel: ${id}`);
+      }
+    });
   }
 
   createInsightPanel() {

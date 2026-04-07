@@ -33,7 +33,7 @@ class AgenticDashboardEngine {
     };
 
     // Event bus
-    this.events = new EventBus();
+    this.events = window.eventBus;
   }
 
   async init() {
@@ -347,7 +347,7 @@ class AgenticDashboardEngine {
 
 class DashboardUIManager {
   constructor() {
-    this.events = new EventBus();
+    this.events = window.eventBus;
     this.panels = new Map();
   }
 
@@ -361,9 +361,10 @@ class DashboardUIManager {
     const panel = document.createElement('div');
     panel.id = 'agent-insights';
     panel.className = 'agent-panel insights-panel';
+    panel.style.display = 'none'; // Hide by default
     panel.innerHTML = `
       <div class="panel-header">
-        <span class="panel-title">🤖 Agent Insights</span>
+        <span class="panel-title">Agent Insights</span>
         <button class="panel-close">×</button>
       </div>
       <div class="panel-content"></div>
@@ -373,7 +374,9 @@ class DashboardUIManager {
 
     // Auto-hide after 30 seconds
     setTimeout(() => {
-      panel.classList.add('minimized');
+      if (panel.style.display !== 'none') {
+        panel.classList.add('minimized');
+      }
     }, 30000);
   }
 
@@ -381,9 +384,10 @@ class DashboardUIManager {
     const panel = document.createElement('div');
     panel.id = 'agent-goals';
     panel.className = 'agent-panel goals-panel';
+    panel.style.display = 'none'; // Hide by default
     panel.innerHTML = `
       <div class="panel-header">
-        <span class="panel-title">🎯 Active Goals</span>
+        <span class="panel-title">Active Goals</span>
         <span class="goal-count">0</span>
       </div>
       <div class="panel-content"></div>
@@ -396,9 +400,10 @@ class DashboardUIManager {
     const indicator = document.createElement('div');
     indicator.id = 'connection-status';
     indicator.className = 'connection-indicator';
+    indicator.style.display = 'none'; // Hide by default
     indicator.innerHTML = `
       <span class="status-dot"></span>
-      <span class="status-text">Connecting...</span>
+      <span class="status-text">Connected</span>
     `;
     document.body.appendChild(indicator);
   }

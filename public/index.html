@@ -73,7 +73,9 @@
   <script src="/js/cookie-consent.js"></script>
 
   <!-- UX/UI Helpers - 10 Tricks for 9.9/10 Rating -->
-  <script src="/js/ux-helpers.js"></script>
+  <script src="js/cake-customizer.js"></script>
+  <script src="js/performance-optimizer.js"></script>
+  <script src="js/ux-helpers.js"></script>
 
   <!-- Mascot Chat Widget - Advanced Filtering & Layout Engineering -->
   <script src="/js/mascot-chat-widget.js"></script>
@@ -2039,7 +2041,7 @@
     }
 
     .cookie-consent-content {
-      max-width: 1200px;
+      max-width: var(--width-xl);
       margin: 0 auto;
       display: flex;
       align-items: center;
@@ -2204,9 +2206,12 @@
     <nav class="nav-links" id="navLinks">
       <a href="/" class="active">Home</a>
       <a href="/shop.html">Shop</a>
-      <a href="/blog.html">Blog</a>
       <a href="/about.html">About</a>
+      <a href="/blog.html">Blog</a>
       <a href="/contact.html">Contact</a>
+      <a href="/login.html">Login</a>
+      <a href="/cart.html">Cart</a>
+      <a href="/profile.html">Profile</a>
     </nav>
     <div class="header-actions">
       <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
@@ -4218,10 +4223,18 @@
       <div class="footer-links">
         <div class="footer-section">
           <h4>Shop</h4>
-          <a href="index.html">Home</a>
-          <a href="shop.html">All Products</a>
-          <a href="blog.html">Blog</a>
-          <a href="#" onclick="showToast('Coming soon!')">Gift Cards</a>
+          <a href="/">Home</a>
+          <a href="/shop.html">Shop</a>
+          <a href="/blog.html">Blog</a>
+          <a href="/about.html">About</a>
+          <a href="/contact.html">Contact</a>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Account</h4>
+          <a href="/login.html">Login</a>
+          <a href="/cart.html">Cart</a>
+          <a href="/profile.html">Profile</a>
         </div>
         
         <div class="footer-section">
@@ -4259,7 +4272,7 @@
     }
     
     .footer-content {
-      max-width: 1200px;
+      max-width: var(--width-xl);
       margin: 0 auto;
       display: grid;
       grid-template-columns: auto 1fr;
@@ -4325,7 +4338,7 @@
     }
     
     .footer-bottom {
-      max-width: 1200px;
+      max-width: var(--width-xl);
       margin: 40px auto 0;
       padding-top: 24px;
       border-top: 1px solid rgba(255,255,255,0.1);

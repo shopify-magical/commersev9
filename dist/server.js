@@ -256,6 +256,15 @@ export class AgenticServer {
             return;
         }
         res.setHeader('X-Powered-By', 'AgenticEngine/1.0');
+        res.setHeader('X-Frame-Options', 'DENY');
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+        res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()');
+        res.setHeader('X-XSS-Protection', '1; mode=block');
+        res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+        res.setHeader('X-Permitted-Cross-Domain-Policies', 'none');
+        // CSP - using report-only for now to avoid blocking issues
+        res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com; frame-src https://www.youtube.com https://player.vimeo.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
         // Serve dashboard at root
         if ((url === '/' || url === '/dashboard') && method === 'GET') {
             try {
@@ -285,7 +294,17 @@ export class AgenticServer {
                     '.webp': 'image/webp',
                     '.json': 'application/json',
                 };
-                res.writeHead(200, { 'Content-Type': mimeTypes[ext] ?? 'application/octet-stream' });
+                // Add cache headers based on file type
+                const isImage = url.startsWith('/images/');
+                const isJS = url.endsWith('.js');
+                const isCSS = url.endsWith('.css');
+                const cacheControl = isImage ? 'public, max-age=31536000, immutable'
+                    : isJS || isCSS ? 'public, max-age=31536000'
+                        : 'no-cache';
+                res.writeHead(200, {
+                    'Content-Type': mimeTypes[ext] ?? 'application/octet-stream',
+                    'Cache-Control': cacheControl
+                });
                 res.end(content);
             }
             catch {

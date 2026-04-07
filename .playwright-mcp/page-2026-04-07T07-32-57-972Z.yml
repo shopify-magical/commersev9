@@ -1,0 +1,215 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "CAKE Sweet Layers" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e5]: CAKE
+        - generic [ref=e6]: Sweet Layers
+      - navigation [ref=e7]:
+        - link "หน้าแรก" [ref=e8] [cursor=pointer]:
+          - /url: /
+        - link "สินค้า" [ref=e9] [cursor=pointer]:
+          - /url: /shop.html
+        - link "บล็อก" [ref=e10] [cursor=pointer]:
+          - /url: /blog.html
+        - link "เกี่ยวกับ" [ref=e11] [cursor=pointer]:
+          - /url: /about.html
+        - link "ติดต่อ" [ref=e12] [cursor=pointer]:
+          - /url: /contact.html
+      - generic [ref=e13]:
+        - button "0" [ref=e14] [cursor=pointer]:
+          - img [ref=e15]
+          - generic [ref=e19]: "0"
+        - link "เข้าสู่ระบบ" [ref=e20] [cursor=pointer]:
+          - /url: /login.html
+  - generic [ref=e21]:
+    - heading "สินค้าทั้งหมด" [level=1] [ref=e22]
+    - paragraph [ref=e23]: ขนมสดใหม่ทุกวัน พร้อมส่งถึงบ้านคุณ
+  - generic [ref=e24]:
+    - complementary [ref=e25]:
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - img [ref=e28]
+          - text: หมวดหมู่
+        - generic [ref=e31]:
+          - generic [ref=e32] [cursor=pointer]:
+            - checkbox "Mooncakes" [ref=e33]
+            - text: Mooncakes
+          - generic [ref=e34] [cursor=pointer]:
+            - checkbox "Cakes" [ref=e35]
+            - text: Cakes
+          - generic [ref=e36] [cursor=pointer]:
+            - checkbox "Pastries" [ref=e37]
+            - text: Pastries
+          - generic [ref=e38] [cursor=pointer]:
+            - checkbox "Egg Yolk" [ref=e39]
+            - text: Egg Yolk
+          - generic [ref=e40] [cursor=pointer]:
+            - checkbox "Gift Sets" [ref=e41]
+            - text: Gift Sets
+      - generic [ref=e42]:
+        - generic [ref=e43]:
+          - img [ref=e44]
+          - text: ราคา
+        - generic [ref=e46]:
+          - generic [ref=e47] [cursor=pointer]:
+            - radio "0 - 200 THB" [ref=e48]
+            - text: 0 - 200 THB
+          - generic [ref=e49] [cursor=pointer]:
+            - radio "200 - 500 THB" [ref=e50]
+            - text: 200 - 500 THB
+          - generic [ref=e51] [cursor=pointer]:
+            - radio "500+ THB" [ref=e52]
+            - text: 500+ THB
+    - generic [ref=e53]:
+      - generic [ref=e54]:
+        - generic [ref=e55]:
+          - text: แสดง
+          - strong [ref=e56]: "14"
+          - text: สินค้า
+        - combobox [ref=e57]:
+          - option "Popular" [selected]
+          - option "Newest"
+          - 'option "Price: Low to High"'
+          - 'option "Price: High to Low"'
+      - generic [ref=e58]:
+        - article [ref=e59]:
+          - generic [ref=e60]:
+            - img "Premium White Lotus Mooncake" [ref=e62]
+            - generic [ref=e63]: Best Seller
+          - generic [ref=e64]:
+            - heading "Premium White Lotus Mooncake" [level=3] [ref=e65]
+            - paragraph [ref=e66]: 4 pcs/box
+            - generic [ref=e67]:
+              - generic [ref=e68]: ฿89
+              - button "เพิ่ม Premium White Lotus Mooncake ลงตะกร้า" [ref=e69] [cursor=pointer]:
+                - img [ref=e70]
+        - article [ref=e71]:
+          - generic [ref=e72]:
+            - img "Double Yolk Red Bean Mooncake" [ref=e74]
+            - generic [ref=e75]: Premium
+          - generic [ref=e76]:
+            - heading "Double Yolk Red Bean Mooncake" [level=3] [ref=e77]
+            - paragraph [ref=e78]: 4 pcs/box
+            - generic [ref=e79]:
+              - generic [ref=e80]: ฿129
+              - button "เพิ่ม Double Yolk Red Bean Mooncake ลงตะกร้า" [ref=e81] [cursor=pointer]:
+                - img [ref=e82]
+        - article [ref=e83]:
+          - img "Red Bean Pastry (Nankatang)" [ref=e86]
+          - generic [ref=e87]:
+            - heading "Red Bean Pastry (Nankatang)" [level=3] [ref=e88]
+            - paragraph [ref=e89]: 2 pcs
+            - generic [ref=e90]:
+              - generic [ref=e91]: ฿45
+              - button "เพิ่ม Red Bean Pastry (Nankatang) ลงตะกร้า" [ref=e92] [cursor=pointer]:
+                - img [ref=e93]
+        - article [ref=e94]:
+          - generic [ref=e95]:
+            - img "Taro Coconut Pastry" [ref=e97]
+            - generic [ref=e98]: Popular
+          - generic [ref=e99]:
+            - heading "Taro Coconut Pastry" [level=3] [ref=e100]
+            - paragraph [ref=e101]: 2 pcs
+            - generic [ref=e102]:
+              - generic [ref=e103]: ฿55
+              - button "เพิ่ม Taro Coconut Pastry ลงตะกร้า" [ref=e104] [cursor=pointer]:
+                - img [ref=e105]
+        - article [ref=e106]:
+          - img "Salted Egg Yolk Fritter" [ref=e109]
+          - generic [ref=e110]:
+            - heading "Salted Egg Yolk Fritter" [level=3] [ref=e111]
+            - paragraph [ref=e112]: 1 pc
+            - generic [ref=e113]:
+              - generic [ref=e114]: ฿35
+              - button "เพิ่ม Salted Egg Yolk Fritter ลงตะกร้า" [ref=e115] [cursor=pointer]:
+                - img [ref=e116]
+        - article [ref=e117]:
+          - img "Pandan Custard Cake" [ref=e120]
+          - generic [ref=e121]:
+            - heading "Pandan Custard Cake" [level=3] [ref=e122]
+            - paragraph [ref=e123]: 1 lb
+            - generic [ref=e124]:
+              - generic [ref=e125]: ฿299
+              - button "เพิ่ม Pandan Custard Cake ลงตะกร้า" [ref=e126] [cursor=pointer]:
+                - img [ref=e127]
+        - article [ref=e128]:
+          - generic [ref=e129]:
+            - img "Heritage Gift Box Set" [ref=e131]
+            - generic [ref=e132]: 20% Off
+          - generic [ref=e133]:
+            - heading "Heritage Gift Box Set" [level=3] [ref=e134]
+            - paragraph [ref=e135]: 8 pcs Bundle
+            - generic [ref=e136]:
+              - generic [ref=e137]: ฿499
+              - button "เพิ่ม Heritage Gift Box Set ลงตะกร้า" [ref=e138] [cursor=pointer]:
+                - img [ref=e139]
+        - article [ref=e140]:
+          - img "Mini Assorted Pastry Set" [ref=e143]
+          - generic [ref=e144]:
+            - heading "Mini Assorted Pastry Set" [level=3] [ref=e145]
+            - paragraph [ref=e146]: 6 pcs/box
+            - generic [ref=e147]:
+              - generic [ref=e148]: ฿199
+              - button "เพิ่ม Mini Assorted Pastry Set ลงตะกร้า" [ref=e149] [cursor=pointer]:
+                - img [ref=e150]
+        - article [ref=e151]:
+          - generic [ref=e152]:
+            - img "Black Sesame Mooncake" [ref=e154]
+            - generic [ref=e155]: New
+          - generic [ref=e156]:
+            - heading "Black Sesame Mooncake" [level=3] [ref=e157]
+            - paragraph [ref=e158]: 4 pcs/box
+            - generic [ref=e159]:
+              - generic [ref=e160]: ฿99
+              - button "เพิ่ม Black Sesame Mooncake ลงตะกร้า" [ref=e161] [cursor=pointer]:
+                - img [ref=e162]
+        - article [ref=e163]:
+          - img "Mung Bean Sweet Soup" [ref=e166]
+          - generic [ref=e167]:
+            - heading "Mung Bean Sweet Soup" [level=3] [ref=e168]
+            - paragraph [ref=e169]: 1 bowl
+            - generic [ref=e170]:
+              - generic [ref=e171]: ฿65
+              - button "เพิ่ม Mung Bean Sweet Soup ลงตะกร้า" [ref=e172] [cursor=pointer]:
+                - img [ref=e173]
+        - article [ref=e174]:
+          - generic [ref=e175]:
+            - img "Salted Egg Pastry" [ref=e177]
+            - generic [ref=e178]: Hot
+          - generic [ref=e179]:
+            - heading "Salted Egg Pastry" [level=3] [ref=e180]
+            - paragraph [ref=e181]: 2 pcs
+            - generic [ref=e182]:
+              - generic [ref=e183]: ฿75
+              - button "เพิ่ม Salted Egg Pastry ลงตะกร้า" [ref=e184] [cursor=pointer]:
+                - img [ref=e185]
+        - article [ref=e186]:
+          - img "Taro Coconut Roll" [ref=e189]
+          - generic [ref=e190]:
+            - heading "Taro Coconut Roll" [level=3] [ref=e191]
+            - paragraph [ref=e192]: 2 pcs
+            - generic [ref=e193]:
+              - generic [ref=e194]: ฿85
+              - button "เพิ่ม Taro Coconut Roll ลงตะกร้า" [ref=e195] [cursor=pointer]:
+                - img [ref=e196]
+        - article [ref=e197]:
+          - img "Red Bean Sweet Soup" [ref=e200]
+          - generic [ref=e201]:
+            - heading "Red Bean Sweet Soup" [level=3] [ref=e202]
+            - paragraph [ref=e203]: 1 bowl
+            - generic [ref=e204]:
+              - generic [ref=e205]: ฿55
+              - button "เพิ่ม Red Bean Sweet Soup ลงตะกร้า" [ref=e206] [cursor=pointer]:
+                - img [ref=e207]
+        - article [ref=e208]:
+          - generic [ref=e209]:
+            - img "Pandan Layer Cake" [ref=e211]
+            - generic [ref=e212]: New
+          - generic [ref=e213]:
+            - heading "Pandan Layer Cake" [level=3] [ref=e214]
+            - paragraph [ref=e215]: 1.5 lb
+            - generic [ref=e216]:
+              - generic [ref=e217]: ฿349
+              - button "เพิ่ม Pandan Layer Cake ลงตะกร้า" [ref=e218] [cursor=pointer]:
+                - img [ref=e219]

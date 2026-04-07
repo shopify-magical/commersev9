@@ -38,7 +38,26 @@
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 24px;
-  
+
+  /* Width Tokens */
+  --width-xs: 320px;
+  --width-sm: 480px;
+  --width-md: 640px;
+  --width-lg: 1024px;
+  --width-xl: 1200px;
+  --width-2xl: 1440px;
+  --width-3xl: 1920px;
+  --width-4xl: 2560px;
+
+  /* Spacing Tokens */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
   /* Transitions */
   --transition: 0.3s ease;
 }

@@ -1,0 +1,252 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: 📱
+      - generic [ref=e6]:
+        - generic [ref=e7]: Marketing Center
+        - generic [ref=e8]: Sweet Layers
+    - navigation [ref=e9]:
+      - link "📊 Dashboard" [ref=e10] [cursor=pointer]:
+        - /url: cake-shop-owner.html
+        - generic [ref=e11]: 📊
+        - text: Dashboard
+      - link "📱 Marketing Center" [ref=e12] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e13]: 📱
+        - text: Marketing Center
+      - link "📈 Analytics" [ref=e14] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e15]: 📈
+        - text: Analytics
+      - link "👥 Customers" [ref=e16] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e17]: 👥
+        - text: Customers
+      - link "💰 Financial" [ref=e18] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e19]: 💰
+        - text: Financial
+  - main [ref=e20]:
+    - generic [ref=e21]:
+      - heading "Marketing Center" [level=1] [ref=e22]
+      - paragraph [ref=e23]: Manage campaigns, track performance, and grow your customer base
+    - generic [ref=e24]:
+      - generic [ref=e25]:
+        - generic [ref=e26]: "8"
+        - generic [ref=e27]: Active Campaigns
+        - generic [ref=e28]:
+          - img [ref=e29]
+          - text: +2 this week
+      - generic [ref=e31]:
+        - generic [ref=e32]: 24.7%
+        - generic [ref=e33]: Conversion Rate
+        - generic [ref=e34]:
+          - img [ref=e35]
+          - text: +3.2% improvement
+      - generic [ref=e37]:
+        - generic [ref=e38]: $4.82
+        - generic [ref=e39]: Cost per Acquisition
+        - generic [ref=e40]:
+          - img [ref=e41]
+          - text: "-$0.45 vs last month"
+      - generic [ref=e43]:
+        - generic [ref=e44]: $127
+        - generic [ref=e45]: Avg Customer Value
+        - generic [ref=e46]:
+          - img [ref=e47]
+          - text: +$18 LTV growth
+    - generic [ref=e49]:
+      - generic [ref=e50]:
+        - generic [ref=e51]: 🚀
+        - text: Active Campaigns
+      - generic [ref=e52]:
+        - generic [ref=e53]:
+          - generic [ref=e54]: 📧
+          - generic [ref=e55]:
+            - generic [ref=e56]: Mooncake Festival Special
+            - generic [ref=e57]: Email campaign targeting past mooncake customers
+            - generic [ref=e58]:
+              - generic [ref=e59]:
+                - generic [ref=e60]: 📧
+                - strong [ref=e61]: 2,847
+                - text: sent
+              - generic [ref=e62]:
+                - generic [ref=e63]: 📖
+                - strong [ref=e64]: 68%
+                - text: open
+              - generic [ref=e65]:
+                - generic [ref=e66]: 🛒
+                - strong [ref=e67]: 12%
+                - text: converted
+          - generic [ref=e68]:
+            - generic [ref=e69]: Active
+            - generic [ref=e70]: 342 orders generated
+        - generic [ref=e71]:
+          - generic [ref=e72]: 📱
+          - generic [ref=e73]:
+            - generic [ref=e74]: Instagram Weekend Showcase
+            - generic [ref=e75]: Visual campaign featuring new cake designs
+            - generic [ref=e76]:
+              - generic [ref=e77]:
+                - generic [ref=e78]: 👁️
+                - strong [ref=e79]: 12.4k
+                - text: views
+              - generic [ref=e80]:
+                - generic [ref=e81]: ❤️
+                - strong [ref=e82]: "847"
+                - text: likes
+              - generic [ref=e83]:
+                - generic [ref=e84]: 🛒
+                - strong [ref=e85]: "89"
+                - text: orders
+          - generic [ref=e86]:
+            - generic [ref=e87]: Active
+            - generic [ref=e88]: $7,234 revenue
+        - generic [ref=e89]:
+          - generic [ref=e90]: 💬
+          - generic [ref=e91]:
+            - generic [ref=e92]: Flash Sale - Today Only
+            - generic [ref=e93]: SMS blast for 20% off Thai Tea cakes
+            - generic [ref=e94]:
+              - generic [ref=e95]:
+                - generic [ref=e96]: 📱
+                - strong [ref=e97]: 1,247
+                - text: sent
+              - generic [ref=e98]:
+                - generic [ref=e99]: 📖
+                - strong [ref=e100]: 94%
+                - text: read
+              - generic [ref=e101]:
+                - generic [ref=e102]: 🛒
+                - strong [ref=e103]: 8%
+                - text: converted
+          - generic [ref=e104]:
+            - generic [ref=e105]: Scheduled
+            - generic [ref=e106]: Starts at 2:00 PM
+    - generic [ref=e107]:
+      - generic [ref=e108]: 📊
+      - text: Marketing Channels Performance
+    - generic [ref=e109]:
+      - generic [ref=e110]:
+        - generic [ref=e112]:
+          - generic [ref=e113]: 📧
+          - text: Email Marketing
+        - generic [ref=e115]:
+          - generic [ref=e116]:
+            - generic [ref=e117]: 68%
+            - generic [ref=e118]: Open Rate
+          - generic [ref=e119]:
+            - generic [ref=e120]: 12%
+            - generic [ref=e121]: CTR
+          - generic [ref=e122]:
+            - generic [ref=e123]: 4.2%
+            - generic [ref=e124]: Conversion
+          - generic [ref=e125]:
+            - generic [ref=e126]: $2.1
+            - generic [ref=e127]: CPA
+        - generic [ref=e128]:
+          - button "Manage" [ref=e129] [cursor=pointer]
+          - button "Analytics" [ref=e130] [cursor=pointer]
+      - generic [ref=e131]:
+        - generic [ref=e133]:
+          - generic [ref=e134]: 📱
+          - text: Social Media
+        - generic [ref=e136]:
+          - generic [ref=e137]:
+            - generic [ref=e138]: 24.5k
+            - generic [ref=e139]: Followers
+          - generic [ref=e140]:
+            - generic [ref=e141]: 3.2%
+            - generic [ref=e142]: Engagement
+          - generic [ref=e143]:
+            - generic [ref=e144]: 2.8%
+            - generic [ref=e145]: Conversion
+          - generic [ref=e146]:
+            - generic [ref=e147]: $3.7
+            - generic [ref=e148]: CPA
+        - generic [ref=e149]:
+          - button "Manage" [ref=e150] [cursor=pointer]
+          - button "Analytics" [ref=e151] [cursor=pointer]
+      - generic [ref=e152]:
+        - generic [ref=e154]:
+          - generic [ref=e155]: 💬
+          - text: SMS Marketing
+        - generic [ref=e157]:
+          - generic [ref=e158]:
+            - generic [ref=e159]: 94%
+            - generic [ref=e160]: Read Rate
+          - generic [ref=e161]:
+            - generic [ref=e162]: 8.7%
+            - generic [ref=e163]: CTR
+          - generic [ref=e164]:
+            - generic [ref=e165]: 6.2%
+            - generic [ref=e166]: Conversion
+          - generic [ref=e167]:
+            - generic [ref=e168]: $1.8
+            - generic [ref=e169]: CPA
+        - generic [ref=e170]:
+          - button "Manage" [ref=e171] [cursor=pointer]
+          - button "Analytics" [ref=e172] [cursor=pointer]
+    - generic [ref=e173]:
+      - generic [ref=e174]:
+        - generic [ref=e175]: 📅
+        - text: Content Calendar
+      - generic [ref=e176]:
+        - generic [ref=e177]: Sun
+        - generic [ref=e178]: Mon
+        - generic [ref=e179]: Tue
+        - generic [ref=e180]: Wed
+        - generic [ref=e181]: Thu
+        - generic [ref=e182]: Fri
+        - generic [ref=e183]: Sat
+        - generic [ref=e185] [cursor=pointer]: "28"
+        - generic [ref=e187] [cursor=pointer]: "29"
+        - generic [ref=e189] [cursor=pointer]: "30"
+        - generic [ref=e191] [cursor=pointer]: "31"
+        - generic [ref=e193] [cursor=pointer]: "1"
+        - generic [ref=e195] [cursor=pointer]: "2"
+        - generic [ref=e198] [cursor=pointer]: "3"
+        - generic [ref=e200] [cursor=pointer]: "4"
+        - generic [ref=e202] [cursor=pointer]: "5"
+        - generic [ref=e205] [cursor=pointer]: "6"
+        - generic [ref=e207] [cursor=pointer]: "7"
+        - generic [ref=e209] [cursor=pointer]: "8"
+        - generic [ref=e212] [cursor=pointer]: "9"
+        - generic [ref=e214] [cursor=pointer]: "10"
+    - generic [ref=e215]:
+      - generic [ref=e216]: ⚡
+      - text: Quick Actions
+    - generic [ref=e217]:
+      - generic [ref=e218] [cursor=pointer]:
+        - generic [ref=e219]: 🚀
+        - generic [ref=e220]: Create Campaign
+        - generic [ref=e221]: Launch a new marketing campaign
+      - generic [ref=e222] [cursor=pointer]:
+        - generic [ref=e223]: 📝
+        - generic [ref=e224]: Schedule Post
+        - generic [ref=e225]: Plan social media content
+      - generic [ref=e226] [cursor=pointer]:
+        - generic [ref=e227]: 🎯
+        - generic [ref=e228]: Segment Audience
+        - generic [ref=e229]: Create customer segments
+      - generic [ref=e230] [cursor=pointer]:
+        - generic [ref=e231]: 📊
+        - generic [ref=e232]: Generate Report
+        - generic [ref=e233]: Marketing performance insights
+    - generic [ref=e234]:
+      - generic [ref=e236]:
+        - generic [ref=e237]: 📈
+        - text: Campaign Performance Trend
+      - generic [ref=e241]:
+        - generic [ref=e242]: 🎯
+        - text: Channel Performance
+    - generic [ref=e245]:
+      - button "🚀 New Campaign" [ref=e246] [cursor=pointer]:
+        - generic [ref=e247]: 🚀
+        - text: New Campaign
+      - button "📊 View Analytics" [ref=e248] [cursor=pointer]:
+        - generic [ref=e249]: 📊
+        - text: View Analytics
+      - button "📄 Export Report" [ref=e250] [cursor=pointer]:
+        - generic [ref=e251]: 📄
+        - text: Export Report

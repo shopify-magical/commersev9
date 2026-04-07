@@ -1,0 +1,13 @@
+[    2342ms] Identifier 'EventBus' has already been declared
+[    2345ms] Identifier 'EventBus' has already been declared
+[    2426ms] [LOG] 🎂 Starting Sweet Layers Live Automation... @ https://bizcommerz-cake-shop.pages.dev/:2209
+[    2433ms] [LOG] 🎂 Initializing Cake Shop Automation Engine... @ https://bizcommerz-cake-shop.pages.dev/js/cake-shop-automation.js:36
+[    2461ms] [ERROR] Failed to initialize automation: ReferenceError: AgenticDashboardEngine is not defined
+    at CakeShopAutomation.init (https://bizcommerz-cake-shop.pages.dev/js/cake-shop-automation.js:41:25)
+    at HTMLDocument.initCakeShopAutomation (https://bizcommerz-cake-shop.pages.dev/:2214:30) @ https://bizcommerz-cake-shop.pages.dev/js/cake-shop-automation.js:64
+[    2466ms] [LOG] 🔧 Cake Shop running in offline mode @ https://bizcommerz-cake-shop.pages.dev/js/cake-shop-automation.js:518
+[    2468ms] [LOG] ✅ Sweet Layers Automation LIVE! Customer journey tracking active. @ https://bizcommerz-cake-shop.pages.dev/:2218
+[    2468ms] [LOG] 💬 Enhanced AI Chat ready for ordering and tasks! @ https://bizcommerz-cake-shop.pages.dev/:2219
+[    2536ms] ReferenceError: AgenticEngine is not defined
+    at initAIAssistant (https://bizcommerz-cake-shop.pages.dev/:1925:7)
+    at HTMLDocument.<anonymous> (https://bizcommerz-cake-shop.pages.dev/:2653:7)

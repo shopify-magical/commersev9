@@ -1,0 +1,541 @@
+<!--
+  Premium Product Card Component - Figma-Generated Design
+  Sweet Layers Design System Component
+  
+  Usage:
+  <sl-product-card
+    image="/images/cake.jpg"
+    name="ชื่อสินค้า"
+    price="450"
+    badge="bestseller"
+    rating="4.8"
+    reviews="128"
+    description="รายละเอียดสั้นๆ">
+  </sl-product-card>
+-->
+
+<template id="sl-product-card-template">
+  <style>
+    :host {
+      display: block;
+      --card-bg: #ffffff;
+      --card-shadow: 0 4px 16px rgba(13,42,34,0.08);
+      --card-shadow-hover: 0 8px 32px rgba(13,42,34,0.15);
+      --primary: #2A6B52;
+      --accent: #C4A647;
+      --brown: #3D2E22;
+      --cream: #FDF9F5;
+      --radius: 16px;
+    }
+    
+    .product-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--card-shadow-hover);
+    }
+    
+    .product-image-wrapper {
+      position: relative;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--cream) 0%, #F5EDE4 100%);
+    }
+    
+    .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .product-card:hover .product-image {
+      transform: scale(1.08);
+    }
+    
+    .image-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 16px;
+    }
+    
+    .product-card:hover .image-overlay {
+      opacity: 1;
+    }
+    
+    .quick-view-btn {
+      background: white;
+      color: var(--brown);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 24px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .product-card:hover .quick-view-btn {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .quick-view-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .badges {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    
+    .badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      animation: badgePop 0.4s ease;
+    }
+    
+    @keyframes badgePop {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    
+    .badge-bestseller {
+      background: linear-gradient(135deg, #C4A647 0%, #B3941A 100%);
+      color: white;
+    }
+    
+    .badge-new {
+      background: linear-gradient(135deg, #2A6B52 0%, #1F4A3A 100%);
+      color: white;
+    }
+    
+    .badge-sale {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+    }
+    
+    .wishlist-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    
+    .product-card:hover .wishlist-btn {
+      opacity: 1;
+      transform: scale(1);
+    }
+    
+    .wishlist-btn:hover {
+      background: #ff4757;
+      color: white;
+    }
+    
+    .wishlist-btn.active {
+      background: #ff4757;
+      color: white;
+    }
+    
+    .product-info {
+      padding: 20px;
+    }
+    
+    .product-category {
+      font-size: 0.75rem;
+      color: var(--accent);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    
+    .product-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--brown);
+      margin-bottom: 8px;
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .product-description {
+      font-size: 0.85rem;
+      color: var(--gray-500);
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.5;
+    }
+    
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    
+    .stars {
+      display: flex;
+      gap: 2px;
+      color: var(--accent);
+    }
+    
+    .rating-value {
+      font-weight: 600;
+      color: var(--brown);
+      font-size: 0.9rem;
+    }
+    
+    .reviews-count {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+    }
+    
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid var(--gray-200);
+    }
+    
+    .price-section {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .original-price {
+      font-size: 0.85rem;
+      color: var(--gray-400);
+      text-decoration: line-through;
+    }
+    
+    .current-price {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .add-to-cart {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: none;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .add-to-cart:hover {
+      background: var(--primary-dark);
+      transform: scale(1.1);
+    }
+    
+    .add-to-cart:active {
+      transform: scale(0.95);
+    }
+    
+    .add-to-cart::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .add-to-cart:active::before {
+      opacity: 1;
+    }
+    
+    /* Skeleton loading state */
+    .skeleton {
+      background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    
+    /* Responsive */
+    @media (max-width: 480px) {
+      .product-info {
+        padding: 16px;
+      }
+      
+      .product-name {
+        font-size: 1rem;
+      }
+      
+      .current-price {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+  
+  <div class="product-card">
+    <div class="product-image-wrapper">
+      <img class="product-image" src="" alt="">
+      <div class="image-overlay">
+        <button class="quick-view-btn">ดูรายละเอียด</button>
+      </div>
+      <div class="badges"></div>
+      <button class="wishlist-btn">❤️</button>
+    </div>
+    
+    <div class="product-info">
+      <div class="product-category"></div>
+      <h3 class="product-name"></h3>
+      <p class="product-description"></p>
+      
+      <div class="rating-row">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <span class="rating-value"></span>
+        <span class="reviews-count"></span>
+      </div>
+      
+      <div class="product-footer">
+        <div class="price-section">
+          <span class="original-price"></span>
+          <span class="current-price"></span>
+        </div>
+        <button class="add-to-cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 2L6 7H3v2h1.3L5 20h14l.7-11H21V7h-3l-3-5H9zm2 2h2l2 3h-6l2-3zm-5 5h12l-.5 9H6.5L6 9z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+class SLProductCard extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    const template = document.getElementById('sl-product-card-template');
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
+  }
+  
+  static get observedAttributes() {
+    return ['image', 'name', 'price', 'original-price', 'badge', 'rating', 'reviews', 'description', 'category'];
+  }
+  
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue === newValue) return;
+    this.render();
+  }
+  
+  connectedCallback() {
+    this.render();
+    this.attachEvents();
+  }
+  
+  render() {
+    const image = this.getAttribute('image') || '/images/placeholder.jpg';
+    const name = this.getAttribute('name') || 'สินค้า';
+    const price = this.getAttribute('price') || '0';
+    const originalPrice = this.getAttribute('original-price');
+    const badge = this.getAttribute('badge');
+    const rating = this.getAttribute('rating');
+    const reviews = this.getAttribute('reviews');
+    const description = this.getAttribute('description');
+    const category = this.getAttribute('category') || 'เค้ก';
+    
+    // Set image
+    const img = this.shadowRoot.querySelector('.product-image');
+    img.src = image;
+    img.alt = name;
+    
+    // Set text content
+    this.shadowRoot.querySelector('.product-name').textContent = name;
+    this.shadowRoot.querySelector('.product-category').textContent = category;
+    this.shadowRoot.querySelector('.current-price').textContent = `฿${price}`;
+    
+    if (description) {
+      this.shadowRoot.querySelector('.product-description').textContent = description;
+    }
+    
+    // Set original price (if sale)
+    const originalPriceEl = this.shadowRoot.querySelector('.original-price');
+    if (originalPrice) {
+      originalPriceEl.textContent = `฿${originalPrice}`;
+      originalPriceEl.style.display = 'block';
+    } else {
+      originalPriceEl.style.display = 'none';
+    }
+    
+    // Set rating
+    const ratingEl = this.shadowRoot.querySelector('.rating-value');
+    const reviewsEl = this.shadowRoot.querySelector('.reviews-count');
+    if (rating) {
+      ratingEl.textContent = rating;
+      reviewsEl.textContent = `(${reviews || 0} รีวิว)`;
+    } else {
+      this.shadowRoot.querySelector('.rating-row').style.display = 'none';
+    }
+    
+    // Set badges
+    const badgesContainer = this.shadowRoot.querySelector('.badges');
+    badgesContainer.innerHTML = '';
+    
+    if (badge) {
+      const badgeEl = document.createElement('span');
+      badgeEl.className = `badge badge-${badge}`;
+      const badgeText = {
+        'bestseller': 'ขายดี',
+        'new': 'ใหม่',
+        'sale': 'ลดราคา'
+      };
+      badgeEl.textContent = badgeText[badge] || badge;
+      badgesContainer.appendChild(badgeEl);
+    }
+  }
+  
+  attachEvents() {
+    // Quick view
+    this.shadowRoot.querySelector('.quick-view-btn')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.dispatchEvent(new CustomEvent('quickView', { 
+        bubbles: true, 
+        detail: { product: this.getProductData() }
+      }));
+    });
+    
+    // Wishlist
+    const wishlistBtn = this.shadowRoot.querySelector('.wishlist-btn');
+    wishlistBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      wishlistBtn.classList.toggle('active');
+      this.dispatchEvent(new CustomEvent('toggleWishlist', {
+        bubbles: true,
+        detail: { product: this.getProductData(), active: wishlistBtn.classList.contains('active') }
+      }));
+    });
+    
+    // Add to cart
+    this.shadowRoot.querySelector('.add-to-cart')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.addToCart();
+    });
+    
+    // Card click
+    this.shadowRoot.querySelector('.product-card')?.addEventListener('click', () => {
+      this.dispatchEvent(new CustomEvent('cardClick', {
+        bubbles: true,
+        detail: { product: this.getProductData() }
+      }));
+    });
+  }
+  
+  getProductData() {
+    return {
+      name: this.getAttribute('name'),
+      price: this.getAttribute('price'),
+      image: this.getAttribute('image'),
+      description: this.getAttribute('description'),
+      badge: this.getAttribute('badge'),
+      rating: this.getAttribute('rating'),
+      reviews: this.getAttribute('reviews')
+    };
+  }
+  
+  addToCart() {
+    const item = {
+      id: this.getAttribute('id') || `product-${Date.now()}`,
+      name: this.getAttribute('name'),
+      price: parseInt(this.getAttribute('price')),
+      image: this.getAttribute('image'),
+      qty: 1
+    };
+    
+    // Get existing cart
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    
+    // Check if already in cart
+    const existing = cart.find(i => i.name === item.name);
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push(item);
+    }
+    
+    // Save cart
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    // Dispatch events
+    window.dispatchEvent(new CustomEvent('cartUpdated', { detail: cart }));
+    this.dispatchEvent(new CustomEvent('addedToCart', {
+      bubbles: true,
+      detail: { product: item, cart: cart }
+    }));
+    
+    // Visual feedback
+    const btn = this.shadowRoot.querySelector('.add-to-cart');
+    btn.style.transform = 'scale(0.9)';
+    setTimeout(() => btn.style.transform = '', 150);
+    
+    // Show toast if available
+    if (typeof showToast === 'function') {
+      showToast(`✅ เพิ่ม ${item.name} ลงตะกร้าแล้ว!`);
+    }
+  }
+}
+
+customElements.define('sl-product-card', SLProductCard);
+</script>

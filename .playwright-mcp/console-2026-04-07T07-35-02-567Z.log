@@ -1,0 +1,14 @@
+[    2488ms] [ERROR] QR generation failed: TypeError: Failed to fetch
+    at generatePromptPayQR (https://bizcommerz-cake-shop.pages.dev/checkout:575:27)
+    at renderSummary (https://bizcommerz-cake-shop.pages.dev/checkout:552:9)
+    at selectPayment (https://bizcommerz-cake-shop.pages.dev/checkout:570:7)
+    at https://bizcommerz-cake-shop.pages.dev/checkout:693:5 @ https://bizcommerz-cake-shop.pages.dev/checkout:590
+[    2510ms] [ERROR] QR generation failed: TypeError: Failed to fetch
+    at generatePromptPayQR (https://bizcommerz-cake-shop.pages.dev/checkout:575:27)
+    at selectPayment (https://bizcommerz-cake-shop.pages.dev/checkout:565:9)
+    at https://bizcommerz-cake-shop.pages.dev/checkout:693:5 @ https://bizcommerz-cake-shop.pages.dev/checkout:590
+[    2510ms] [ERROR] QR generation failed: TypeError: Failed to fetch
+    at generatePromptPayQR (https://bizcommerz-cake-shop.pages.dev/checkout:575:27)
+    at renderSummary (https://bizcommerz-cake-shop.pages.dev/checkout:552:9)
+    at https://bizcommerz-cake-shop.pages.dev/checkout:692:5 @ https://bizcommerz-cake-shop.pages.dev/checkout:590
+[    2939ms] [LOG] Products loaded: 14 @ https://bizcommerz-cake-shop.pages.dev/shop:479

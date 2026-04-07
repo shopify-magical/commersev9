@@ -34,9 +34,6 @@ class CakeShopAutomation {
   }
 
   async init() {
-    console.log('AgenticDashboardEngine' in window ? 'AgenticDashboardEngine available' : 'AgenticDashboardEngine not available');
-    console.log('AgenticEngine' in window ? 'AgenticEngine available' : 'AgenticEngine not available');
-    
     try {
       // Check if AgenticDashboardEngine is available
       if (typeof AgenticDashboardEngine === 'undefined') {
@@ -69,9 +66,36 @@ class CakeShopAutomation {
 
     } catch (err) {
       console.error('Failed to initialize automation:', err);
-      console.log('Falling back to offline mode...');
       this.initOfflineMode();
     }
+  }
+
+  async initOfflineMode() {
+    console.log('AgenticDashboardEngine' in window ? 'AgenticDashboardEngine available in offline mode' : 'AgenticDashboardEngine not available in offline mode');
+    console.log('AgenticEngine' in window ? 'AgenticEngine available in offline mode' : 'AgenticEngine not available in offline mode');
+    console.log('Cake Shop running in offline mode - basic functionality available');
+    
+    // Set up basic offline functionality
+    this.agent = {
+      submitGoal: (goal, priority, data) => {
+        console.log(`[OFFLINE] Goal submitted: ${goal} (${priority})`, data);
+      }
+    };
+    
+    // Basic tracking without backend
+    this.setupBasicTracking();
+  }
+
+  setupBasicTracking() {
+    console.log('Setting up basic tracking in offline mode');
+    // Basic click tracking without agent
+    document.addEventListener('click', (e) => {
+      const cakeElement = e.target.closest('[data-cake]');
+      if (cakeElement) {
+        const cakeName = cakeElement.dataset.cake;
+        console.log(`[OFFLINE] Cake interaction: ${cakeName}`);
+      }
+    });
   }
 
   // ========== FLOW 1: WELCOME SEQUENCE ==========

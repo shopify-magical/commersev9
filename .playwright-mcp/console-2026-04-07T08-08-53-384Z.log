@@ -1,0 +1,22 @@
+[     954ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap:0
+[     958ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://static.line-scdn.net/liff/edge/2/LineLiff.js:0
+[    1093ms] [LOG] LIFF not available, running in browser mode @ https://main.bizcommerz-cake-shop.pages.dev/line-liff:316
+[  185645ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://bizcommerz-cake-shop.pages.dev/line-liff.html:0
+[  186002ms] [LOG] 🚀 BookingGo Router initialized @ https://bizcommerz-cake-shop.pages.dev/js/router.js:62
+[  186170ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at https://bizcommerz-cake-shop.pages.dev/line-liff.html:262:43
+[  186063ms] [LOG] ✅ Routes configured @ https://bizcommerz-cake-shop.pages.dev/js/routes.js:254
+[  196463ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap:0
+[  196468ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://static.line-scdn.net/liff/edge/2/LineLiff.js:0
+[  196689ms] [ERROR] LINE Connection Error: TypeError: window.liff.getDecodedIDToken is not a function
+    at LINEIntegration.connectLINE (https://main.bizcommerz-cake-shop.pages.dev/js/line-integration.js:22:37)
+    at async HTMLDocument.initializeLIFF (https://main.bizcommerz-cake-shop.pages.dev/line-liff:334:11) @ https://main.bizcommerz-cake-shop.pages.dev/js/line-integration.js:32
+[  218053ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap:0
+[  218058ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://static.line-scdn.net/liff/edge/2/LineLiff.js:0
+[  218078ms] [LOG] LINE User ID: undefined @ https://main.bizcommerz-cake-shop.pages.dev/js/line-integration.js:22
+[  239705ms] [ERROR] Access to fetch at 'https://api.line.me/v2/bot/message/push' from origin 'https://main.bizcommerz-cake-shop.pages.dev' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://main.bizcommerz-cake-shop.pages.dev/line-liff:0
+[  239709ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.line.me/v2/bot/message/push:0
+[  239709ms] [ERROR] LINE Message Error: TypeError: Failed to fetch
+    at LINEIntegration.sendLINEMessage (https://main.bizcommerz-cake-shop.pages.dev/js/line-integration.js:384:30)
+    at addToCart (https://main.bizcommerz-cake-shop.pages.dev/line-liff:398:32)
+    at HTMLDivElement.onclick (https://main.bizcommerz-cake-shop.pages.dev/line-liff:446:2) @ https://main.bizcommerz-cake-shop.pages.dev/js/line-integration.js:403

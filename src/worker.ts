@@ -84,7 +84,7 @@ export default {
       url.pathname.startsWith('/onboard') ||
       url.pathname.startsWith('/ws');
 
-    // Root HTML page - let Workers Sites try to serve, or return simple message
+    // Root HTML page - redirect to shop
     if (url.pathname === '/' || url.pathname === '/index.html') {
       return new Response('Redirecting to static site...', { 
         status: 302,
@@ -92,9 +92,9 @@ export default {
       });
     }
 
-    // For other non-API routes, try to serve static files
+    // For other routes, let Workers Sites handle static files unless it's an API route
     if (!isApiRoute) {
-      return new Response('Not Found', { status: 404 });
+      return fetch(request);
     }
 
     // For API routes, ensure engine is initialized

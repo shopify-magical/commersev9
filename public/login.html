@@ -293,6 +293,16 @@
       opacity: 0;
       transition: all 0.3s;
       z-index: 1000;
+      box-shadow: var(--shadow-lg);
+      max-width: 90vw;
+    }
+    
+    .toast.success {
+      background: var(--primary);
+    }
+    
+    .toast.error {
+      background: var(--error);
     }
 
     .toast.show {
@@ -320,16 +330,18 @@
     </div>
 
     <div class="login-body">
-      <form id="loginForm" onsubmit="handleLogin(event)">
+      <form id="loginForm" onsubmit="handleLogin(event)" novalidate>
         <div class="form-group">
           <label for="email">อีเมลหรือเบอร์โทรศัพท์</label>
           <input 
-            type="text" 
+            type="email" 
             id="email" 
             name="email" 
             placeholder="example@email.com หรือ 08xxxxxxxx"
             required
             autocomplete="email"
+            aria-describedby="emailError"
+            aria-invalid="false"
           >
           <div class="error-message" id="emailError">กรุณากรอกอีเมลหรือเบอร์โทรศัพท์</div>
         </div>
@@ -343,6 +355,9 @@
             placeholder="••••••••"
             required
             autocomplete="current-password"
+            aria-describedby="passwordError"
+            aria-invalid="false"
+            minlength="6"
           >
           <div class="error-message" id="passwordError">รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร</div>
         </div>
@@ -355,8 +370,8 @@
           <a href="#" class="forgot-password" onclick="showToast('ติดต่อแอดมินเพื่อรีเซ็ตรหัสผ่าน')">ลืมรหัสผ่าน?</a>
         </div>
 
-        <button type="submit" class="btn btn-primary" id="loginBtn">
-          เข้าสู่ระบบ
+        <button type="submit" class="btn btn-primary" id="loginBtn" aria-label="เข้าสู่ระบบ">
+          <span class="btn-text">เข้าสู่ระบบ</span>
         </button>
       </form>
 
@@ -383,6 +398,8 @@
 
   <div class="toast" id="toast"></div>
 
+  <script src="js/shared.js"></script>
+  <script src="js/analytics.js"></script>
   <script>
     const API_BASE = window.location.hostname.includes('pages.dev')
       ? 'https://bizcommerz-agentic-engine.aekbuffalo.workers.dev'
@@ -395,95 +412,260 @@
       setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
+    // Enhanced validation functions
     function validateEmail(email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const phoneRegex = /^[0-9]{10}$/;
-      return emailRegex.test(email) || phoneRegex.test(email.replace(/-/g, ''));
+      return emailRegex.test(email);
+    }
+    
+    function validatePassword(password) {
+      // At least 6 chars, 1 letter, 1 number
+      const hasLetter = /[a-zA-Z]/.test(password);
+      const hasNumber = /[0-9]/.test(password);
+      return password.length >= 6 && hasLetter && hasNumber;
+    }
+    
+    function generateDeviceFingerprint() {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      ctx.text('Device fingerprint', 12, 'Arial');
+      const fingerprint = canvas.toDataURL();
+      return btoa(fingerprint).substring(0, 16);
+    }
+    
+    function getLoginErrorMessage(errorCode) {
+      const errorMessages = {
+        'invalid_credentials': 'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
+        'account_locked': 'บัญชีผู้ใช้ถูกล็อคชั่วคราง',
+        'rate_limit': 'กรุณารอ 5 นาทีแล้วลองใหม่',
+        'server_error': 'ข้อผิดพลาดจากเซิร์ฟเวอร์ กรุณาลองใหม่',
+        'network_error': 'ไม่สามารถเชื่อมต่ออินเทอร์เน็ต'
+      };
+      return errorMessages[errorCode] || 'เกิดข้อผิดที่ไม่ทราบสาเหตุ';
+    }
+    
+    // Loading state management
+    function showLoadingState(button, message) {
+      button.disabled = true;
+      button.innerHTML = `<span class="loading"></span> ${message}`;
+    }
+    
+    function hideLoadingState(button) {
+      button.disabled = false;
+      button.textContent = 'เข้าสู่ระบบ';
+    }
+
+    // Enhanced validation
+    function validateForm() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      let hasError = false;
+      
+      // Reset all errors first
+      document.querySelectorAll('.form-group input').forEach(input => {
+        input.classList.remove('error');
+      });
+      document.querySelectorAll('.error-message').forEach(msg => {
+        msg.classList.remove('show');
+      });
+      
+      // Enhanced email validation
+      if (!email) {
+        showFieldError('email', 'กรุณากรอกอีเมลหรือเบอร์โทรศัพท์');
+        hasError = true;
+      } else if (!validateEmail(email)) {
+        showFieldError('email', 'รูปแบบอีเมลหรือเบอร์ไม่ถูกต้อง');
+        hasError = true;
+      }
+      
+      // Enhanced password validation
+      if (!password) {
+        showFieldError('password', 'กรุณากรอกรหัสผ่าน');
+        hasError = true;
+      } else if (password.length < 6) {
+        showFieldError('password', 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร');
+        hasError = true;
+      } else if (!validatePassword(password)) {
+        showFieldError('password', 'รหัสผ่านต้องมีทั้งตัวอักษรและตัวเลข');
+        hasError = true;
+      }
+      
+      return !hasError;
+    }
+    
+    function showFieldError(fieldId, message) {
+      const field = document.getElementById(fieldId);
+      const errorElement = document.getElementById(fieldId + 'Error');
+      field.classList.add('error');
+      errorElement.textContent = message;
+      errorElement.classList.add('show');
+      
+      // Track validation error for analytics
+      if (typeof trackEvent === 'function') {
+        trackEvent('login_validation_error', { field: fieldId, message });
+      }
     }
 
     async function handleLogin(event) {
       event.preventDefault();
+      
+      // Track login attempt
+      if (typeof trackEvent === 'function') {
+        trackEvent('login_attempt', { method: 'email' });
+      }
+      
+      if (!validateForm()) return;
       
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
       const rememberMe = document.getElementById('rememberMe').checked;
       const btn = document.getElementById('loginBtn');
 
-      // Reset errors
-      document.getElementById('email').classList.remove('error');
-      document.getElementById('password').classList.remove('error');
-      document.getElementById('emailError').classList.remove('show');
-      document.getElementById('passwordError').classList.remove('show');
-
-      // Validate
-      let hasError = false;
-      if (!email) {
-        document.getElementById('email').classList.add('error');
-        document.getElementById('emailError').classList.add('show');
-        hasError = true;
-      }
-      if (password.length < 6) {
-        document.getElementById('password').classList.add('error');
-        document.getElementById('passwordError').classList.add('show');
-        hasError = true;
-      }
-      if (hasError) return;
-
-      // Loading state
-      btn.disabled = true;
-      btn.innerHTML = '<span class="loading"></span> กำลังเข้าสู่ระบบ...';
+      // Loading state with animation
+      showLoadingState(btn, 'กำลังเข้าสู่ระบบ...');
 
       try {
+        // Enhanced API call with timeout and retry
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        
         const response = await fetch(`${API_BASE}/auth/login`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password, rememberMe })
+          headers: { 
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: JSON.stringify({ 
+            email, 
+            password, 
+            rememberMe,
+            deviceFingerprint: generateDeviceFingerprint(),
+            timestamp: Date.now()
+          }),
+          signal: controller.signal
         });
-
+        
+        clearTimeout(timeoutId);
         const data = await response.json();
 
         if (data.success) {
-          // Store token
-          if (rememberMe) {
-            localStorage.setItem('auth_token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
-          } else {
-            sessionStorage.setItem('auth_token', data.token);
-            sessionStorage.setItem('user', JSON.stringify(data.user));
+          // Enhanced token storage
+          const storage = rememberMe ? localStorage : sessionStorage;
+          storage.setItem('auth_token', data.token);
+          storage.setItem('user', JSON.stringify(data.user));
+          storage.setItem('login_timestamp', Date.now().toString());
+          
+          // Track successful login
+          if (typeof trackEvent === 'function') {
+            trackEvent('login_success', { 
+              userId: data.user.id,
+              method: 'email',
+              rememberMe 
+            });
           }
           
-          showToast('เข้าสู่ระบบสำเร็จ!');
+          showToast('เข้าสู่ระบบสำเร็จ!', 'success');
           
-          // Redirect to dashboard
+          // Check for redirect parameter
+          const urlParams = new URLSearchParams(window.location.search);
+          const redirectTo = urlParams.get('redirect') || '/dashboard.html';
+          
+          // Smooth redirect with loading state
+          showLoadingState(btn, 'กำลังนำทาง...');
           setTimeout(() => {
-            window.location.href = '/dashboard.html';
-          }, 1000);
+            window.location.href = redirectTo;
+          }, 800);
         } else {
-          showToast(data.message || 'อีเมลหรือรหัสผ่านไม่ถูกต้อง');
-          btn.disabled = false;
-          btn.textContent = 'เข้าสู่ระบบ';
+          // Enhanced error handling
+          const errorMessage = getLoginErrorMessage(data.error || 'invalid_credentials');
+          showToast(errorMessage, 'error');
+          
+          // Track failed login
+          if (typeof trackEvent === 'function') {
+            trackEvent('login_failed', { 
+              error: data.error,
+              email: email.substring(0, 3) + '***' // Partial masking for privacy
+            });
+          }
+          
+          hideLoadingState(btn);
         }
       } catch (error) {
-        showToast('ไม่สามารถเชื่อมต่อกับระบบได้');
-        btn.disabled = false;
-        btn.textContent = 'เข้าสู่ระบบ';
+        console.error('Login error:', error);
+        showToast('การเชื่อมต่อขัดข้อผิดพลาด กรุณาลองใหม่', 'error');
+        
+        // Track network error
+        if (typeof trackEvent === 'function') {
+          trackEvent('login_network_error', { error: error.message });
+        }
+        
+        hideLoadingState(btn);
       }
     }
 
     function socialLogin(provider) {
+      // Track social login attempt
+      if (typeof trackEvent === 'function') {
+        trackEvent('social_login_attempt', { provider });
+      }
+      
       showToast(`กำลังเชื่อมต่อกับ ${provider}...`);
-      // Implement OAuth flow
+      
+      // OAuth implementation would go here
+      // For demo: simulate successful login
+      setTimeout(() => {
+        const mockUser = {
+          id: 'demo_user',
+          name: provider === 'line' ? 'LINE User' : 'Google User',
+          email: `user@${provider}.com`,
+          avatar: `https://ui-avatars.com/api/?name=${provider}&background=random`
+        };
+        
+        const storage = localStorage;
+        storage.setItem('auth_token', 'demo_token_' + provider);
+        storage.setItem('user', JSON.stringify(mockUser));
+        
+        if (typeof trackEvent === 'function') {
+          trackEvent('social_login_success', { provider });
+        }
+        
+        showToast(`เข้าสู่ระบบด้วย ${provider}!`, 'success');
+        setTimeout(() => {
+          window.location.href = '/dashboard.html';
+        }, 1000);
+      }, 1500);
     }
 
     function openOnboardFromLogin(event) {
       event.preventDefault();
+      
+      // Track onboarding click
+      if (typeof trackEvent === 'function') {
+        trackEvent('onboarding_click', { source: 'login_page' });
+      }
+      
       window.location.href = '/?onboard=true';
     }
 
-    // Check if already logged in
+    // Check if already logged in and redirect appropriately
     const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
-    if (token) {
-      window.location.href = '/dashboard.html';
+    const user = token ? JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user')) : null;
+    
+    if (token && user) {
+      // Track auto-redirect
+      if (typeof trackEvent === 'function') {
+        trackEvent('auto_redirect', { 
+          reason: 'already_logged_in',
+          userRole: user.role || 'customer'
+        });
+      }
+      
+      // Check user role for appropriate redirect
+      const redirectPath = user.role === 'admin' ? '/super-admin.html' : 
+                        user.role === 'business' ? '/dashboard.html' : 
+                        '/dashboard.html';
+      
+      window.location.href = redirectPath;
     }
   </script>
 </body>

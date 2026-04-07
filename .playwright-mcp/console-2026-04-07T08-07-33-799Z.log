@@ -1,0 +1,7 @@
+[     981ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap:0
+[     985ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://static.line-scdn.net/liff/edge/2/LineLiff.js:0
+[    1027ms] [LOG] LIFF not available, running in browser mode @ https://main.bizcommerz-cake-shop.pages.dev/line-liff:316
+[    1346ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://main.bizcommerz-cake-shop.pages.dev/images/chocolate-cake.jpg:0
+[    1350ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://main.bizcommerz-cake-shop.pages.dev/images/strawberry-cake.jpg:0
+[    1351ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://main.bizcommerz-cake-shop.pages.dev/images/matcha-cake.jpg:0
+[    1351ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://main.bizcommerz-cake-shop.pages.dev/images/vanilla-cake.jpg:0

@@ -2618,6 +2618,9 @@
   </div>
 
   <script src="js/shared.js"></script>
+  <script src="js/unified-chat-widget.js"></script>
+  <script src="js/mascot-chat-widget.js"></script>
+  <script src="js/agentic-engine.js"></script>
   <script src="js/dashboard-agent.js"></script>
   <script src="js/agentic-dashboard-engine.js"></script>
   <script src="js/cake-shop-automation.js"></script>
@@ -3174,7 +3177,6 @@
       try {
         console.log('🎭 Initializing Mascot Chat Widget...');
 
-        // Create mascot chat widget with advanced features
         window.mascotChat = new MascotChatWidget({
           character: 'mooncake',
           personality: 'friendly',
@@ -3190,7 +3192,25 @@
 
         await window.mascotChat.init();
 
-        // Enhance existing AI chat with mascot features
+        // Connect chatbot to engines for automation flow
+        if (window.AgenticEngine) {
+          // Connect to main Agentic Engine
+          window.mascotChat.onAutomationTrigger = (action, data) => {
+            window.AgenticEngine.submitGoal(
+              `Process chatbot automation: ${action}`,
+              Priority.MEDIUM,
+              { source: 'chatbot', action, data }
+            );
+          };
+          console.log('🤖 Chatbot connected to AgenticEngine!');
+        }
+
+        if (window.AgenticDashboardEngine) {
+          // Connect to Dashboard Engine
+          window.AgenticDashboardEngine.connectChatbot(window.mascotChat);
+          console.log('📊 Chatbot connected to AgenticDashboardEngine!');
+        }
+
         enhanceAIChatWithMascot();
 
         console.log('🎭 Mascot Chat Widget initialized successfully!');

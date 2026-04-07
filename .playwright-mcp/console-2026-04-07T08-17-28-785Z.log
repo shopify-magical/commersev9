@@ -1,0 +1,3 @@
+[     995ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap:0
+[     999ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://static.line-scdn.net/liff/edge/2/LineLiff.js:0
+[    1069ms] [LOG] LINE User ID: undefined @ https://main.bizcommerz-cake-shop.pages.dev/js/line-integration.js:22

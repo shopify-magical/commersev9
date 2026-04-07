@@ -5,10 +5,11 @@
 
 class LINEIntegration {
   constructor() {
-    this.channelAccessToken = 'f2d21879e9a8f2fdad6625c726a2f5bd'; // Channel Access Token (Long-lived)
-    this.channelSecret = '65f763d0af5e321d166cdeff84198182'; // Channel Secret ที่ได้
+    this.channelAccessToken = 'f2d21879e9a8f2fdad6625c726a2f5bd'; // Your Channel Access Token
+    this.channelSecret = '65f763d0af5e321d166cdeff84198182'; // Your Channel Secret
     this.userId = null;
-    this.liffId = '2008523083-1KKafaGY'; // LIFF ID ที่ได้
+    this.liffId = '2008523083-1KKafaGY'; // Your LIFF ID
+    this.channelId = '2008523083'; // Your Channel ID
   }
 
   // 1. เชื่อมต่อกับ LINE Official Account

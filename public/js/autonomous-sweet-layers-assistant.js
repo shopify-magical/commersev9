@@ -477,9 +477,9 @@ What would you like help with? ${this.getMascotEmoji()}`,
 
   handleGreetingIntent(nlpResult) {
     const greetings = [
-      `Hello! Welcome to Sweet Layers! I'm your autonomous assistant, ready to help you find the perfect cake! ${this.getMascotEmoji()}`,
-      `Hi there! I'm excited to help you with your cake needs! What can I assist you with today?`,
-      `Greetings! Sweet Layers at your service! I can help with orders, recommendations, and more!`
+      `Hello! Welcome to Sweet Layers! I'm here to help you find the perfect cake! ${this.getMascotEmoji()}`,
+      `Hi there! I can help you with orders, recommendations, and more! What would you like today?`,
+      `Greetings! Sweet Layers at your service! How may I assist you with your cake needs?`
     ];
     
     return {

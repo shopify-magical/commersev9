@@ -1,14 +1,14 @@
-export { AgenticEngine } from './orchestrator/index.js';
+export { AgenticEngine } from './engine.js';
 export { EventBus } from './core/event-bus.js';
 export { StateManager } from './core/state-manager.js';
 export { Logger } from './core/logger.js';
 export { ErrorHandler, AgenticError } from './core/error-handler.js';
-export { PerceptionModule, Sensor, TimerSensor, MetricSensor } from './perception/index.js';
+export { PerceptionModule, Sensor, TimerSensor, MetricSensor } from './perception.js';
 export { ReasoningEngine } from './reasoning/index.js';
 export { ActionExecutor } from './action/index.js';
-export { KnowledgeBase, LearningModule } from './learning/index.js';
+export { KnowledgeBase, LearningModule } from './learning.js';
 export { AgentState, Priority, TaskStatus } from './types/index.js';
-import { AgenticEngine } from './orchestrator/index.js';
+import { AgenticEngine } from './engine.js';
 import { Priority } from './types/index.js';
 // Demo: run autonomous engine
 async function main() {

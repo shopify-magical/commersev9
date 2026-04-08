@@ -1,6 +1,0 @@
-[     807ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://bizcommerz-cake-shop.pages.dev/super-admin.html:0
-[    2088ms] [LOG] 🚀 BookingGo Router initialized @ https://bizcommerz-cake-shop.pages.dev/js/router.js:62
-[    2204ms] TypeError: Cannot read properties of null (reading 'addEventListener')
-    at https://bizcommerz-cake-shop.pages.dev/super-admin.html:262:43
-[    2230ms] [LOG] ✅ Routes configured @ https://bizcommerz-cake-shop.pages.dev/js/routes.js:254
-[    2419ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://bizcommerz-cake-shop.pages.dev/favicon.ico:0

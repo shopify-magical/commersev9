@@ -3892,6 +3892,7 @@
       group.querySelectorAll('.radio-item').forEach(r => r.classList.remove('selected'));
       el.classList.add('selected');
       filters[type] = el.dataset.value;
+      console.log(`Selected ${type}: ${el.dataset.value}`);
     }
 
     // ─── PRICE RANGE ───
@@ -3903,6 +3904,7 @@
 
       filters.priceMin = min;
       filters.priceMax = max;
+      console.log(`Price range updated: $${min} - $${max}`);
 
       document.getElementById('priceMin').textContent = `$${min}`;
       document.getElementById('priceMax').textContent = `$${max}`;
@@ -3917,6 +3919,7 @@
     }
 
     function setPricePreset(min, max) {
+      console.log(`Setting price preset: $${min} - $${max}`);
       document.getElementById('rangeMin').value = min;
       document.getElementById('rangeMax').value = max;
       updateRange();

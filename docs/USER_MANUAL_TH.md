@@ -1,6 +1,6 @@
 # BizCommerz Agentic Engine - คู่มือการใช้งาน
 
-## 🎂 Sweet Layers - ระบบจัดการร้านค้าอัจฉริยะ
+## เค้ก Sweet Layers - ระบบจัดการร้านค้าอัจฉริยะ
 
 ---
 
@@ -73,7 +73,7 @@ https://bizcommerz-cake-shop.pages.dev/cake-shop-owner.html
 | ฿2,835 | รายได้วันนี้ |
 | 47 | จำนวนออเดอร์วันนี้ |
 | 12 | ออเดอร์ที่กำลังทำ |
-| ⭐ 4.8 | คะแนนลูกค้า |
+| ดาว 4.8 | คะแนนลูกค้า |
 
 ### 🎯 สถานะออเดอร์
 
@@ -165,7 +165,7 @@ https://bizcommerz-cake-shop.pages.dev/line-liff.html
 ### ข้อความที่ระบบส่ง
 
 ```
-🎂 มีออเดอร์ใหม่!
+เค้ก มีออเดอร์ใหม่!
 
 ชื่อ: สมชาย
 สินค้า: เค้กช็อกโกแลต x 1
@@ -221,11 +221,11 @@ https://bizcommerz-cake-shop.pages.dev/line-liff.html
 
 ---
 
-## 📞 ติดต่อสนับสนุน
+## โทร ติดต่อสนับสนุน
 
 หากมีปัญหา ติดต่อได้ที่:
 
-- 📧 อีเมล: support@sweetlayers.com
+- อีเมล อีเมล: support@sweetlayers.com
 - 📱 โทร: 084-087-1065
 - 💬 LINE: @sweetlayers
 

@@ -1,0 +1,8 @@
+#:schema node_modules/wrangler/config-schema.json
+name = "db-proxy-worker"
+main = "src/db-proxy-worker.ts"
+compatibility_date = "2025-03-20"
+
+# DATABASE_URL should be set as a secret for production
+# For local testing: wrangler secret put DATABASE_URL
+# Example: postgresql://user:pass@host:26257/database

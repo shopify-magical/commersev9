@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: cockroachdb-proxy
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node db-proxy.js
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: PORT
+        value: 3001

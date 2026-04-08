@@ -1,0 +1,18 @@
+{
+  "name": "cockroachdb-proxy",
+  "version": "1.0.0",
+  "description": "Proxy service for CockroachDB to enable HTTP API access from Cloudflare Workers",
+  "main": "db-proxy.js",
+  "scripts": {
+    "start": "node db-proxy.js",
+    "dev": "nodemon db-proxy.js"
+  },
+  "dependencies": {
+    "pg": "^8.11.3",
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

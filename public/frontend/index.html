@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agentic Engine Dashboard</title>
+  <link rel="stylesheet" href="frontend/styles/main.css">
+</head>
+<body>
+  <div class="dashboard">
+    <header>
+      <div class="header-content">
+        <h1>🚀 Universal Agentic Gateway</h1>
+        <p class="subtitle">Real-time Dashboard - Powered by Backend API</p>
+      </div>
+      <div id="health-monitor"></div>
+    </header>
+    
+    <main>
+      <div class="dashboard-grid">
+        <!-- AI Processing Section -->
+        <section class="card ai-section">
+          <h2>🤖 AI Processing</h2>
+          <div id="ai-processor"></div>
+        </section>
+        
+        <!-- Chat Interface Section -->
+        <section class="card chat-section">
+          <h2>💬 Chat Interface</h2>
+          <div id="chat-interface"></div>
+        </section>
+        
+        <!-- Business Agents Section -->
+        <section class="card agents-section">
+          <h2>🏢 Business Agents</h2>
+          <div id="agent-panel"></div>
+        </section>
+        
+        <!-- Realtime Section -->
+        <section class="card realtime-section">
+          <h2>⏱️ Realtime Data</h2>
+          <div id="realtime-data"></div>
+        </section>
+        
+        <!-- API Info Section -->
+        <section class="card api-section">
+          <h2>📡 API Information</h2>
+          <div id="api-info"></div>
+        </section>
+      </div>
+    </main>
+    
+    <footer>
+      <p>Powered by Cloudflare Workers • Backend: https://bizcommerz-agentic-engine.aekbuffalo.workers.dev</p>
+    </footer>
+  </div>
+  
+  <script src="frontend/api/client.js"></script>
+  <script src="frontend/components/HealthMonitor.js"></script>
+  <script src="frontend/components/ChatInterface.js"></script>
+  <script src="frontend/components/AIProcessor.js"></script>
+  <script src="frontend/components/AgentPanel.js"></script>
+  <script src="frontend/components/RealtimeClock.js"></script>
+  <script src="frontend/dashboard.js"></script>
+</body>
+</html>

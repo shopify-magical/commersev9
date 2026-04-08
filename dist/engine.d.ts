@@ -1,0 +1,37 @@
+import type { EngineConfig, Goal } from './types/index.js';
+import { Priority } from './types/index.js';
+import { EventBus } from './core/event-bus.js';
+import { StateManager } from './core/state-manager.js';
+import { Logger } from './core/logger.js';
+import { ErrorHandler } from './core/error-handler.js';
+import { PerceptionModule } from './perception.js';
+import { ReasoningEngine } from './reasoning/index.js';
+import { ActionExecutor } from './action/index.js';
+import { KnowledgeBase, LearningModule } from './learning.js';
+export declare class AgenticEngine {
+    readonly events: EventBus;
+    readonly state: StateManager;
+    readonly logger: Logger;
+    readonly errors: ErrorHandler;
+    readonly perception: PerceptionModule;
+    readonly reasoning: ReasoningEngine;
+    readonly actions: ActionExecutor;
+    readonly knowledge: KnowledgeBase;
+    readonly learning: LearningModule;
+    private running;
+    private tickTimer;
+    private tickCount;
+    private readonly config;
+    constructor(config?: Partial<EngineConfig>);
+    private setupDefaultSensors;
+    private setupEventHandlers;
+    start(): Promise<void>;
+    stop(): Promise<void>;
+    halt(): void;
+    private tick;
+    submitGoal(description: string, priority?: Priority, constraints?: Record<string, unknown>): Goal;
+    registerAction(action: string, handler: (params: Record<string, unknown>) => Promise<unknown>): void;
+    getMetrics(): import("./types/index.js").MetricsSnapshot;
+    isRunning(): boolean;
+    getConfig(): EngineConfig;
+}

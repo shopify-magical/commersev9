@@ -1,5 +1,0 @@
-[    2470ms] [ERROR] Loading the script 'https://static.line-scdn.net/liff/edge/2/LineLiff.js' violates the following Content Security Policy directive: "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://*.googletagmanager.com". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been blocked. @ https://main.bizcommerz-cake-shop.pages.dev/line-liff:0
-[    2606ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap:0
-[    3057ms] [ERROR] LIFF Initialization Error: ReferenceError: liff is not defined
-    at HTMLDocument.initializeLIFF (https://main.bizcommerz-cake-shop.pages.dev/line-liff:315:9) @ https://main.bizcommerz-cake-shop.pages.dev/line-liff:333
-[    3543ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://main.bizcommerz-cake-shop.pages.dev/favicon.ico:0

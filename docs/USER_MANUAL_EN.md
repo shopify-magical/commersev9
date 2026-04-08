@@ -1,6 +1,6 @@
 # BizCommerz Agentic Engine - User Manual
 
-## 🎂 Sweet Layers - Smart Store Management System
+## เค้ก Sweet Layers - Smart Store Management System
 
 ---
 
@@ -73,7 +73,7 @@ When accessing `cake-shop-owner.html`, you'll see:
 | ฿2,835 | Today's Revenue |
 | 47 | Orders Today |
 | 12 | Active Orders |
-| ⭐ 4.8 | Customer Rating |
+| ดาว 4.8 | Customer Rating |
 
 ### 🎯 Order Status
 
@@ -165,7 +165,7 @@ https://bizcommerz-cake-shop.pages.dev/line-liff.html
 ### Messages the System Sends
 
 ```
-🎂 New order!
+เค้ก New order!
 
 Name: Somchai
 Product: Chocolate cake x 1
@@ -221,11 +221,11 @@ Go to: `https://bizcommerz-cake-shop.pages.dev/customer-insights.html`
 
 ---
 
-## 📞 Contact Support
+## โทร Contact Support
 
 For issues, contact:
 
-- 📧 Email: support@sweetlayers.com
+- อีเมล Email: support@sweetlayers.com
 - 📱 Phone: 084-087-1065
 - 💬 LINE: @sweetlayers
 

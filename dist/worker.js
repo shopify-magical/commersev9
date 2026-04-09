@@ -1,54 +1,37 @@
 /**
- * Sweet Layers Agentic Engine - Cloudflare Worker
- * Unified API Gateway for all services
+ * Cloudflare Workers entry point for Agentic Engine
+ * Adapts the Node.js server for Edge runtime
  */
-var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
-    var useValue = arguments.length > 2;
-    for (var i = 0; i < initializers.length; i++) {
-        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
+import { AgenticEngine } from './orchestrator/index.js';
+import { Priority } from './types/index.js';
+// Engine instance (per-isolate, not per-request)
+let engine = null;
+// Initialize engine singleton
+function getEngine(env) {
+    if (!engine) {
+        engine = new AgenticEngine({
+            name: env.ENGINE_NAME || 'CloudflareEngine',
+            tickIntervalMs: 5000,
+            logLevel: env.LOG_LEVEL || 'info',
+            enableLearning: env.ENABLE_LEARNING !== 'false',
+            enableSelfImprovement: true,
+        });
+        engine.start().catch(console.error);
     }
-    return useValue ? value : void 0;
-};
-var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
-    function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
-    var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
-    var target = !descriptorIn && ctor ? contextIn["static"] ? ctor : ctor.prototype : null;
-    var descriptor = descriptorIn || (target ? Object.getOwnPropertyDescriptor(target, contextIn.name) : {});
-    var _, done = false;
-    for (var i = decorators.length - 1; i >= 0; i--) {
-        var context = {};
-        for (var p in contextIn) context[p] = p === "access" ? {} : contextIn[p];
-        for (var p in contextIn.access) context.access[p] = contextIn.access[p];
-        context.addInitializer = function (f) { if (done) throw new TypeError("Cannot add initializers after decoration has completed"); extraInitializers.push(accept(f || null)); };
-        var result = (0, decorators[i])(kind === "accessor" ? { get: descriptor.get, set: descriptor.set } : descriptor[key], context);
-        if (kind === "accessor") {
-            if (result === void 0) continue;
-            if (result === null || typeof result !== "object") throw new TypeError("Object expected");
-            if (_ = accept(result.get)) descriptor.get = _;
-            if (_ = accept(result.set)) descriptor.set = _;
-            if (_ = accept(result.init)) initializers.unshift(_);
-        }
-        else if (_ = accept(result)) {
-            if (kind === "field") initializers.unshift(_);
-            else descriptor[key] = _;
-        }
-    }
-    if (target) Object.defineProperty(target, contextIn.name, descriptor);
-    done = true;
-};
-import { routeAgentRequest, Agent, callable } from 'agents';
-// CORS headers helper
+    return engine;
+}
+// CORS headers
 function corsHeaders(origin) {
     return {
-        'Access-Control-Allow-Origin': origin,
+        'Access-Control-Allow-Origin': origin || '*',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
         'Access-Control-Max-Age': '86400',
     };
 }
 // JSON response helper
-function jsonResponse(data, status = 200, headers = {}) {
-    return new Response(JSON.stringify(data), {
+function jsonResponse(data, status = 200, headers) {
+    return new Response(JSON.stringify(data, null, 2), {
         status,
         headers: {
             'Content-Type': 'application/json',
@@ -56,221 +39,20 @@ function jsonResponse(data, status = 200, headers = {}) {
         },
     });
 }
-// Proper JWT with HMAC-SHA256 signing using Web Crypto API
-const JWT_SECRET = 'sweet-layers-secret-key-2024-change-in-production';
-async function generateToken(userId, roles) {
-    const header = {
-        alg: 'HS256',
-        typ: 'JWT'
-    };
-    const payload = {
-        userId,
-        roles,
-        exp: Math.floor(Date.now() / 1000) + 86400, // 24 hours
-        iat: Math.floor(Date.now() / 1000)
-    };
-    const encodedHeader = base64UrlEncode(JSON.stringify(header));
-    const encodedPayload = base64UrlEncode(JSON.stringify(payload));
-    const data = `${encodedHeader}.${encodedPayload}`;
-    const signature = await hmacSha256(data, JWT_SECRET);
-    return `${data}.${signature}`;
-}
-function base64UrlEncode(str) {
-    return btoa(str)
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=/g, '');
-}
-function base64UrlDecode(str) {
-    str = str.replace(/-/g, '+').replace(/_/g, '/');
-    while (str.length % 4)
-        str += '=';
-    return atob(str);
-}
-async function hmacSha256(message, secret) {
-    const encoder = new TextEncoder();
-    const keyData = encoder.encode(secret);
-    const messageData = encoder.encode(message);
-    const key = await crypto.subtle.importKey('raw', keyData, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
-    const signature = await crypto.subtle.sign('HMAC', key, messageData);
-    const signatureArray = Array.from(new Uint8Array(signature));
-    const signatureBase64 = btoa(String.fromCharCode(...signatureArray));
-    return signatureBase64
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=/g, '');
-}
-async function verifyToken(token) {
-    try {
-        const [encodedHeader, encodedPayload, signature] = token.split('.');
-        if (!encodedHeader || !encodedPayload || !signature) {
-            return null;
-        }
-        const data = `${encodedHeader}.${encodedPayload}`;
-        const expectedSignature = await hmacSha256(data, JWT_SECRET);
-        if (signature !== expectedSignature) {
-            return null;
-        }
-        const decodedPayload = base64UrlDecode(encodedPayload);
-        const dataJson = JSON.parse(decodedPayload);
-        // Check expiration
-        if (dataJson.exp < Math.floor(Date.now() / 1000)) {
-            return null;
-        }
-        return dataJson;
-    }
-    catch (error) {
-        console.error('Token verification error:', error);
-        return null;
-    }
-}
-// UUID generator for owner UIDs
-function generateUUID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        const r = Math.random() * 16 | 0;
-        const v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}
-// Product catalog for chat recommendations
-const productCatalog = [
-    { id: 'mooncake-traditional', name: 'Traditional Mooncakes', desc: 'Lotus paste, red bean, mung bean with salted egg yolk', price: 'From $8', tags: ['mooncake', 'classic', 'lotus', 'red bean', 'mung bean', 'traditional', 'gift'], img: 'images/mooncake-traditional.webp', category: 'Classic' },
-    { id: 'pastry-arrangement', name: 'Pastry Arrangement Box', desc: 'Curated gift boxes with assorted pastries', price: 'From $45', tags: ['gift', 'box', 'arrangement', 'assorted', 'curated', 'present'], img: 'images/pastry-arrangement.webp', category: 'Signature' },
-    { id: 'pandan-custard', name: 'Pandan Custard Cake', desc: 'Fragrant pandan sponge layered with silky coconut custard cream', price: 'From $32', tags: ['pandan', 'custard', 'cake', 'coconut', 'layer', 'popular'], img: 'images/pandan-custard.webp', category: 'Popular' },
-    { id: 'black-sesame', name: 'Black Sesame Layer Cake', desc: 'Rich roasted sesame cream between delicate sponge layers', price: 'From $35', tags: ['sesame', 'black', 'cake', 'layer', 'roasted', 'specialty'], img: 'images/black-sesame.webp', category: 'Specialty' },
-    { id: 'salted-egg', name: 'Salted Egg Lava Pastry', desc: 'Flaky crust with molten salted egg custard center', price: 'From $6', tags: ['salted', 'egg', 'lava', 'pastry', 'flaky', 'custard', 'new'], img: 'images/salted-egg.webp', category: 'New' },
-    { id: 'taro-coconut', name: 'Taro Coconut Cake', desc: 'Creamy taro mousse with coconut shreds on a buttery biscuit base', price: 'From $28', tags: ['taro', 'coconut', 'cake', 'mousse', 'seasonal'], img: 'images/taro-coconut.webp', category: 'Seasonal' },
-    { id: 'mung-bean', name: 'Mung Bean Pastry', desc: 'Smooth mung bean paste in a golden, flaky traditional pastry shell', price: 'From $5', tags: ['mung', 'bean', 'pastry', 'flaky', 'traditional', 'heritage'], img: 'images/mung-bean.webp', category: 'Heritage' },
-    { id: 'red-bean', name: 'Red Bean Delight', desc: 'Sweet red bean paste wrapped in a soft, pillowy mochi-style shell', price: 'From $5', tags: ['red', 'bean', 'mochi', 'sweet', 'classic'], img: 'images/red-bean.webp', category: 'Classic' },
-];
-function getRelevantProducts(query) {
-    if (!query || query.trim().length === 0)
-        return [];
-    const q = query.toLowerCase().trim();
-    const words = q.split(/\s+/);
-    return productCatalog
-        .map(product => {
-        let score = 0;
-        const nameLower = product.name.toLowerCase();
-        const descLower = product.desc.toLowerCase();
-        const tagsStr = product.tags.join(' ').toLowerCase();
-        const catLower = product.category.toLowerCase();
-        for (const word of words) {
-            if (nameLower.includes(word))
-                score += 10;
-            if (catLower.includes(word))
-                score += 5;
-            if (tagsStr.includes(word))
-                score += 3;
-            if (descLower.includes(word))
-                score += 1;
-        }
-        // Exact name match bonus
-        if (nameLower === q)
-            score += 20;
-        // Starts with bonus
-        if (nameLower.startsWith(q))
-            score += 8;
-        return { ...product, score };
-    })
-        .filter(p => p.score > 0)
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 4);
-}
 // Main fetch handler
 export default {
     async fetch(request, env, ctx) {
-        console.log('[Worker] Dashboard route fix deployed - serving local-dashboard.html');
-        // Route agent requests first
-        const agentResponse = await routeAgentRequest(request, env);
-        if (agentResponse) {
-            return agentResponse;
-        }
         const url = new URL(request.url);
-        const origin = request.headers.get('origin') || '*';
         const method = request.method;
-        // Serve static files for components
-        if (url.pathname.startsWith('/frontend/') || url.pathname.startsWith('/images/') || url.pathname.startsWith('/js/') || url.pathname.startsWith('/css/')) {
-            try {
-                // Use the assets binding for Workers Sites
-                const response = await env.ASSETS.fetch(request);
-                if (response.ok) {
-                    return response;
-                }
-                return new Response('File not found', { status: 404 });
-            }
-            catch (error) {
-                console.error('Static file error:', error);
-                return new Response('Error serving static file', { status: 500 });
-            }
-        }
-        // Serve dashboard.html for /dashboard route
-        if (url.pathname === '/dashboard' || url.pathname === '/dashboard/') {
-            const dashboardHtml = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sweet Layers Dashboard</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #FDF9F5; padding: 20px; }
-    .dashboard { max-width: 1200px; margin: 0 auto; }
-    .header { background: #2A6B52; color: white; padding: 24px; border-radius: 12px; margin-bottom: 24px; }
-    .header h1 { margin: 0; font-size: 1.5rem; }
-    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 24px; }
-    .stat { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .stat h3 { color: #3D2E22; margin-bottom: 8px; font-size: 0.9rem; }
-    .stat .value { font-size: 2rem; font-weight: bold; color: #2A6B52; }
-    .stat .change { font-size: 0.8rem; color: #16a34a; }
-  </style>
-</head>
-<body>
-  <div class="dashboard">
-    <div class="header">
-      <h1>Sweet Layers Dashboard</h1>
-      <p>Welcome back! Here's your business overview.</p>
-    </div>
-    <div class="stats">
-      <div class="stat">
-        <h3>Total Revenue</h3>
-        <div class="value">฿45,230</div>
-        <div class="change">+12.5% from last month</div>
-      </div>
-      <div class="stat">
-        <h3>Total Orders</h3>
-        <div class="value">328</div>
-        <div class="change">+8.2% from last month</div>
-      </div>
-      <div class="stat">
-        <h3>Active Customers</h3>
-        <div class="value">1,247</div>
-        <div class="change">+15.3% from last month</div>
-      </div>
-      <div class="stat">
-        <h3>Conversion Rate</h3>
-        <div class="value">3.2%</div>
-        <div class="change" style="color: #ef4444;">-0.8% from last month</div>
-      </div>
-    </div>
-  </div>
-</body>
-</html>`;
-            return new Response(dashboardHtml, {
-                headers: {
-                    'Content-Type': 'text/html',
-                    'Access-Control-Allow-Origin': '*',
-                },
-            });
-        }
+        const origin = request.headers.get('origin') || '*';
         // Handle CORS preflight
         if (method === 'OPTIONS') {
             return new Response(null, {
-                status: 200,
+                status: 204,
                 headers: corsHeaders(origin),
             });
         }
-        // Check if it's an API route (unified gateway routes)
+        // Check route first before initializing engine
         const isApiRoute = url.pathname.startsWith('/api') ||
             url.pathname.startsWith('/health') ||
             url.pathname.startsWith('/workers') ||
@@ -280,397 +62,751 @@ export default {
             url.pathname.startsWith('/agent') ||
             url.pathname.startsWith('/payment') ||
             url.pathname.startsWith('/auth') ||
-            url.pathname.startsWith('/members') ||
-            url.pathname.startsWith('/orders') ||
             url.pathname.startsWith('/stats') ||
             url.pathname.startsWith('/onboard') ||
-            url.pathname.startsWith('/admin') ||
-            url.pathname.startsWith('/line') ||
-            url.pathname.startsWith('/ai') ||
-            url.pathname.startsWith('/transform') ||
-            url.pathname.startsWith('/email') ||
-            url.pathname.startsWith('/timestamp') ||
-            url.pathname.startsWith('/realtime') ||
-            url.pathname === '/init-db' ||
-            url.pathname === '/chat' ||
-            url.pathname === '/chat/commands' ||
-            url.pathname === '/chat/process' ||
-            url.pathname.startsWith('/chat/sessions') ||
             url.pathname.startsWith('/ws');
-        // For API routes, process through unified gateway
-        if (isApiRoute) {
-            const startTime = Date.now();
-            // Unified Router
-            try {
-                // Health check - enhanced with unified gateway info
-                if (url.pathname === '/health' && method === 'GET') {
-                    return jsonResponse({
-                        status: 'healthy',
-                        timestamp: Date.now(),
-                        version: '3.0.0',
-                        service: 'Universal Agentic Gateway',
-                        architecture: 'Hybrid (AI + OCR + Pay + Transform + Email + Chat + Line + Multi-tenant)',
-                        platforms: {
-                            thaiRubberERP: 'integrated',
-                            allverse: 'integrated',
-                            sweetLayers: 'integrated',
+        // Root HTML page - redirect to shop
+        if (url.pathname === '/' || url.pathname === '/index.html') {
+            return new Response('Redirecting to static site...', {
+                status: 302,
+                headers: { 'Location': '/shop.html' }
+            });
+        }
+        // For other routes, let Workers Sites handle static files unless it's an API route
+        if (!isApiRoute) {
+            return fetch(request);
+        }
+        // For API routes, ensure engine is initialized
+        const eng = getEngine(env);
+        const startTime = Date.now();
+        // Router
+        try {
+            // Health check
+            if (url.pathname === '/health' && method === 'GET') {
+                return jsonResponse({
+                    status: eng.isRunning() ? 'healthy' : 'stopped',
+                    timestamp: Date.now(),
+                    version: '1.0.0',
+                    service: 'Agentic Engine (Cloudflare Workers)',
+                }, 200, corsHeaders(origin));
+            }
+            // Root - service discovery
+            if (url.pathname === '/' && method === 'GET') {
+                return jsonResponse({
+                    service: 'Agentic Engine for BizCommerz',
+                    version: '1.0.0',
+                    platform: 'Cloudflare Workers',
+                    architecture: 'Edge Distributed',
+                    endpoints: {
+                        health: 'GET /health',
+                        workers: 'GET /workers',
+                        triggers: {
+                            quote: 'POST /triggers/quote',
+                            order: 'POST /triggers/order',
                         },
-                        agents: ['dashboard', 'automation', 'insights', 'inventory', 'orders', 'customers', 'harvest', 'weather'],
-                        features: ['ai', 'ocr', 'pay', 'transform', 'email', 'chat', 'line', 'multi-tenant'],
+                        export: {
+                            quotes: 'GET /export/quotes?format=csv',
+                            orders: 'GET /export/orders?format=csv',
+                        },
+                        agent: {
+                            assign: 'POST /agent/assign',
+                        },
+                        agentic: {
+                            validate: 'POST /api/agentic/validate',
+                            observation: 'POST /api/agentic/observation',
+                            goal: 'POST /api/agentic/goal',
+                            metrics: 'GET /api/agentic/metrics',
+                            websocket: 'WS /ws',
+                        },
+                        chat: {
+                            commands: 'GET /chat/commands',
+                            process: 'POST /chat/process',
+                        },
+                        payment: {
+                            promptpay: 'POST /payment/promptpay',
+                            status: 'GET /payment/status?paymentId=',
+                            verifySlip: 'POST /payment/verify-slip',
+                        },
+                        stats: 'GET /stats',
+                    },
+                }, 200, corsHeaders(origin));
+            }
+            // Workers list
+            if (url.pathname === '/workers' && method === 'GET') {
+                return jsonResponse({
+                    workers: [
+                        { name: 'cors-proxy', type: 'infrastructure', status: 'available' },
+                        { name: 'chat-processor', type: 'nlp', status: 'available' },
+                        { name: 'recommendation', type: 'ml', status: 'available' },
+                        { name: 'inventory', type: 'data', status: 'available' },
+                    ],
+                    total: 4,
+                    available: 4,
+                    timestamp: Date.now(),
+                }, 200, corsHeaders(origin));
+            }
+            // Triggers - quote
+            if (url.pathname === '/triggers/quote' && method === 'POST') {
+                const body = await request.json();
+                const { customer, items, contact, notes, tenantId = 'default' } = body;
+                const quoteId = `quote_${Date.now()}`;
+                const goal = eng.submitGoal(`Quote request: ${customer} - ${items?.length || 0} items`, Priority.HIGH, { quoteId, customer, items, contact, notes, tenantId, status: 'pending' });
+                // Store in KV for persistence
+                await env.QUOTES_KV.put(quoteId, JSON.stringify({
+                    id: quoteId,
+                    goalId: goal.id,
+                    customer,
+                    items: JSON.stringify(items),
+                    contact,
+                    notes,
+                    tenantId,
+                    createdAt: new Date().toISOString(),
+                    status: 'pending',
+                }));
+                return jsonResponse({
+                    quoteId,
+                    goalId: goal.id,
+                    status: 'queued',
+                    message: 'Quote request received',
+                    timestamp: Date.now(),
+                }, 201, corsHeaders(origin));
+            }
+            // Triggers - order
+            if (url.pathname === '/triggers/order' && method === 'POST') {
+                const body = await request.json();
+                const { customer, items, delivery, payment, tenantId = 'default' } = body;
+                const orderId = `order_${Date.now()}`;
+                let goalId = null;
+                try {
+                    const goal = eng.submitGoal(`Process order: ${customer} - ${items?.length || 0} items`, Priority.CRITICAL, { orderId, customer, items, delivery, payment, tenantId, status: 'new' });
+                    goalId = goal.id;
+                }
+                catch (e) {
+                    console.log('Goal submission skipped:', e.message);
+                }
+                const orderData = {
+                    id: orderId,
+                    goalId,
+                    customer,
+                    items: items || [],
+                    delivery: delivery || null,
+                    payment,
+                    tenantId,
+                    createdAt: new Date().toISOString(),
+                    status: 'new',
+                };
+                if (env.ORDERS_KV) {
+                    try {
+                        await env.ORDERS_KV.put(orderId, JSON.stringify(orderData));
+                    }
+                    catch (kvErr) {
+                        console.log('KV storage error:', kvErr.message);
+                    }
+                }
+                return jsonResponse({
+                    orderId,
+                    goalId,
+                    status: 'processing',
+                    message: 'Order received and processing',
+                    timestamp: Date.now(),
+                }, 201, corsHeaders(origin));
+            }
+            // Export quotes
+            if (url.pathname === '/export/quotes' && method === 'GET') {
+                const format = url.searchParams.get('format') || 'json';
+                const tenantId = url.searchParams.get('tenantId');
+                const quotes = [];
+                const keys = await env.QUOTES_KV.list({ prefix: 'quote_' });
+                for (const key of keys.keys) {
+                    const data = await env.QUOTES_KV.get(key.name);
+                    if (data) {
+                        const parsed = JSON.parse(data);
+                        if (!tenantId || parsed.tenantId === tenantId) {
+                            quotes.push(parsed);
+                        }
+                    }
+                }
+                if (format === 'csv') {
+                    const headers = 'quoteId,customer,items,contact,notes,status,createdAt\n';
+                    const rows = quotes.map(q => `${q.id},"${q.customer}","${q.items}","${q.contact}","${q.notes}",${q.status},${q.createdAt}`).join('\n');
+                    return new Response(headers + rows, {
+                        status: 200,
+                        headers: {
+                            'Content-Type': 'text/csv',
+                            'Content-Disposition': 'attachment; filename="quotes.csv"',
+                            ...corsHeaders(origin),
+                        },
+                    });
+                }
+                return jsonResponse({ quotes, count: quotes.length }, 200, corsHeaders(origin));
+            }
+            // Export orders
+            if (url.pathname === '/export/orders' && method === 'GET') {
+                const format = url.searchParams.get('format') || 'json';
+                const tenantId = url.searchParams.get('tenantId');
+                const orders = [];
+                const keys = await env.ORDERS_KV.list({ prefix: 'order_' });
+                for (const key of keys.keys) {
+                    const data = await env.ORDERS_KV.get(key.name);
+                    if (data) {
+                        const parsed = JSON.parse(data);
+                        if (!tenantId || parsed.tenantId === tenantId) {
+                            orders.push(parsed);
+                        }
+                    }
+                }
+                if (format === 'csv') {
+                    const headers = 'orderId,customer,items,delivery,payment,status,createdAt\n';
+                    const rows = orders.map(o => `${o.id},"${o.customer}","${o.items}","${o.delivery}",${o.payment},${o.status},${o.createdAt}`).join('\n');
+                    return new Response(headers + rows, {
+                        status: 200,
+                        headers: {
+                            'Content-Type': 'text/csv',
+                            'Content-Disposition': 'attachment; filename="orders.csv"',
+                            ...corsHeaders(origin),
+                        },
+                    });
+                }
+                return jsonResponse({ orders, count: orders.length }, 200, corsHeaders(origin));
+            }
+            // Chat commands
+            if (url.pathname === '/chat/commands' && method === 'GET') {
+                return jsonResponse({
+                    available: [
+                        { command: '/recommend', description: 'Get product recommendations', example: '/recommend mooncakes' },
+                        { command: '/search', description: 'Search products', example: '/search heritage tea' },
+                        { command: '/order', description: 'Place an order', example: '/order mooncake box' },
+                        { command: '/status', description: 'Check order status', example: '/status #12345' },
+                        { command: '/inventory', description: 'Check inventory', example: '/inventory pastries' },
+                        { command: '/help', description: 'Show help', example: '/help' },
+                    ],
+                    prefix: '/',
+                    version: '1.0.0',
+                }, 200, corsHeaders(origin));
+            }
+            // Chat process
+            if (url.pathname === '/chat/process' && method === 'POST') {
+                const body = await request.json();
+                const { message, sessionId, tenantId } = body;
+                if (!message) {
+                    return jsonResponse({ error: 'Message is required' }, 400, corsHeaders(origin));
+                }
+                // Parse command
+                const commandMatch = message.match(/^\/(\w+)(?:\s+(.+))?$/);
+                let response;
+                if (commandMatch) {
+                    const [, cmd, args] = commandMatch;
+                    switch (cmd) {
+                        case 'recommend':
+                            response = { type: 'recommendations', data: getRecommendations(args) };
+                            break;
+                        case 'order':
+                            const goal = eng.submitGoal(`Process order: ${args}`, Priority.HIGH);
+                            response = { type: 'order', goalId: goal.id, message: `Order goal created: ${args}` };
+                            break;
+                        case 'inventory':
+                            response = { type: 'inventory', category: args, stock: getInventory(args) };
+                            break;
+                        default:
+                            response = { type: 'unknown', message: `Unknown command: ${cmd}. Type /help for available commands.` };
+                    }
+                }
+                else {
+                    const goal = eng.submitGoal(`Chat: ${message}`, Priority.MEDIUM);
+                    response = { type: 'goal', goalId: goal.id, message: `Goal submitted: ${message}` };
+                }
+                return jsonResponse({
+                    response,
+                    sessionId: sessionId || `session_${Date.now()}`,
+                    timestamp: Date.now(),
+                    processedAt: new Date().toISOString(),
+                }, 200, corsHeaders(origin));
+            }
+            // Agent assign
+            if (url.pathname === '/agent/assign' && method === 'POST') {
+                const body = await request.json();
+                const { goal, workers = [], context } = body;
+                if (!goal) {
+                    return jsonResponse({ error: 'Goal is required' }, 400, corsHeaders(origin));
+                }
+                const jobId = `job_${Date.now()}`;
+                const workerList = workers.length > 0 ? workers : ['default'];
+                const assignments = workerList.map((worker, idx) => ({
+                    taskId: `${jobId}_${idx}`,
+                    worker,
+                    task: `Process: ${goal}`,
+                    status: 'assigned',
+                }));
+                const orchestrationGoal = eng.submitGoal(`Orchestrate: ${goal}`, Priority.HIGH, { jobId, assignments, context, strategy: 'manager-worker' });
+                return jsonResponse({
+                    jobId,
+                    goalId: orchestrationGoal.id,
+                    assignments,
+                    strategy: 'manager-worker',
+                    message: `Agent orchestrator assigned ${assignments.length} worker(s)`,
+                    timestamp: Date.now(),
+                }, 200, corsHeaders(origin));
+            }
+            // Stats
+            if (url.pathname === '/stats' && method === 'GET') {
+                const metrics = eng.getMetrics();
+                const learning = eng.learning.getStats();
+                return jsonResponse({
+                    overview: {
+                        totalGoals: metrics.tasksCompleted + metrics.tasksFailed,
+                        successRate: learning.successRate,
+                        avgDecisionTime: metrics.avgDecisionTime,
+                        knowledgeBaseSize: metrics.knowledgeEntries,
+                    },
+                    performance: {
+                        tasksCompleted: metrics.tasksCompleted,
+                        tasksFailed: metrics.tasksFailed,
+                        modelAccuracy: metrics.modelAccuracy,
+                    },
+                    system: {
                         uptime: Date.now() - startTime,
+                        isRunning: eng.isRunning(),
+                    },
+                    timestamp: Date.now(),
+                }, 200, corsHeaders(origin));
+            }
+            // Payment - PromptPay QR generation
+            if (url.pathname === '/payment/promptpay' && method === 'POST') {
+                const body = await request.json();
+                const { amount, orderId, customer } = body;
+                if (!amount || typeof amount !== 'number') {
+                    return jsonResponse({ error: 'Amount is required' }, 400, corsHeaders(origin));
+                }
+                // Generate PromptPay QR payload (Thailand QR payment standard)
+                // Format: A00000067701011101130066840871065
+                // A000000677 = PromptPay application ID
+                // 010111 = Phone number type
+                // 01130066 = Length + country code (66 for Thailand)
+                // 840871065 = Phone number 0840871065 without leading 0
+                const promptPayId = '0840871065';
+                const qrPayload = generatePromptPayQR(amount, promptPayId, orderId);
+                // Create payment record
+                const paymentId = `pay_${Date.now()}`;
+                return jsonResponse({
+                    paymentId,
+                    orderId: orderId || `order_${Date.now()}`,
+                    amount,
+                    currency: 'THB',
+                    method: 'promptpay',
+                    qrPayload,
+                    qrUrl: `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrPayload)}`,
+                    merchant: {
+                        name: 'Sweet Layers Cake Shop',
+                        phone: promptPayId,
+                    },
+                    status: 'pending',
+                    expiresAt: Date.now() + 15 * 60 * 1000, // 15 minutes
+                    timestamp: Date.now(),
+                }, 200, corsHeaders(origin));
+            }
+            // Onboard new shop
+            if (url.pathname === '/onboard' && method === 'POST') {
+                const body = await request.json();
+                const { storeName, domain, owner, phone, promptPayId, lineToken, lineUserId, package: pkg, tenantId } = body;
+                if (!storeName || !domain) {
+                    return jsonResponse({ error: 'Store name and domain are required' }, 400, corsHeaders(origin));
+                }
+                // Create tenant configuration
+                const tenantConfig = {
+                    tenantId: tenantId || `shop_${Date.now()}`,
+                    storeName,
+                    domain,
+                    owner: owner || '',
+                    phone: phone || '',
+                    promptPayId: promptPayId || '0840871065',
+                    lineToken: lineToken || '',
+                    lineUserId: lineUserId || '',
+                    package: pkg || 'starter',
+                    createdAt: new Date().toISOString(),
+                    status: 'active'
+                };
+                // Store tenant config (in production, save to KV or database)
+                // await env.TENANTS_KV.put(tenantConfig.tenantId, JSON.stringify(tenantConfig));
+                // Create initial order for the tenant
+                const goal = eng.submitGoal(`Onboard new shop: ${storeName}`, Priority.HIGH, { tenantConfig, type: 'onboarding' });
+                return jsonResponse({
+                    success: true,
+                    tenantId: tenantConfig.tenantId,
+                    goalId: goal.id,
+                    message: 'Shop onboarded successfully',
+                    urls: {
+                        shop: `https://${domain}.pages.dev`,
+                        dashboard: `https://${domain}.pages.dev/dashboard.html`
+                    },
+                    config: tenantConfig,
+                    timestamp: Date.now()
+                }, 201, corsHeaders(origin));
+            }
+            // Payment status check
+            if (url.pathname === '/payment/status' && method === 'GET') {
+                const paymentId = url.searchParams.get('paymentId');
+                return jsonResponse({
+                    paymentId: paymentId || 'unknown',
+                    status: 'pending', // Would check actual payment provider in production
+                    message: 'Please scan QR code with your banking app',
+                    timestamp: Date.now(),
+                }, 200, corsHeaders(origin));
+            }
+            // Slip verification with OCR
+            if (url.pathname === '/payment/verify-slip' && method === 'POST') {
+                const body = await request.json();
+                const { imageBase64, paymentId, expectedAmount } = body;
+                if (!imageBase64) {
+                    return jsonResponse({ error: 'Slip image is required' }, 400, corsHeaders(origin));
+                }
+                try {
+                    // Call OCR vision worker to detect slip
+                    const ocrResponse = await fetch('https://ocr-vision-worker.aekbuffalo.workers.dev/vision', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            image: imageBase64,
+                            type: 'payment-slip',
+                            extract: ['amount', 'date', 'time', 'sender', 'receiver', 'ref']
+                        })
+                    });
+                    const ocrResult = await ocrResponse.json();
+                    // Validate slip details
+                    const detectedAmount = parseFloat(ocrResult?.amount || '0');
+                    const isValid = detectedAmount === expectedAmount;
+                    // Update order status if valid
+                    if (isValid && paymentId) {
+                        // In production, update order status in database
+                    }
+                    return jsonResponse({
+                        paymentId: paymentId || 'unknown',
+                        verified: isValid,
+                        detectedAmount,
+                        expectedAmount,
+                        details: ocrResult,
+                        status: isValid ? 'confirmed' : 'mismatch',
+                        timestamp: Date.now(),
+                        message: isValid ? 'Payment verified' : 'Amount mismatch - please check'
                     }, 200, corsHeaders(origin));
                 }
-                // Authentication endpoints
-                if (url.pathname === '/auth/login' && method === 'POST') {
-                    const body = await request.json();
-                    const { email, password, recaptchaToken } = body;
-                    // Verify reCAPTCHA token (if provided)
-                    if (recaptchaToken) {
-                        try {
-                            const recaptchaVerify = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                                body: `secret=${encodeURIComponent('6Ld_7CgqAAAAAKqZ9Q8q7q7q7q7q7q7q7q7q7q')}&response=${encodeURIComponent(recaptchaToken)}`
-                            });
-                            const recaptchaResult = await recaptchaVerify.json();
-                            if (!recaptchaResult.success) {
-                                return jsonResponse({ error: 'reCAPTCHA verification failed' }, 400, corsHeaders(origin));
-                            }
-                        }
-                        catch (error) {
-                            console.error('reCAPTCHA verification error:', error);
-                            return jsonResponse({ error: 'reCAPTCHA verification error' }, 500, corsHeaders(origin));
-                        }
-                    }
-                    try {
-                        const result = await env.bizcommerz_db.prepare('SELECT id, name, email, phone, roles, password FROM users WHERE email = ?').bind(email).first();
-                        if (!result) {
-                            return jsonResponse({ error: 'User not found' }, 404, corsHeaders(origin));
-                        }
-                        // Simple password check (in production, use bcrypt)
-                        if (result.password !== password) {
-                            return jsonResponse({ error: 'Invalid password' }, 401, corsHeaders(origin));
-                        }
-                        const roles = result.roles ? JSON.parse(result.roles) : [];
-                        const token = await generateToken(result.id.toString(), roles);
-                        return jsonResponse({
-                            success: true,
-                            token,
-                            user: {
-                                id: result.id,
-                                name: result.name,
-                                email: result.email,
-                                phone: result.phone,
-                                roles
-                            }
-                        }, 200, corsHeaders(origin));
-                    }
-                    catch (error) {
-                        console.error('Login error:', error);
-                        return jsonResponse({ error: 'Login failed' }, 500, corsHeaders(origin));
-                    }
+                catch (err) {
+                    return jsonResponse({
+                        error: 'OCR verification failed',
+                        message: err instanceof Error ? err.message : 'Unknown error',
+                        verified: false
+                    }, 500, corsHeaders(origin));
                 }
-                if (url.pathname === '/auth/register' && method === 'POST') {
-                    const body = await request.json();
-                    const { name, email, password, recaptchaToken } = body;
-                    // Verify reCAPTCHA token (if provided)
-                    if (recaptchaToken) {
-                        try {
-                            const recaptchaVerify = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                                body: `secret=${encodeURIComponent('6Ld_7CgqAAAAAKqZ9Q8q7q7q7q7q7q7q7q7q7q')}&response=${encodeURIComponent(recaptchaToken)}`
-                            });
-                            const recaptchaResult = await recaptchaVerify.json();
-                            if (!recaptchaResult.success) {
-                                return jsonResponse({ error: 'reCAPTCHA verification failed' }, 400, corsHeaders(origin));
-                            }
-                        }
-                        catch (error) {
-                            console.error('reCAPTCHA verification error:', error);
-                            return jsonResponse({ error: 'reCAPTCHA verification error' }, 500, corsHeaders(origin));
-                        }
-                    }
-                    try {
-                        // Check if user already exists
-                        const existingUser = await env.bizcommerz_db.prepare('SELECT id FROM users WHERE email = ?').bind(email).first();
-                        if (existingUser) {
-                            return jsonResponse({ error: 'User already exists' }, 409, corsHeaders(origin));
-                        }
-                        // Generate UUID for owner_uid
-                        const ownerUid = generateUUID();
-                        // Create new user
-                        const result = await env.bizcommerz_db.prepare('INSERT INTO users (name, email, password, roles, owner_uid, created_at) VALUES (?, ?, ?, ?, ?, ?) RETURNING id').bind(name, email, password, JSON.stringify(['customer']), ownerUid, new Date().toISOString()).first();
-                        const roles = ['customer'];
-                        const token = await generateToken(result?.id?.toString() || '', roles);
-                        return jsonResponse({
-                            success: true,
-                            token,
-                            user: {
-                                id: result?.id,
-                                name,
-                                email,
-                                roles,
-                                owner_uid: ownerUid
-                            }
-                        }, 201, corsHeaders(origin));
-                    }
-                    catch (error) {
-                        console.error('Registration error:', error);
-                        return jsonResponse({ error: 'Registration failed' }, 500, corsHeaders(origin));
-                    }
-                }
-                if (url.pathname === '/auth/verify' && method === 'GET') {
-                    const authHeader = request.headers.get('Authorization');
-                    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-                        return jsonResponse({ error: 'No token provided' }, 401, corsHeaders(origin));
-                    }
-                    const token = authHeader.substring(7);
-                    const payload = await verifyToken(token);
-                    if (!payload) {
-                        return jsonResponse({ error: 'Invalid token' }, 401, corsHeaders(origin));
-                    }
-                    try {
-                        const result = await env.bizcommerz_db.prepare('SELECT id, name, email, phone, roles, owner_uid FROM users WHERE id = ?').bind(payload.userId).first();
-                        if (!result) {
-                            return jsonResponse({ error: 'User not found' }, 404, corsHeaders(origin));
-                        }
-                        return jsonResponse({
-                            valid: true,
-                            user: {
-                                id: result.id,
-                                name: result.name,
-                                email: result.email,
-                                phone: result.phone,
-                                roles: result.roles ? JSON.parse(result.roles) : [],
-                                owner_uid: result.owner_uid
-                            }
-                        }, 200, corsHeaders(origin));
-                    }
-                    catch (error) {
-                        console.error('Verify error:', error);
-                        return jsonResponse({ error: 'Verification failed' }, 500, corsHeaders(origin));
-                    }
-                }
-                if (url.pathname === '/members/addresses' && method === 'GET') {
-                    const authHeader = request.headers.get('Authorization');
-                    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-                        return jsonResponse({ error: 'Unauthorized' }, 401, corsHeaders(origin));
-                    }
-                    const token = authHeader.substring(7);
-                    const payload = await verifyToken(token);
-                    if (!payload) {
-                        return jsonResponse({ error: 'Invalid token' }, 401, corsHeaders(origin));
-                    }
-                    try {
-                        const result = await env.bizcommerz_db.prepare('SELECT * FROM addresses WHERE user_id = ? ORDER BY is_default DESC').bind(payload.userId).all();
-                        return jsonResponse({
-                            addresses: result || []
-                        }, 200, corsHeaders(origin));
-                    }
-                    catch (error) {
-                        console.error('Addresses fetch error:', error);
-                        return jsonResponse({ error: 'Failed to fetch addresses' }, 500, corsHeaders(origin));
-                    }
-                }
-                if (url.pathname === '/members/addresses' && method === 'POST') {
-                    const authHeader = request.headers.get('Authorization');
-                    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-                        return jsonResponse({ error: 'Unauthorized' }, 401, corsHeaders(origin));
-                    }
-                    const token = authHeader.substring(7);
-                    const payload = await verifyToken(token);
-                    if (!payload) {
-                        return jsonResponse({ error: 'Invalid token' }, 401, corsHeaders(origin));
-                    }
-                    const body = await request.json();
-                    const { address_line1, address_line2, city, state, postal_code, country, is_default } = body;
-                    const userId = payload.userId;
-                    try {
-                        const result = await env.bizcommerz_db.prepare('INSERT INTO addresses (user_id, address_line1, address_line2, city, state, postal_code, country, is_default, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id').bind(userId, address_line1, address_line2 || '', city, state, postal_code, country, is_default || 0, new Date().toISOString(), new Date().toISOString()).first();
-                        return jsonResponse({
-                            success: true,
-                            address_id: result?.id,
-                        }, 201, corsHeaders(origin));
-                    }
-                    catch (error) {
-                        console.error('Address creation error:', error);
-                        return jsonResponse({ error: 'Failed to create address' }, 500, corsHeaders(origin));
-                    }
-                }
-                // Database initialization endpoint (for development)
-                if (url.pathname === '/init-db' && method === 'POST') {
-                    try {
-                        // Try to add owner_uid column if it doesn't exist
-                        try {
-                            await env.bizcommerz_db.prepare('SELECT owner_uid FROM users LIMIT 1').first();
-                        }
-                        catch (error) {
-                            // Column doesn't exist, add it
-                            await env.bizcommerz_db.exec('ALTER TABLE users ADD COLUMN owner_uid TEXT');
-                        }
-                        // Create test owner account with owner_uid
-                        const ownerUid = generateUUID();
-                        try {
-                            await env.bizcommerz_db.prepare(`
-                INSERT INTO users (name, email, password, phone, roles, owner_uid, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
-              `).bind('Sweet Layers Owner', 'silvercloud@o2odesign.com', 'owner123', '+66812345678', '["owner"]', ownerUid).run();
-                        }
-                        catch (error) {
-                            // Owner might already exist, update owner_uid if missing
-                            try {
-                                await env.bizcommerz_db.prepare(`
-                  UPDATE users SET owner_uid = ? WHERE email = ? AND owner_uid IS NULL
-                `).bind(ownerUid, 'silvercloud@o2odesign.com').run();
-                            }
-                            catch (updateError) {
-                                console.error('Error updating owner_uid:', updateError);
-                            }
-                        }
-                        // Create test admin account
-                        const adminUid = generateUUID();
-                        try {
-                            await env.bizcommerz_db.prepare(`
-                INSERT INTO users (name, email, password, phone, roles, owner_uid, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
-              `).bind('Admin User', 'admin@sweetlayers.com', 'admin123', '+66812345679', '["admin"]', adminUid).run();
-                        }
-                        catch (error) {
-                            // Admin might already exist, ignore error
-                        }
-                        // Create test customer account
-                        const customerUid = generateUUID();
-                        try {
-                            await env.bizcommerz_db.prepare(`
-                INSERT INTO users (name, email, password, phone, roles, owner_uid, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
-              `).bind('Customer User', 'customer@sweetlayers.com', 'customer123', '+66812345680', '["customer"]', customerUid).run();
-                        }
-                        catch (error) {
-                            // Customer might already exist, ignore error
-                        }
-                        return jsonResponse({
-                            success: true,
-                            message: 'Database initialized successfully'
-                        }, 200, corsHeaders(origin));
-                    }
-                    catch (error) {
-                        console.error('Database initialization error:', error);
-                        return jsonResponse({ error: 'Database initialization failed', details: String(error) }, 500, corsHeaders(origin));
-                    }
-                }
-                // Guest checkout endpoint
-                if (url.pathname === '/orders/guest' && method === 'POST') {
-                    const body = await request.json();
-                    const { customer, phone, email, address, items, total, payment } = body;
-                    try {
-                        // Create customer record if email provided
-                        let customerId = null;
-                        if (email) {
-                            const existingCustomer = await env.bizcommerz_db.prepare('SELECT id FROM customers WHERE email = ?').bind(email).first();
-                            if (existingCustomer) {
-                                customerId = existingCustomer.id;
-                            }
-                            else {
-                                const newCustomer = await env.bizcommerz_db.prepare('INSERT INTO customers (name, email, phone, address) VALUES (?, ?, ?, ?) RETURNING id').bind(customer, email, phone, address).first();
-                                customerId = newCustomer?.id;
-                            }
-                        }
-                        else if (phone) {
-                            // Use phone as identifier if no email
-                            const existingCustomer = await env.bizcommerz_db.prepare('SELECT id FROM customers WHERE phone = ?').bind(phone).first();
-                            if (existingCustomer) {
-                                customerId = existingCustomer.id;
-                            }
-                            else {
-                                const newCustomer = await env.bizcommerz_db.prepare('INSERT INTO customers (name, phone, address) VALUES (?, ?, ?) RETURNING id').bind(customer, phone, address).first();
-                                customerId = newCustomer?.id;
-                            }
-                        }
-                        // Create order
-                        const result = await env.bizcommerz_db.prepare('INSERT INTO orders (customer_id, total, status, payment_status) VALUES (?, ?, ?, ?) RETURNING id').bind(customerId, total, 'pending', 'pending').first();
-                        return jsonResponse({
-                            success: true,
-                            order_id: result?.id,
-                            customer_id: customerId,
-                            status: 'pending',
-                        }, 201, corsHeaders(origin));
-                    }
-                    catch (error) {
-                        console.error('Guest checkout error:', error);
-                        return jsonResponse({ error: 'Guest checkout failed' }, 500, corsHeaders(origin));
-                    }
-                }
-                // Chat processing endpoint
-                if (url.pathname === '/chat/process' && method === 'POST') {
-                    const body = await request.json();
-                    const { messages, sessionId } = body;
-                    try {
-                        // Use simple keyword-based responses for now
-                        // Agent integration requires special Durable Object configuration
-                        const lastMessage = messages[messages.length - 1]?.content?.toLowerCase() || '';
-                        let response = '';
-                        if (lastMessage.includes('mooncake') || lastMessage.includes('moon')) {
-                            response = "Our Traditional Mooncakes are hand-pressed with lotus paste and salted egg yolk — a timeless delicacy perfect for gifting. We also have seasonal varieties available. Would you like to see our mooncake collection?";
-                        }
-                        else if (lastMessage.includes('pandan')) {
-                            response = "Our Pandan Custard Cake features fragrant pandan sponge layered with silky coconut custard cream. It's one of our most popular items! The combination of aromatic pandan and rich coconut is absolutely divine.";
-                        }
-                        else if (lastMessage.includes('gift') || lastMessage.includes('box')) {
-                            response = "Our Pastry Arrangement Boxes are perfect for gifting! We offer curated gift boxes with assorted pastries starting from $45. They make excellent presents for holidays, celebrations, or corporate events.";
-                        }
-                        else if (lastMessage.includes('sesame')) {
-                            response = "Our Black Sesame Layer Cake features rich roasted sesame cream between delicate sponge layers. It's a specialty item that's become quite popular for its unique nutty flavor profile.";
-                        }
-                        else if (lastMessage.includes('salted egg') || lastMessage.includes('lava')) {
-                            response = "Our Salted Egg Lava Pastry has a flaky crust with molten salted egg custard center — absolutely irresistible! It's one of our newer items that customers are loving.";
-                        }
-                        else if (lastMessage.includes('order') || lastMessage.includes('buy')) {
-                            response = "I'd be happy to help you place an order! You can add items directly from our recommendations, or browse our full menu. Would you like me to suggest some items based on your preferences?";
-                        }
-                        else if (lastMessage.includes('recommend') || lastMessage.includes('suggest')) {
-                            response = "Based on our popular items, I'd recommend our Pandan Custard Cake for a classic choice, or our Pastry Arrangement Box if you're looking for something special. What occasion are you shopping for?";
-                        }
-                        else if (lastMessage.includes('price') || lastMessage.includes('cost')) {
-                            response = "Our prices range from $5 for individual pastries up to $45 for large gift boxes. Traditional Mooncakes start at $8 each, and our layer cakes range from $28-$35. All prices are very competitive for the quality!";
-                        }
-                        else if (lastMessage.includes('delivery') || lastMessage.includes('shipping')) {
-                            response = "We offer same-day delivery for orders placed before 12pm, and next-day standard delivery. All our pastries are baked fresh and carefully packaged to ensure they arrive in perfect condition!";
-                        }
-                        else {
-                            response = "I'd be happy to help you find the perfect pastries! We have traditional mooncakes, layer cakes, gift boxes, and specialty items. What type of pastry are you interested in, or would you like me to recommend something based on an occasion?";
-                        }
-                        return jsonResponse({
-                            response: response,
-                            products: getRelevantProducts(lastMessage)
-                        }, 200, corsHeaders(origin));
-                    }
-                    catch (error) {
-                        console.error('Chat processing error:', error);
-                        return jsonResponse({ error: 'Chat processing failed' }, 500, corsHeaders(origin));
-                    }
-                }
-                // Default API response
-                return jsonResponse({
-                    error: 'API endpoint not found',
-                    path: url.pathname,
-                    method: method,
-                }, 404, corsHeaders(origin));
             }
-            catch (error) {
-                console.error('API Error:', error);
+            // Authentication - Login
+            if (url.pathname === '/auth/login' && method === 'POST') {
+                const body = await request.json();
+                const { email, password, rememberMe } = body;
+                if (!email || !password) {
+                    return jsonResponse({
+                        success: false,
+                        message: 'Email and password are required'
+                    }, 400, corsHeaders(origin));
+                }
+                // Mock authentication (replace with real auth in production)
+                // Check against mock users or verify with database
+                const mockUsers = [
+                    { email: 'admin@sweetlayers.com', password: 'admin123', name: 'Admin', tenantId: 'default', role: 'admin' },
+                    { email: 'demo@sweetlayers.com', password: 'demo123', name: 'Demo Shop', tenantId: 'shop_demo', role: 'shop' },
+                ];
+                // Normalize email/phone
+                const normalizedEmail = String(email).toLowerCase().trim();
+                const user = mockUsers.find(u => u.email === normalizedEmail ||
+                    u.email.replace(/@.+$/, '') === normalizedEmail);
+                if (!user || user.password !== password) {
+                    return jsonResponse({
+                        success: false,
+                        message: 'Invalid email or password'
+                    }, 401, corsHeaders(origin));
+                }
+                // Generate simple token (use JWT in production)
+                const token = `token_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
                 return jsonResponse({
-                    error: 'Internal server error',
-                    message: error instanceof Error ? error.message : 'Unknown error',
-                }, 500, corsHeaders(origin));
+                    success: true,
+                    token,
+                    user: {
+                        email: user.email,
+                        name: user.name,
+                        tenantId: user.tenantId,
+                        role: user.role,
+                    },
+                    expiresIn: rememberMe ? 30 * 24 * 60 * 60 : 24 * 60 * 60, // 30 days or 1 day
+                    timestamp: Date.now(),
+                }, 200, corsHeaders(origin));
             }
+            // Authentication - Verify Token
+            if (url.pathname === '/auth/verify' && method === 'GET') {
+                const authHeader = request.headers.get('Authorization');
+                if (!authHeader || !authHeader.startsWith('Bearer ')) {
+                    return jsonResponse({
+                        success: false,
+                        message: 'No token provided'
+                    }, 401, corsHeaders(origin));
+                }
+                const token = authHeader.substring(7);
+                // Verify token (mock validation)
+                if (!token.startsWith('token_')) {
+                    return jsonResponse({
+                        success: false,
+                        message: 'Invalid token'
+                    }, 401, corsHeaders(origin));
+                }
+                return jsonResponse({
+                    success: true,
+                    valid: true,
+                    user: {
+                        email: 'admin@sweetlayers.com',
+                        name: 'Admin',
+                        tenantId: 'default',
+                        role: 'admin',
+                    },
+                    timestamp: Date.now(),
+                }, 200, corsHeaders(origin));
+            }
+            // ========== AGENTIC DASHBOARD API ENDPOINTS ==========
+            // Decision validation from frontend agent
+            if (url.pathname === '/api/agentic/validate' && method === 'POST') {
+                const body = await request.json();
+                const { decision, context } = body;
+                // Agentic engine validates the decision
+                const confidence = decision?.confidence || 0.5;
+                const decisionType = decision?.type || 'unknown';
+                // Submit validation as a goal to the engine
+                const validationGoal = eng.submitGoal(`Validate frontend decision: ${decisionType}`, Priority.MEDIUM, { decision, context, validationType: 'frontend' });
+                return jsonResponse({
+                    approved: confidence > 0.5,
+                    goalId: validationGoal.id,
+                    confidence,
+                    reasoning: confidence > 0.7 ? 'High confidence decision approved' : 'Low confidence, requires review',
+                    timestamp: Date.now(),
+                }, 200, corsHeaders(origin));
+            }
+            // Receive observations from frontend agent
+            if (url.pathname === '/api/agentic/observation' && method === 'POST') {
+                const body = await request.json();
+                const { type, data, timestamp, sessionId, userId } = body;
+                // Store observation in knowledge base
+                eng.knowledge.set('observation', `${sessionId || 'anon'}_${Date.now()}`, {
+                    type,
+                    data,
+                    timestamp,
+                    sessionId,
+                    userId,
+                    receivedAt: Date.now()
+                });
+                // Create a goal if important observation
+                if (type === 'navigation' && data?.to?.includes('checkout')) {
+                    eng.submitGoal('User approaching checkout - optimize conversion', Priority.HIGH, { observation: body, action: 'optimize_checkout' });
+                }
+                return jsonResponse({
+                    received: true,
+                    observationId: `obs_${Date.now()}`,
+                    processed: true,
+                    timestamp: Date.now(),
+                }, 200, corsHeaders(origin));
+            }
+            // Receive goals from frontend agent
+            if (url.pathname === '/api/agentic/goal' && method === 'POST') {
+                const body = await request.json();
+                const { description, priority = 'medium', context } = body;
+                // Map string priority to enum
+                const priorityMap = {
+                    critical: 0, high: 1, medium: 2, low: 3
+                };
+                const priorityNum = priorityMap[String(priority).toLowerCase()] || 2;
+                // Submit goal to agentic engine
+                const goal = eng.submitGoal(description, priorityNum, { ...context, source: 'frontend' });
+                return jsonResponse({
+                    goalId: goal.id,
+                    description: goal.description,
+                    priority: goal.priority,
+                    status: 'submitted',
+                    timestamp: Date.now(),
+                    message: 'Goal submitted to agentic engine',
+                }, 201, corsHeaders(origin));
+            }
+            // Get agent metrics for dashboard
+            if (url.pathname === '/api/agentic/metrics' && method === 'GET') {
+                const metrics = eng.getMetrics();
+                const learning = eng.learning.getStats();
+                return jsonResponse({
+                    engine: {
+                        running: eng.isRunning(),
+                        tickCount: metrics.state === 'PERCEIVING' ? Date.now() % 1000 : 0,
+                        uptime: metrics.uptime,
+                    },
+                    performance: {
+                        tasksCompleted: metrics.tasksCompleted,
+                        tasksFailed: metrics.tasksFailed,
+                        avgDecisionTime: metrics.avgDecisionTime,
+                        knowledgeEntries: metrics.knowledgeEntries,
+                        experiences: metrics.experienceCount,
+                        modelAccuracy: metrics.modelAccuracy,
+                    },
+                    learning: {
+                        successRate: learning.successRate,
+                        avgReward: learning.avgReward,
+                        total: learning.total,
+                    },
+                    timestamp: Date.now(),
+                }, 200, corsHeaders(origin));
+            }
+            // WebSocket upgrade for real-time sync
+            if (url.pathname === '/ws' && method === 'GET') {
+                const upgradeHeader = request.headers.get('Upgrade');
+                if (upgradeHeader !== 'websocket') {
+                    return jsonResponse({ error: 'Expected WebSocket upgrade' }, 400, corsHeaders(origin));
+                }
+                // Create WebSocket pair
+                const [client, server] = Object.values(new WebSocketPair());
+                // Accept the WebSocket
+                server.accept();
+                // Handle messages from frontend
+                server.addEventListener('message', (event) => {
+                    try {
+                        const msg = JSON.parse(event.data);
+                        // Handle different message types
+                        switch (msg.type) {
+                            case 'user:connect':
+                                server.send(JSON.stringify({
+                                    type: 'connected',
+                                    message: 'Connected to agentic engine',
+                                    timestamp: Date.now(),
+                                }));
+                                break;
+                            case 'goal:request':
+                                // Create a goal from frontend request
+                                const goal = eng.submitGoal(msg.data.description, Priority.MEDIUM, msg.data.context);
+                                server.send(JSON.stringify({
+                                    type: 'goal:assigned',
+                                    goalId: goal.id,
+                                    timestamp: Date.now(),
+                                }));
+                                break;
+                            case 'ping':
+                                server.send(JSON.stringify({ type: 'pong', timestamp: Date.now() }));
+                                break;
+                        }
+                    }
+                    catch (err) {
+                        console.error('WebSocket message error:', err);
+                    }
+                });
+                // Push insights periodically
+                const insightInterval = setInterval(() => {
+                    if (server.readyState === 1) { // WebSocket.OPEN
+                        server.send(JSON.stringify({
+                            type: 'insight:push',
+                            insight: {
+                                message: `Engine active - ${eng.getMetrics().tasksCompleted} tasks completed`,
+                                confidence: 0.9,
+                            },
+                            timestamp: Date.now(),
+                        }));
+                    }
+                    else {
+                        clearInterval(insightInterval);
+                    }
+                }, 10000); // Every 10 seconds
+                // Handle close
+                server.addEventListener('close', () => {
+                    clearInterval(insightInterval);
+                    console.log('WebSocket closed');
+                });
+                return new Response(null, {
+                    status: 101,
+                    webSocket: client,
+                });
+            }
+            // ========== END AGENTIC DASHBOARD API ==========
+            // 404 for unhandled API routes
+            console.log('API route not handled:', url.pathname);
+            return new Response(JSON.stringify({ error: 'Not found', path: url.pathname }), {
+                status: 404,
+                headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) }
+            });
         }
-        // For non-API routes, let Workers Sites handle static files automatically
-        return fetch(request);
-    }
+        catch (err) {
+            return jsonResponse({
+                error: 'Internal server error',
+                message: err instanceof Error ? err.message : 'Unknown error',
+            }, 500, corsHeaders(origin));
+        }
+    },
 };
-// Durable Object for engine state (required for deployment)
+// Helper functions
+function getRecommendations(category, limit = 5) {
+    const products = [
+        { id: 1, name: 'Heritage Mooncake', category: 'mooncakes', price: 450 },
+        { id: 2, name: 'Thai Tea Cake', category: 'cakes', price: 380 },
+        { id: 3, name: 'Pandan Custard', category: 'pastries', price: 120 },
+        { id: 4, name: 'Black Sesame Roll', category: 'pastries', price: 95 },
+        { id: 5, name: 'Salted Egg Pastry', category: 'pastries', price: 150 },
+    ];
+    if (category) {
+        return products.filter(p => p.category === category || p.name.toLowerCase().includes(category.toLowerCase())).slice(0, limit);
+    }
+    return products.slice(0, limit);
+}
+function getInventory(category) {
+    const inventory = [
+        { id: 1, name: 'Heritage Mooncake', category: 'mooncakes', stock: 50, available: 45 },
+        { id: 2, name: 'Thai Tea Cake', category: 'cakes', stock: 30, available: 28 },
+        { id: 3, name: 'Pandan Custard', category: 'pastries', stock: 100, available: 90 },
+    ];
+    if (category) {
+        return inventory.filter(i => i.category === category);
+    }
+    return inventory;
+}
+// Generate PromptPay QR payload (Thailand QR payment standard)
+function generatePromptPayQR(amount, phone, ref) {
+    // Remove leading 0 from phone and add country code
+    const phoneWithCountry = '66' + phone.replace(/^0/, '');
+    // Build TLV (Tag-Length-Value) structure
+    function tlv(tag, value) {
+        const length = value.length.toString().padStart(2, '0');
+        return tag + length + value;
+    }
+    // PromptPay Application ID
+    const appId = tlv('00', 'A000000677010111');
+    // Phone number
+    const phoneData = tlv('01', phoneWithCountry);
+    // Country code
+    const country = tlv('58', 'TH');
+    // Currency (764 = THB)
+    const currency = tlv('53', '764');
+    // Amount (with 2 decimal places)
+    const amountStr = amount.toFixed(2);
+    const amountTlv = tlv('54', amountStr);
+    // Reference (optional)
+    let refData = '';
+    if (ref) {
+        refData = tlv('62', tlv('05', ref));
+    }
+    // Combine payload
+    const payload = appId + phoneData + country + currency + amountTlv + refData + '6304';
+    // Calculate CRC16 checksum
+    const crc = calculateCRC16(payload.slice(0, -4));
+    return payload + crc;
+}
+// CRC16 calculation for PromptPay
+function calculateCRC16(data) {
+    let crc = 0xFFFF;
+    for (let i = 0; i < data.length; i++) {
+        crc ^= data.charCodeAt(i) << 8;
+        for (let j = 0; j < 8; j++) {
+            crc = (crc & 0x8000) ? ((crc << 1) ^ 0x1021) : (crc << 1);
+            crc &= 0xFFFF;
+        }
+    }
+    return crc.toString(16).toUpperCase().padStart(4, '0');
+}
+// Durable Object for engine state (optional, for scaling)
 export class EngineState {
     state;
     env;
@@ -679,220 +815,7 @@ export class EngineState {
         this.env = env;
     }
     async fetch(request) {
-        return new Response('Engine State Durable Object');
+        return new Response('Engine State DO', { status: 200 });
     }
 }
-let BakeryAssistantAgent = (() => {
-    let _classSuper = Agent;
-    let _instanceExtraInitializers = [];
-    let _initializeSession_decorators;
-    let _sendMessage_decorators;
-    let _searchProducts_decorators;
-    let _getChatHistory_decorators;
-    let _getCustomerPreferences_decorators;
-    let _clearSession_decorators;
-    return class BakeryAssistantAgent extends _classSuper {
-        static {
-            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
-            _initializeSession_decorators = [callable()];
-            _sendMessage_decorators = [callable()];
-            _searchProducts_decorators = [callable()];
-            _getChatHistory_decorators = [callable()];
-            _getCustomerPreferences_decorators = [callable()];
-            _clearSession_decorators = [callable()];
-            __esDecorate(this, null, _initializeSession_decorators, { kind: "method", name: "initializeSession", static: false, private: false, access: { has: obj => "initializeSession" in obj, get: obj => obj.initializeSession }, metadata: _metadata }, null, _instanceExtraInitializers);
-            __esDecorate(this, null, _sendMessage_decorators, { kind: "method", name: "sendMessage", static: false, private: false, access: { has: obj => "sendMessage" in obj, get: obj => obj.sendMessage }, metadata: _metadata }, null, _instanceExtraInitializers);
-            __esDecorate(this, null, _searchProducts_decorators, { kind: "method", name: "searchProducts", static: false, private: false, access: { has: obj => "searchProducts" in obj, get: obj => obj.searchProducts }, metadata: _metadata }, null, _instanceExtraInitializers);
-            __esDecorate(this, null, _getChatHistory_decorators, { kind: "method", name: "getChatHistory", static: false, private: false, access: { has: obj => "getChatHistory" in obj, get: obj => obj.getChatHistory }, metadata: _metadata }, null, _instanceExtraInitializers);
-            __esDecorate(this, null, _getCustomerPreferences_decorators, { kind: "method", name: "getCustomerPreferences", static: false, private: false, access: { has: obj => "getCustomerPreferences" in obj, get: obj => obj.getCustomerPreferences }, metadata: _metadata }, null, _instanceExtraInitializers);
-            __esDecorate(this, null, _clearSession_decorators, { kind: "method", name: "clearSession", static: false, private: false, access: { has: obj => "clearSession" in obj, get: obj => obj.clearSession }, metadata: _metadata }, null, _instanceExtraInitializers);
-            if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-        }
-        initialState = (__runInitializers(this, _instanceExtraInitializers), {
-            chatHistory: [],
-            customerPreferences: {
-                favoriteCategories: [],
-                lastViewedProducts: [],
-                orderCount: 0,
-            },
-            currentSession: {
-                sessionId: '',
-                startedAt: Date.now(),
-                lastActivity: Date.now(),
-            },
-        });
-        productCatalog = [
-            { id: 'mooncake-traditional', name: 'Traditional Mooncakes', desc: 'Lotus paste, red bean, mung bean with salted egg yolk', price: 'From $8', tags: ['mooncake', 'classic', 'lotus', 'red bean', 'mung bean', 'traditional', 'gift'], img: 'images/mooncake-traditional.webp', category: 'Classic' },
-            { id: 'pastry-arrangement', name: 'Pastry Arrangement Box', desc: 'Curated gift boxes with assorted pastries', price: 'From $45', tags: ['gift', 'box', 'arrangement', 'assorted', 'curated', 'present'], img: 'images/pastry-arrangement.webp', category: 'Signature' },
-            { id: 'pandan-custard', name: 'Pandan Custard Cake', desc: 'Fragrant pandan sponge layered with silky coconut custard cream', price: 'From $32', tags: ['pandan', 'custard', 'cake', 'coconut', 'layer', 'popular'], img: 'images/pandan-custard.webp', category: 'Popular' },
-            { id: 'black-sesame', name: 'Black Sesame Layer Cake', desc: 'Rich roasted sesame cream between delicate sponge layers', price: 'From $35', tags: ['sesame', 'black', 'cake', 'layer', 'roasted', 'specialty'], img: 'images/black-sesame.webp', category: 'Specialty' },
-            { id: 'salted-egg', name: 'Salted Egg Lava Pastry', desc: 'Flaky crust with molten salted egg custard center', price: 'From $6', tags: ['salted', 'egg', 'lava', 'pastry', 'flaky', 'custard', 'new'], img: 'images/salted-egg.webp', category: 'New' },
-            { id: 'taro-coconut', name: 'Taro Coconut Cake', desc: 'Creamy taro mousse with coconut shreds on a buttery biscuit base', price: 'From $28', tags: ['taro', 'coconut', 'cake', 'mousse', 'seasonal'], img: 'images/taro-coconut.webp', category: 'Seasonal' },
-            { id: 'mung-bean', name: 'Mung Bean Pastry', desc: 'Smooth mung bean paste in a golden, flaky traditional pastry shell', price: 'From $5', tags: ['mung', 'bean', 'pastry', 'flaky', 'traditional', 'heritage'], img: 'images/mung-bean.webp', category: 'Heritage' },
-            { id: 'red-bean', name: 'Red Bean Delight', desc: 'Sweet red bean paste wrapped in a soft, pillowy mochi-style shell', price: 'From $5', tags: ['red', 'bean', 'mochi', 'sweet', 'classic'], img: 'images/red-bean.webp', category: 'Classic' },
-        ];
-        async initializeSession(sessionId) {
-            this.setState({
-                ...this.state,
-                currentSession: {
-                    sessionId,
-                    startedAt: Date.now(),
-                    lastActivity: Date.now(),
-                },
-            });
-            return { success: true, sessionId };
-        }
-        async sendMessage(message) {
-            const userMessage = {
-                role: 'user',
-                content: message,
-                timestamp: Date.now(),
-            };
-            this.setState({
-                ...this.state,
-                chatHistory: [...this.state.chatHistory, userMessage],
-                currentSession: {
-                    ...this.state.currentSession,
-                    lastActivity: Date.now(),
-                },
-            });
-            const response = this.generateResponse(message.toLowerCase());
-            const assistantMessage = {
-                role: 'assistant',
-                content: response.text,
-                timestamp: Date.now(),
-            };
-            this.setState({
-                ...this.state,
-                chatHistory: [...this.state.chatHistory, userMessage, assistantMessage],
-            });
-            this.updatePreferences(message);
-            return {
-                response: response.text,
-                products: response.products,
-                timestamp: Date.now(),
-            };
-        }
-        async searchProducts(query) {
-            const products = this.getRelevantProducts(query);
-            return { products };
-        }
-        async getChatHistory() {
-            return this.state.chatHistory;
-        }
-        async getCustomerPreferences() {
-            return this.state.customerPreferences;
-        }
-        async clearSession() {
-            this.setState({
-                ...this.state,
-                chatHistory: [],
-                currentSession: {
-                    sessionId: '',
-                    startedAt: Date.now(),
-                    lastActivity: Date.now(),
-                },
-            });
-            return { success: true };
-        }
-        generateResponse(message) {
-            let response = '';
-            let products = [];
-            if (message.includes('mooncake') || message.includes('moon')) {
-                response = "Our Traditional Mooncakes are hand-pressed with lotus paste and salted egg yolk — a timeless delicacy perfect for gifting. We also have seasonal varieties available. Would you like to see our mooncake collection?";
-                products = this.productCatalog.filter(p => p.tags.includes('mooncake'));
-            }
-            else if (message.includes('pandan')) {
-                response = "Our Pandan Custard Cake features fragrant pandan sponge layered with silky coconut custard cream. It's one of our most popular items! The combination of aromatic pandan and rich coconut is absolutely divine.";
-                products = this.productCatalog.filter(p => p.tags.includes('pandan'));
-            }
-            else if (message.includes('gift') || message.includes('box')) {
-                response = "Our Pastry Arrangement Boxes are perfect for gifting! We offer curated gift boxes with assorted pastries starting from $45. They make excellent presents for holidays, celebrations, or corporate events.";
-                products = this.productCatalog.filter(p => p.tags.includes('gift') || p.tags.includes('box'));
-            }
-            else if (message.includes('sesame')) {
-                response = "Our Black Sesame Layer Cake features rich roasted sesame cream between delicate sponge layers. It's a specialty item that's become quite popular for its unique nutty flavor profile.";
-                products = this.productCatalog.filter(p => p.tags.includes('sesame'));
-            }
-            else if (message.includes('salted egg') || message.includes('lava')) {
-                response = "Our Salted Egg Lava Pastry has a flaky crust with molten salted egg custard center — absolutely irresistible! It's one of our newer items that customers are loving.";
-                products = this.productCatalog.filter(p => p.tags.includes('salted') || p.tags.includes('lava'));
-            }
-            else if (message.includes('order') || message.includes('buy')) {
-                response = "I'd be happy to help you place an order! You can add items directly from our recommendations, or browse our full menu. Would you like me to suggest some items based on your preferences?";
-                products = this.productCatalog.slice(0, 4);
-            }
-            else if (message.includes('recommend') || message.includes('suggest')) {
-                response = "Based on our popular items, I'd recommend our Pandan Custard Cake for a classic choice, or our Pastry Arrangement Box if you're looking for something special. What occasion are you shopping for?";
-                products = this.productCatalog.filter(p => p.category === 'Popular' || p.category === 'Signature');
-            }
-            else if (message.includes('price') || message.includes('cost')) {
-                response = "Our prices range from $5 for individual pastries up to $45 for large gift boxes. Traditional Mooncakes start at $8 each, and our layer cakes range from $28-$35. All prices are very competitive for the quality!";
-                products = [];
-            }
-            else if (message.includes('delivery') || message.includes('shipping')) {
-                response = "We offer same-day delivery for orders placed before 12pm, and next-day standard delivery. All our pastries are baked fresh and carefully packaged to ensure they arrive in perfect condition!";
-                products = [];
-            }
-            else {
-                response = "I'd be happy to help you find the perfect pastries! We have traditional mooncakes, layer cakes, gift boxes, and specialty items. What type of pastry are you interested in, or would you like me to recommend something based on an occasion?";
-                products = this.productCatalog.slice(0, 4);
-            }
-            return { text: response, products };
-        }
-        getRelevantProducts(query) {
-            if (!query || query.trim().length === 0)
-                return [];
-            const q = query.toLowerCase().trim();
-            const words = q.split(/\s+/);
-            return this.productCatalog
-                .map(product => {
-                let score = 0;
-                const nameLower = product.name.toLowerCase();
-                const descLower = product.desc.toLowerCase();
-                const tagsStr = product.tags.join(' ').toLowerCase();
-                const catLower = product.category.toLowerCase();
-                for (const word of words) {
-                    if (nameLower.includes(word))
-                        score += 10;
-                    if (catLower.includes(word))
-                        score += 5;
-                    if (tagsStr.includes(word))
-                        score += 3;
-                    if (descLower.includes(word))
-                        score += 1;
-                }
-                if (nameLower === q)
-                    score += 20;
-                if (nameLower.startsWith(q))
-                    score += 8;
-                return { ...product, score };
-            })
-                .filter(p => p.score > 0)
-                .sort((a, b) => b.score - a.score)
-                .slice(0, 4);
-        }
-        updatePreferences(message) {
-            const categories = this.state.customerPreferences.favoriteCategories;
-            const newCategories = [...categories];
-            if (message.includes('mooncake') && !newCategories.includes('Classic')) {
-                newCategories.push('Classic');
-            }
-            if (message.includes('gift') && !newCategories.includes('Signature')) {
-                newCategories.push('Signature');
-            }
-            if (message.includes('pandan') && !newCategories.includes('Popular')) {
-                newCategories.push('Popular');
-            }
-            this.setState({
-                ...this.state,
-                customerPreferences: {
-                    ...this.state.customerPreferences,
-                    favoriteCategories: newCategories,
-                },
-            });
-        }
-    };
-})();
-export { BakeryAssistantAgent };
 //# sourceMappingURL=worker.js.map

@@ -60,7 +60,7 @@ const TaskStatus = {
 const LOG_LEVELS = { debug: 0, info: 1, warn: 2, error: 3 };
 
 // ============================================
-// EVENT BUS
+// EVENT BUS (use shared.js if available)
 // ============================================
 
 class EventBus {
@@ -68,6 +68,60 @@ class EventBus {
     this.handlers = new Map();
     this.onceHandlers = new Map();
   }
+
+  on(event, handler) {
+    if (!this.handlers.has(event)) {
+      this.handlers.set(event, new Set());
+    }
+    this.handlers.get(event).add(handler);
+    return () => this.off(event, handler);
+  }
+
+  emit(event, ...args) {
+    const handlers = this.handlers.get(event);
+    if (handlers) {
+      for (const handler of [...handlers]) {
+        try {
+          handler(...args);
+        } catch (err) {
+          console.error(`[EventBus] Error in handler for "${event}":`, err);
+        }
+      }
+    }
+    const onceHandlers = this.onceHandlers.get(event);
+    if (onceHandlers) {
+      onceHandlers.forEach(handler => handler(...args));
+      this.onceHandlers.delete(event);
+    }
+  }
+
+  off(event, handler) {
+    const handlers = this.handlers.get(event);
+    if (handlers) handlers.delete(handler);
+  }
+
+  once(event, handler) {
+    if (!this.onceHandlers.has(event)) {
+      this.onceHandlers.set(event, new Set());
+    }
+    this.onceHandlers.get(event).add(handler);
+  }
+
+  clear(event) {
+    if (event) {
+      this.handlers.delete(event);
+      this.onceHandlers.delete(event);
+    } else {
+      this.handlers.clear();
+      this.onceHandlers.clear();
+    }
+  }
+}
+
+// Only create instance if not already defined
+if (typeof window !== 'undefined' && !window.eventBus) {
+  window.eventBus = new EventBus();
+}
 
   on(event, handler) {
     if (!this.handlers.has(event)) {

@@ -1,0 +1,1790 @@
+{
+  "metadata": {
+    "generatedAt": "2026-04-09T01:30:12.855Z",
+    "environment": "staging",
+    "duration": 1575
+  },
+  "summary": {
+    "total": 25,
+    "passed": 2,
+    "failed": 23,
+    "skipped": 0,
+    "error": 0,
+    "passRate": 8
+  },
+  "suite": {
+    "id": "suite_1775698211279",
+    "name": "API Regression Suite",
+    "startTime": 1775698211279,
+    "endTime": 1775698212854,
+    "duration": 1575
+  },
+  "results": [
+    {
+      "id": "auth.login.success",
+      "name": "User login with valid credentials",
+      "status": "failed",
+      "duration": 824,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 0)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/api/auth/login",
+        "body": {
+          "username": "testuser",
+          "password": "password123"
+        }
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec16d978de9-SIN",
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=9ngwHx4WlZ8ixMx5m6o13qODOfGG3wRWlE%2Fs3FWxeEiHTeT08C5GolUFTEkQ7n%2FWqtKxW%2FESis0I93kZ7BPLJKrMBVR4QRhstCkLNmZtu%2FadJpdKDICKws%2BuyHsZk%2BbMGP7NiRstp06625lR%2FXlpiHrO02g%2BEP0b4pVtBXTJG0xMhUDh5r4alGs0%2Bq1Rx8lV5VdnSHGrXg%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/auth/login"
+        },
+        "duration": 718
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 200, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  200
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        },
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/",
+              "message": "must have required property 'token'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "token"
+              }
+            },
+            {
+              "path": "/",
+              "message": "must have required property 'user'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "user"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "error.429.rate_limit",
+      "name": "429 rate limit exceeded",
+      "status": "failed",
+      "duration": 890,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 4)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/products"
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec19a9b3ddc-SIN",
+          "connection": "keep-alive",
+          "content-length": "44",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=A%2FuACrOtNq4C5L7ak86Hu0AoXUY%2F3F7A0nSSfLZuTOB%2ByD281xoxde5oAYvrhkTyz92ihAIHU%2BIrLg1yk5%2FjShq2J32MnPRww%2BCWuxcJzNSZ9lj7myXaRjQurSO%2BcpYoMADbgaZDpCTlXJErBPfPH4jm12qfg4GaMORfdGkH7gPX7BGeVUe6sV1cswQv7Oav8cX4%2Bdmaiw%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/products"
+        },
+        "duration": 879
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 200 or 429, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  200,
+                  429
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "user.list.success",
+      "name": "List all users",
+      "status": "failed",
+      "duration": 937,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 1)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/users"
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec19e4440b3-SIN",
+          "connection": "keep-alive",
+          "content-length": "41",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=HWd5%2Fan3FaD6cxjk4DyLPlcri0pRD7k6WhZwyRIxNGJOt8gPOURKRI%2BWVq%2FzHjgjBi25xKcSBEZRJLrFN7nz2bRLcvFkOivMSttXYPJ0B1bEMEMPfl7ijByaB6PRjHdAfFbBUojDbB8YQ%2B%2FcpjiinrOic%2BA2ky4j4%2Bgc0eXlo5cBPtMi4xj%2FN%2F%2FbXS4mMexj%2BPJrH%2FB1RA%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/users"
+        },
+        "duration": 925
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 200, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  200
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        },
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/",
+              "message": "must have required property 'data'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "data"
+              }
+            },
+            {
+              "path": "/",
+              "message": "must have required property 'total'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "total"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "user.update.success",
+      "name": "Update user details",
+      "status": "failed",
+      "duration": 984,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 2)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "PUT",
+        "path": "/api/users/user-123",
+        "body": {
+          "name": "Updated Name"
+        }
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec18dfc81f8-SIN",
+          "connection": "keep-alive",
+          "content-encoding": "br",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=vHxljCbdAd1A28F3LvBfLu%2Fh6VqmpdpAfz0Uz1S5TjX2qBlPp4sbGauHtv4%2BSIQ%2FwIvsRHhqi8qnG5rTTKJ19UDT4Wk9p%2FWhrO5wveIujdQ6yM3Qu7n400S1yHf9bsTfqXQYhJ%2BGre%2FT5JV9sU%2F6rHpGz1cSkHqY%2FmBHqD2Bme6SfLLaas%2Bl9vwd%2FNkRnViP0lUEe7Vq3A%3D%3D\"}]}",
+          "server": "cloudflare",
+          "transfer-encoding": "chunked"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/users/user-123"
+        },
+        "duration": 916
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 200, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  200
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        },
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/",
+              "message": "must have required property 'id'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "id"
+              }
+            },
+            {
+              "path": "/",
+              "message": "must have required property 'email'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "email"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "product.get.success",
+      "name": "Get product by ID",
+      "status": "failed",
+      "duration": 999,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 3)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/products/prod-123"
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec15ed591c0-SIN",
+          "connection": "keep-alive",
+          "content-encoding": "br",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=ujQdXJhtXOMz2oafqsCMAuD6gwXPRGHWf6w4N5pj3wXlvSN3Q3u9RVEWdfwxsnPNMXKlaDgvL1f%2BE7i%2BRXFPZUoLhFHuPj3V9z1%2FVMZLL4K09%2FRlqfAEbPjBGGn0TnUykFsgPAXrm3bnT7qLiwg7Q3oEFZJefWNXT6%2Fjj2Y9%2BUIAosFnBGpGJUTM2qxzdMsfw4%2B8r5yhAw%3D%3D\"}]}",
+          "server": "cloudflare",
+          "transfer-encoding": "chunked"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/products/prod-123"
+        },
+        "duration": 964
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 200, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  200
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        },
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/",
+              "message": "must have required property 'id'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "id"
+              }
+            },
+            {
+              "path": "/",
+              "message": "must have required property 'name'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "name"
+              }
+            },
+            {
+              "path": "/",
+              "message": "must have required property 'price'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "price"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "error.500.internal_server",
+      "name": "500 internal server error",
+      "status": "failed",
+      "duration": 135,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 4)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/error-trigger"
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec339728de9-SIN",
+          "connection": "keep-alive",
+          "content-length": "49",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=aT83KN8%2BHgmMr4KXiZre6Re%2FuthAqk9p33pzuDLMeMH%2Bx0JLRlVFbKI%2FaOIICjzL8PpSOEdTzYxoHxWmiBGjgE1G33e7pY4PIn3PLj7l7tMgqlZD8ZvY%2BHXVl3xAmrDmcfCUyD0YbahLX7unZIp5pb66OpXKq0zlYVL8T0%2FzIKPoFNxIXldbSX7eikBUneMHqowLi10NJw%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/error-trigger"
+        },
+        "duration": 133
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 500, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  500
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "user.delete.success",
+      "name": "Delete user",
+      "status": "failed",
+      "duration": 79,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 2)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "DELETE",
+        "path": "/api/users/user-to-delete"
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec3df7540b3-SIN",
+          "connection": "keep-alive",
+          "content-encoding": "br",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=W%2F95E%2BMO7zZ3Z7EDzM2APUE5EINOs0YqJLeA%2FRGY2z3cZY%2Fv4l3bVY2m%2F%2FepAKGNYpAZhfoNQgv8hlXq3aSAHfJSEg2%2BPUbDoLO4EnkoRAtagk013lY0R%2BE17TOYQQnKNVjZZJ52zA2XVlY3DwtgC42nzCCDGq7QHroCSCtcFuG81SU9xJy8T5I8auTYgr3wWvoiapPOSw%3D%3D\"}]}",
+          "server": "cloudflare",
+          "transfer-encoding": "chunked"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/users/user-to-delete"
+        },
+        "duration": 73
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 204, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  204
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "product.create.validation",
+      "name": "Create product with validation",
+      "status": "failed",
+      "duration": 82,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 3)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/api/products",
+        "body": {
+          "name": "Test Product",
+          "price": 99.99,
+          "category": "test"
+        }
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec40f5c81f8-SIN",
+          "connection": "keep-alive",
+          "content-length": "44",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=qzySmElsFrS7yrVwHQBrLcK6zMujfwl%2F7epdTX43pfr6hNgGpl8nSzx0zVN8RQcHU7UZNQQ0xJz1SYOIdnDGgmcAzeJjmdpI63IAWuCoMkzJMRM%2F96xjVnjdiSQCU2eVQaDSdbevioZZWFS0xHyoz%2BuRXA7NhtleGoyZ%2FfB6qH8dwNffdmFIplUKjlFDrMx0fTFzmsfl4Q%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/products"
+        },
+        "duration": 77
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 201, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  201
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        },
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/",
+              "message": "must have required property 'id'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "id"
+              }
+            },
+            {
+              "path": "/",
+              "message": "must have required property 'name'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "name"
+              }
+            },
+            {
+              "path": "/",
+              "message": "must have required property 'price'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "price"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "error.timeout",
+      "name": "Request timeout handling",
+      "status": "failed",
+      "duration": 76,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 4)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/slow-endpoint"
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec4190091c0-SIN",
+          "connection": "keep-alive",
+          "content-length": "49",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=V92%2FFB6CsxN0i1%2BaobCBNfPYdWi0JzArWWJkn%2F9QJNfGvZQ9GGxb23TMbBvrbXDAU%2BD8bIJj9EfGts28DybKlV9jKDyHQEdX%2F9pr4KtBdZpkb7oOMt92u%2BIy1W%2FQvoAv8RkjNj3Dz2RLX93DgjrA0xn2OKaUThl0euOtWwwAncPMfuKQi1SDVMoShfOcRcNbG5DgQZUlUQ%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/slow-endpoint"
+        },
+        "duration": 75
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 504, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  504
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "product.list.success",
+      "name": "List all products",
+      "status": "failed",
+      "duration": 66,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 2)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/products"
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec44bb78de9-SIN",
+          "connection": "keep-alive",
+          "content-length": "44",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=dbk7A5IQy4FnHsoV5O8b6otHjjkNzerl3%2FIwe9Z5dur2H2bFuDjf12fDcT9Ptu2YpNnN5rTMoiSLdqGeMgrmeMfZsDuD2gkFzdYvDZEmom3H4Ss0efy0C399Ewwdp%2FBAvZzx3VXAPvm4n8Vi3DDfKD623b15cyc0Uc4SNrkoJ6lsFZUHVfPhFBPbgtfXssz9oDgeyuAg1w%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/products"
+        },
+        "duration": 56
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 200, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  200
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        },
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/",
+              "message": "must have required property 'data'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "data"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "product.price_filter",
+      "name": "Filter products by price range",
+      "status": "failed",
+      "duration": 76,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 3)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/products"
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec47fdd40b3-SIN",
+          "connection": "keep-alive",
+          "content-length": "44",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=w8bf%2FjNoVR8MNswE%2B03m3NRF9ClrGhTCGVr9pYGVYNXlo0GzgipxNHwr21mWWVAvc0DoSs%2BzMmyMkklGRJDpilaXU1LzEwY3181LhCvL%2BJ3yhlODisGDIC%2FjFbeUXtQPLQchEmvMqhTsuy5tHkL0pjv2EKnZHN4DZo210Ha63duSaNAElng%2B%2BAhlN%2BpkwHReWMZ72lK8KA%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/products"
+        },
+        "duration": 63
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 200, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  200
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "perf.response_time.list",
+      "name": "Response time for list endpoint",
+      "status": "failed",
+      "duration": 76,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 4)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/users"
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec49fb181f8-SIN",
+          "connection": "keep-alive",
+          "content-length": "41",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=Ie2HLviiKYN9LZTeFAwbXqMDIWHLVR7gtoOmpA41QGSpBzE2kkLzFCdFbiX51vzZjSVHpz5MUYjlYsgWX3iZNrv24IF5Nt1waZO3xvj9%2Fpr50SSmo0cpr6Ke1QptH9mkhSAXqqhDMdpe1i7xtw8c1FAPCdDMNHHqfwXLDhu642igJWTmiN6FosNGlmnTFPGMQHoLiyW3TA%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/users"
+        },
+        "duration": 73
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 200, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  200
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        },
+        {
+          "valid": true,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "id": "product.list.filter_category",
+      "name": "Filter products by category",
+      "status": "failed",
+      "duration": 91,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 2)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/products"
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec4b97091c0-SIN",
+          "connection": "keep-alive",
+          "content-length": "44",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=cv8N33W8wKggGjF6xhuRZnrs%2Fxx0RjutXCiumXc2ibswwJ74vipTxoJHkVNnxfkadQdXLfPbMSkez%2FYMNzFIvykrmAE8NeZ%2F7%2B%2BUU%2BLOWqoc6bOBXgOI24gtC2qEELlPczDG1NFW0DkNFfum73DlKkDVcq1Bx%2BHCZJ2M6%2BySfviyRdmB7%2Fw0o9mKbZYnHR5xBDhnFYPqWQ%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/products"
+        },
+        "duration": 89
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 200, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  200
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        },
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/",
+              "message": "must have required property 'data'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "data"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "auth.login.invalid_credentials",
+      "name": "User login with invalid credentials",
+      "status": "failed",
+      "duration": 388,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 0)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/api/auth/login",
+        "body": {
+          "username": "testuser",
+          "password": "wrongpassword"
+        }
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec47d0c46a3-SIN",
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=dK%2Bq3jYUDRCnJEwnGDATj9iWopUkPvKkCKkljv5mAujSLB0tXCWFY5GvFOnUxmhhGKsG1i5Q%2Fi7BGFCgTYlaVOnFTLD9WSWDpbDZMzH%2FR2gVgSd8EmmjsqnDjIg%2BoXMs3agYACqRMKnj9SYbWGllSCylc6lmkqA11XrMA84z6Dd%2FjHxmH5bH5yY4Eto50KBAcPjczJLbXA%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/auth/login"
+        },
+        "duration": 383
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 401, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  401
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        },
+        {
+          "valid": true,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "id": "user.get.by_id",
+      "name": "Get user by ID",
+      "status": "failed",
+      "duration": 309,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 1)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/users/user-123"
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec47c78fcec-SIN",
+          "connection": "keep-alive",
+          "content-encoding": "br",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=3EXTRX38%2BVn54g90ZOl4rvzBEVnaRxOPpTdSzTEso%2FjzsUN3gwRI4yQSshjahCS%2BtQqYFDJw8FxYV2zI9IRjWB3PmEYckLL1HKpy%2Bduz3jtjmlhdKTpXOk0O2znKgtW62nEWBPdJKuCIEBEgutN%2BwyYQo6xQMO7dIWFBROFvtizCOvu6sB%2F7LobQwDQJ0umxYZQdslLc%2Bw%3D%3D\"}]}",
+          "server": "cloudflare",
+          "transfer-encoding": "chunked"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/users/user-123"
+        },
+        "duration": 284
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 200, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  200
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        },
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/",
+              "message": "must have required property 'id'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "id"
+              }
+            },
+            {
+              "path": "/",
+              "message": "must have required property 'email'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "email"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "error.404.not_found",
+      "name": "404 for non-existent endpoint",
+      "status": "passed",
+      "duration": 92,
+      "retries": 0,
+      "request": {
+        "method": "GET",
+        "path": "/api/unknown-endpoint"
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec4fd2c8de9-SIN",
+          "connection": "keep-alive",
+          "content-encoding": "br",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=lSQgC9VOg8UtDa1Gngs7cXNLYo7qd8D10skWU34wu6WgPybHnxyvWWRphTQsYJV8D4sQQOI7PrKeKvAB%2Fnu3Uvh6MQiIUOUOsGAXYPMS6SdlrQ12unXQWbPoqJjxmkLgUO3WZon05tCqdZKee8ksKl2hKOKCpXCTCsI8F3SwNAATFxqqOL2Fj24siLapMtT%2BuGkM4Wznzg%3D%3D\"}]}",
+          "server": "cloudflare",
+          "transfer-encoding": "chunked"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/unknown-endpoint"
+        },
+        "duration": 87
+      },
+      "validations": [
+        {
+          "valid": true,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "id": "product.list.pagination",
+      "name": "Products pagination",
+      "status": "failed",
+      "duration": 54,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 2)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/products"
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec5481081f8-SIN",
+          "connection": "keep-alive",
+          "content-length": "44",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=zDml2bnrwFKRif561Jq2UrI5jVj8RM1SAgxexSQb9QOS9vmad%2F6JDwu%2FHznYjNP9XJQNqrZghHMVkQ3B7O4miOr2ZLCqYS%2FuOnZT9s1hTXSSi%2FZOYI%2FyXIxxBastYnZ%2F%2BXUNrtbFyiWMAeqbqzjRlS46Uf7A6HZiqHvrWW6GYPDyWTo4UDUQ4XW3%2BD%2BYQr2qCvjlb87Spw%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/products"
+        },
+        "duration": 52
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 200, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  200
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "auth.login.missing_fields",
+      "name": "User login with missing required fields",
+      "status": "failed",
+      "duration": 72,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 0)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/api/auth/login",
+        "body": {
+          "username": "testuser"
+        }
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec56d433ddc-SIN",
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=BJ1u5kgojKfQHgCRdD%2FlOpHJrkAukY%2FOs2mNXaycnOoNXRGEzzHf1l5dkg3xpQz9IGVogWfZRf7YfaPPTwYowlK%2BEJuliG7JY7nOsw%2FJrIERuUsTNn4YK6QBJCP2%2FGHFBmVaLUKuFk9UBe%2FP1rKJmG7pl1js%2FpqwSutfdrwWROJA9emxm1%2BmYlMT8rNMP%2Fg1dlcGX%2FCc4w%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/auth/login"
+        },
+        "duration": 70
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 400, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  400
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        },
+        {
+          "valid": true,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "id": "error.405.method_not_allowed",
+      "name": "405 for wrong HTTP method",
+      "status": "failed",
+      "duration": 74,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 3)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "PATCH",
+        "path": "/api/users"
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec579ea91c0-SIN",
+          "connection": "keep-alive",
+          "content-length": "41",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=%2BubrD5A%2Bk%2F7Mnz24cW8Lq2yJK4y033SpLcvibbLs3p2fcBT2cz3iYaYfuWZ5qICEw1dD9Ho56NBaXsJT5XV4un0QXnWDh0U0HWdtCBcbjyDChGkT0BQB93rZoghpGklfB7p7IRUWyBJOfAPtFlM9FJKx%2FxpqonHvZYdQ34hHBTD0Y1%2FjoAYoSrUIx53sz4w%2FfX3l6smNZw%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/users"
+        },
+        "duration": 72
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 405, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  405
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "perf.response_time.create",
+      "name": "Response time for create endpoint",
+      "status": "failed",
+      "duration": 144,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 4)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/api/users",
+        "body": {
+          "email": "perf-test@example.com",
+          "name": "Perf Test",
+          "password": "password123"
+        }
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec5383640b3-SIN",
+          "connection": "keep-alive",
+          "content-length": "41",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=Js94RfN%2Fyge9gVM9tVIrEA9zupsP%2FIwVcw1rM6hl6fe6NLw2UgYxM1h3CGT45xY1eQebVBuIevZuFy%2BzA6c%2Bm%2B5qE4Ddow2WuYy9VTOLxAzcwHRRlCC2N%2FQhdx8IwLvTJQoaoY8p6ZozsPHVlN4rNz2qiVJxM83IHUsLvbCIEHEa4qySIi9tIA%2FCqaxPMIa%2BJH5OTU5kwg%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/users"
+        },
+        "duration": 144
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 201, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  201
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        },
+        {
+          "valid": true,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "id": "user.get.not_found",
+      "name": "Get user by non-existent ID",
+      "status": "passed",
+      "duration": 91,
+      "retries": 0,
+      "request": {
+        "method": "GET",
+        "path": "/api/users/non-existent-id"
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec57e228de9-SIN",
+          "connection": "keep-alive",
+          "content-encoding": "br",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=mp82l9LeFpJZVTjHLmA1dYFDrvnc17hJkyVJJj%2BJpDro89iTHOhgWCmYIH61UK6%2Fr8ltK9DOMEvXNDCUGVMTGa%2BV7GmRHd443cxEQcicphan7IvW6VPoDP43f%2FFCzAnSqxvTdvmv05kF0MC5JV7kAN314QdsWLYadasjoynPJ7lagxcFpHdy8XRWDWJ2kKz6brBzjjkYQQ%3D%3D\"}]}",
+          "server": "cloudflare",
+          "transfer-encoding": "chunked"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/users/non-existent-id"
+        },
+        "duration": 70
+      },
+      "validations": [
+        {
+          "valid": true,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "id": "auth.logout.success",
+      "name": "User logout with valid token",
+      "status": "failed",
+      "duration": 57,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 0)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/api/auth/logout",
+        "headers": {
+          "Authorization": "Bearer valid-token"
+        }
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec5e87181f8-SIN",
+          "connection": "keep-alive",
+          "content-length": "47",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=y%2BT8OHEEylYc5ep%2BanKM2xpLc1FtuQ4s0xEiu6xO%2FaiJNHIKN6SFmXOGfF1xN3gl29rOihp7vG%2BNAZ4tancXjOFg%2BlUKGzPNiIcPwnpzXK7xeiIcrTeM0rGipX9J2l7NoxPn2hI1o%2BK5nkwbIRyBgiNsAXHwPIrApIYk%2FEmKyZCci9n5n3MxRMMf%2B%2BrRA76aYecLJljOcQ%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/auth/logout"
+        },
+        "duration": 55
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 200, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  200
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "auth.token.refresh",
+      "name": "Refresh authentication token",
+      "status": "failed",
+      "duration": 106,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 0)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/api/auth/refresh",
+        "headers": {
+          "Authorization": "Bearer valid-token"
+        }
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec638c140b3-SIN",
+          "connection": "keep-alive",
+          "content-length": "48",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=YTeQ45WKrUP2CSDrAuCuXHkfUaBNXr8sT%2BdxXBrEuTsR4xRXD4cPmlvvuyIkPbbs1PZz5PipHA8mPPrFb4UqWY22e%2FLFUEIR8wfnDb8h9Pw0nTUDcw0DQoDGb9L5EsRhpfJeDwRRcjH9gbUHPfJmeK9OkZyYhLBQNi7j5rCBRo1Lb49rZwDy7%2BiQR4de%2FGzGDosdgBrQ0w%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/auth/refresh"
+        },
+        "duration": 105
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 200, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  200
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        },
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/",
+              "message": "must have required property 'token'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "token"
+              }
+            },
+            {
+              "path": "/",
+              "message": "must have required property 'user'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "user"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "user.create.success",
+      "name": "Create new user",
+      "status": "failed",
+      "duration": 135,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 1)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/api/users",
+        "body": {
+          "email": "newuser@example.com",
+          "name": "New User",
+          "password": "securePassword123"
+        }
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec60f828de9-SIN",
+          "connection": "keep-alive",
+          "content-length": "41",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=lxL32zIXq4dWTKX2MaI%2F6F4t%2B4S4nTeWEbzu3nFkwD08LU5trn55emtcF50AtXZbUrRGsufkIVMhMKDwiimm0yyKFLmqbtlu3Ye3TGY7SZ56z%2FPncgFGPjEScqLEWtA4CHDYW4reanGMbU3WOsWg%2FeWC%2BAFaJzU2Oha7HfDLNKqIrjAsFwqlN5UAyYgd9L8Y0xJkPyDglA%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/users"
+        },
+        "duration": 135
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 201, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  201
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        },
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/",
+              "message": "must have required property 'id'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "id"
+              }
+            },
+            {
+              "path": "/",
+              "message": "must have required property 'email'",
+              "keyword": "required",
+              "params": {
+                "missingProperty": "email"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "user.create.duplicate_email",
+      "name": "Create user with duplicate email",
+      "status": "failed",
+      "duration": 93,
+      "retries": 0,
+      "error": {
+        "message": "Validation failed",
+        "stack": "Error: Validation failed\n    at executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 1)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:506:18)",
+        "type": "validation"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/api/users",
+        "body": {
+          "email": "existing@example.com",
+          "name": "Duplicate User",
+          "password": "password123"
+        }
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-origin": "*",
+          "access-control-max-age": "86400",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-ray": "9e95bec6e94c40b3-SIN",
+          "connection": "keep-alive",
+          "content-length": "41",
+          "content-type": "application/json",
+          "date": "Thu, 09 Apr 2026 01:30:12 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=aa0IOToG8ajwTtkMfKAd%2Ftb1IMs7OhiHf7HhdroOO3Fjn8pkl5zQTzfApK3CTDVnRQ4h%2FvLYB5d2GQNG%2F3yc2rOP8R3I6dA%2FHdGx%2BstuDBwgGvZHUmcPTGV7PCzN1YTCoiVhaY4onLWiobl1snY8LKMs9EtLCtUO76Sgucbc6uigMIc4BFDUmD5XC5vIkBKm0DPPMLRLdw%3D%3D\"}]}",
+          "server": "cloudflare"
+        },
+        "body": {
+          "error": "Not found",
+          "path": "/api/users"
+        },
+        "duration": 93
+      },
+      "validations": [
+        {
+          "valid": false,
+          "errors": [
+            {
+              "path": "/status",
+              "message": "Expected status 409, got 404",
+              "keyword": "status",
+              "params": {
+                "expected": [
+                  409
+                ],
+                "actual": 404
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "coverage": {
+    "totalEndpoints": 12,
+    "coveredEndpoints": 2,
+    "totalMethods": 16,
+    "coveredMethods": 2,
+    "coveragePercentage": 12.5,
+    "uncoveredEndpoints": [
+      "/api/auth/login",
+      "/api/auth/logout",
+      "/api/auth/refresh",
+      "/api/users",
+      "/api/users/user-123",
+      "/api/users/user-to-delete",
+      "/api/products",
+      "/api/products/prod-123",
+      "/api/error-trigger",
+      "/api/slow-endpoint"
+    ],
+    "uncoveredMethods": [
+      {
+        "method": "POST",
+        "endpoint": "/api/auth/login"
+      },
+      {
+        "method": "POST",
+        "endpoint": "/api/auth/logout"
+      },
+      {
+        "method": "POST",
+        "endpoint": "/api/auth/refresh"
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/users"
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/users/user-123"
+      },
+      {
+        "method": "POST",
+        "endpoint": "/api/users"
+      },
+      {
+        "method": "PUT",
+        "endpoint": "/api/users/user-123"
+      },
+      {
+        "method": "DELETE",
+        "endpoint": "/api/users/user-to-delete"
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/products"
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/products/prod-123"
+      },
+      {
+        "method": "POST",
+        "endpoint": "/api/products"
+      },
+      {
+        "method": "PATCH",
+        "endpoint": "/api/users"
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/error-trigger"
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/slow-endpoint"
+      }
+    ]
+  }
+}

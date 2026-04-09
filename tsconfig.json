@@ -10,8 +10,9 @@
     "declaration": true,
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["node"]
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "tests", "src/worker.ts"]
+  "include": ["src/server.ts", "src/index.ts", "src/engine.ts", "src/core/**/*.ts", "src/utils.ts", "src/orchestrator/**/*.ts", "src/learning/**/*.ts", "src/agents/agents.d.ts"],
+  "exclude": ["node_modules", "dist", "tests", "src/worker.ts", "src/agents/bakery-agent.ts"]
 }

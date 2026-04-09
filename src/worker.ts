@@ -92,9 +92,32 @@ export default {
       });
     }
 
-    // For other routes, let Workers Sites handle static files unless it's an API route
+    // Try to fetch static file from Workers Sites
+    // If not found, check if it's a valid HTML file and serve from public
     if (!isApiRoute) {
-      return fetch(request);
+      try {
+        const staticResponse = await fetch(request);
+        if (staticResponse.status === 404) {
+          // Try appending .html for paths without extension
+          if (!url.pathname.endsWith('.html') && !url.pathname.includes('.')) {
+            const htmlRequest = new Request(url.origin + url.pathname + '.html', {
+              method: request.method,
+              headers: request.headers,
+              body: request.body
+            });
+            const htmlResponse = await fetch(htmlRequest);
+            if (htmlResponse.ok) return htmlResponse;
+          }
+          // Return 404
+          return new Response('Page not found', { 
+            status: 404,
+            headers: { 'Content-Type': 'text/html' }
+          });
+        }
+        return staticResponse;
+      } catch (e) {
+        return new Response('Error loading page', { status: 500 });
+      }
     }
 
     // For API routes, ensure engine is initialized
@@ -564,10 +587,10 @@ export default {
             })
           });
 
-          const ocrResult = await ocrResponse.json();
+          const ocrResult = await ocrResponse.json() as { amount?: string };
 
           // Validate slip details
-          const detectedAmount = parseFloat(ocrResult.amount || '0');
+          const detectedAmount = parseFloat(ocrResult?.amount || '0');
           const isValid = detectedAmount === expectedAmount;
 
           // Update order status if valid
@@ -788,7 +811,7 @@ export default {
           learning: {
             successRate: learning.successRate,
             avgReward: learning.avgReward,
-            totalExperiences: learning.totalExperiences,
+            total: learning.total,
           },
           timestamp: Date.now(),
         }, 200, corsHeaders(origin));

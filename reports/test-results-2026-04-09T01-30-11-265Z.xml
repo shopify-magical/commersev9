@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="API Regression Suite" tests="25" failures="23" errors="0" skipped="0" time="1.575" timestamp="2026-04-09T01:30:11.279Z">
+    <testcase classname="auth.login" name="User login with valid credentials" time="0.824">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="error.429" name="429 rate limit exceeded" time="0.89">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="user.list" name="List all users" time="0.937">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="user.update" name="Update user details" time="0.984">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="product.get" name="Get product by ID" time="0.999">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="error.500" name="500 internal server error" time="0.135">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="user.delete" name="Delete user" time="0.079">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="product.create" name="Create product with validation" time="0.082">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="error" name="Request timeout handling" time="0.076">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="product.list" name="List all products" time="0.066">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="product" name="Filter products by price range" time="0.076">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="perf.response_time" name="Response time for list endpoint" time="0.076">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="product.list" name="Filter products by category" time="0.091">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="auth.login" name="User login with invalid credentials" time="0.388">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="user.get" name="Get user by ID" time="0.309">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="error.404" name="404 for non-existent endpoint" time="0.092"/>
+    <testcase classname="product.list" name="Products pagination" time="0.054">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="auth.login" name="User login with missing required fields" time="0.072">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="error.405" name="405 for wrong HTTP method" time="0.074">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="perf.response_time" name="Response time for create endpoint" time="0.144">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="user.get" name="Get user by non-existent ID" time="0.091"/>
+    <testcase classname="auth.logout" name="User logout with valid token" time="0.057">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="auth.token" name="Refresh authentication token" time="0.106">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="user.create" name="Create new user" time="0.135">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+    <testcase classname="user.create" name="Create user with duplicate email" time="0.093">
+      <failure type="validation" message="Validation failed"/>
+    </testcase>
+</testsuite>

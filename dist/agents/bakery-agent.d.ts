@@ -2,7 +2,7 @@
  * Sweet Layers Bakery Assistant Agent
  * Built with Cloudflare Agents SDK
  */
-import { Agent } from 'agents';
+import { Agent } from './agents.js';
 import type { Env } from '../worker.js';
 export type BakeryState = {
     chatHistory: Array<{

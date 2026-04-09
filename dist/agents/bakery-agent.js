@@ -36,7 +36,7 @@ var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, 
     if (target) Object.defineProperty(target, contextIn.name, descriptor);
     done = true;
 };
-import { Agent, callable } from 'agents';
+import { Agent, callable } from './agents.js';
 let BakeryAssistantAgent = (() => {
     let _classSuper = Agent;
     let _instanceExtraInitializers = [];

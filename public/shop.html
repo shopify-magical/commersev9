@@ -26,6 +26,7 @@
       --shadow-sm: 0 1px 3px rgba(13,42,34,0.06);
       --shadow-md: 0 4px 16px rgba(13,42,34,0.08);
       --radius-sm: 8px; --radius-md: 12px;
+      --width-xl: 1280px;
     }
     body {
       font-family: 'Inter', -apple-system, sans-serif;
@@ -563,8 +564,22 @@
     }
 
     function addToCart(productId) {
+      console.log('addToCart called with:', productId);
+      
+      // Get cart - try localStorage, fallback to session or memory
+      let cart = [];
+      try {
+        cart = JSON.parse(localStorage.getItem('cart') || sessionStorage.getItem('cart') || '[]');
+      } catch(e) {
+        console.warn('localStorage not available, using memory');
+      }
+      
       const product = products.find(p => p.id === productId);
-      if (!product) return;
+      if (!product) {
+        console.error('Product not found:', productId);
+        alert('Product not found');
+        return;
+      }
       
       const existing = cart.find(item => item.id === productId);
       if (existing) {
@@ -572,9 +587,31 @@
       } else {
         cart.push({ id: product.id, name: product.name, price: product.price, qty: 1 });
       }
-      localStorage.setItem('cart', JSON.stringify(cart));
-      updateCartCount();
-      showToast(`เพิ่ม ${product.name} ลงตะกร้า`);
+      
+      // Save to storage
+      try {
+        localStorage.setItem('cart', JSON.stringify(cart));
+        sessionStorage.setItem('cart', JSON.stringify(cart));
+      } catch(e) {
+        console.warn('Could not save to storage');
+      }
+      
+      // Update UI immediately
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+      const cartCountEl = document.getElementById('cartCount');
+      if (cartCountEl) {
+        cartCountEl.textContent = count;
+      }
+      
+      // Show toast
+      const toast = document.getElementById('toast');
+      if (toast) {
+        toast.textContent = '✅ Added to cart!';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+      }
+      
+      console.log('Cart updated, count:', count);
     }
 
     function updateCartCount() {
@@ -633,6 +670,48 @@
       img.style.transformOrigin = 'center center';
     }
 
+    // Initialize - read URL params for category filtering
+    function initFromURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const category = urlParams.get('category');
+      
+      if (category) {
+        // Map URL category to checkbox values
+        const categoryMap = {
+          'mooncakes': 'mooncakes',
+          'cakes': 'cakes',
+          'pastries': 'pastries',
+          'egg-yolk': 'egg-yolk',
+          'bundles': 'bundles',
+          'gifts': 'bundles',
+          'desserts': 'desserts'
+        };
+        
+        const checkboxValue = categoryMap[category.toLowerCase()];
+        if (checkboxValue) {
+          const checkbox = document.querySelector(`.filter-options input[value="${checkboxValue}"]`);
+          if (checkbox) {
+            checkbox.checked = true;
+          }
+        }
+        
+        // Update page title
+        const titleEl = document.querySelector('.page-title');
+        if (titleEl) {
+          const categoryNames = {
+            'mooncakes': 'มูนเค้ก',
+            'cakes': 'เค้ก',
+            'pastries': 'ขนมเปี๊ยะ',
+            'egg-yolk': 'ไข่',
+            'bundles': 'ชุดของขวัญ',
+            'gifts': 'ชุดของขวัญ',
+            'desserts': 'ของหวาน'
+          };
+          titleEl.textContent = categoryNames[category.toLowerCase()] || 'สินค้าทั้งหมด';
+        }
+      }
+    }
+
     function moveZoom(e, container) {
       if (!container.classList.contains('zoomed')) return;
       const img = container.querySelector('img');
@@ -646,9 +725,19 @@
     rIC(() => {
       imageObserver = createImageObserver();
       products = productData;
-      renderProducts(products);
+      initFromURL(); // Apply URL category filter
+      filterProducts(); // Apply filters
       updateCartCount();
     });
   </script>
+  
+  <footer style="background: var(--brown); color: var(--gray-300); padding: 40px 16px; text-align: center; margin-top: 60px;">
+    <p style="margin-bottom: 8px;">🍰 Sweet Layers - ขนมอร่อย ส่งตรงถึงมือคุณ</p>
+    <p style="font-size: 0.85rem;">
+      <a href="/track.html" style="color: var(--accent);">ติดตามสถานะสั่งซื้อ</a> | 
+      <a href="/contact.html" style="color: var(--gray-300);">ติดต่อเรา</a> | 
+      <a href="/about.html" style="color: var(--gray-300);">เกี่ยวกับเรา</a>
+    </p>
+  </footer>
 </body>
 </html>

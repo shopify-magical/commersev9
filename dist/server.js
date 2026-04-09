@@ -1,7 +1,7 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { join, extname } from 'node:path';
-import { AgenticEngine } from './engine.js';
+import { AgenticEngine } from './orchestrator/index.js';
 import { Priority } from './types/index.js';
 export class AgenticServer {
     server;
@@ -1294,17 +1294,9 @@ export class AgenticServer {
             res.end(JSON.stringify({ stats, explorationRate, model }, null, 2));
             return;
         }
-        // 404 - serve proper HTML 404 page
-        try {
-            const html = await readFile(join(this.publicDir, '404.html'), 'utf-8');
-            res.writeHead(404, { 'Content-Type': 'text/html' });
-            res.end(html);
-        }
-        catch {
-            // Fallback to JSON if 404.html is not found
-            res.writeHead(404);
-            res.end(JSON.stringify({ error: 'Not found', path: url, method }));
-        }
+        // 404
+        res.writeHead(404);
+        res.end(JSON.stringify({ error: 'Not found', path: url, method }));
     }
     async start() {
         await this.engine.start();

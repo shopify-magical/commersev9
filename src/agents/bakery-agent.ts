@@ -3,7 +3,7 @@
  * Built with Cloudflare Agents SDK
  */
 
-import { Agent, callable } from 'agents';
+import { Agent, callable } from './agents.js';
 import type { Env } from '../worker.js';
 
 export type BakeryState = {

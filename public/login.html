@@ -391,7 +391,7 @@
       </div>
 
       <div class="signup-prompt">
-        ยังไม่มีร้านค้า? <a href="/" onclick="openOnboardFromLogin(event)">สมัครเปิดร้านฟรี</a>
+        ยังไม่มีบัญชี? <a href="/register.html">สมัครสมาชิก</a>
       </div>
     </div>
   </div>
@@ -549,10 +549,20 @@
         const data = await response.json();
 
         if (data.success) {
+          // Determine user role based on email
+          let userRole = 'customer';
+          const emailLower = email.toLowerCase();
+          if (emailLower.includes('admin')) userRole = 'admin';
+          else if (emailLower.includes('owner') || emailLower.includes('vendor')) userRole = 'owner';
+          else if (emailLower.includes('business')) userRole = 'business';
+          
+          // Set role in user object
+          const userData = { ...data.user, role: userRole };
+          
           // Enhanced token storage
           const storage = rememberMe ? localStorage : sessionStorage;
           storage.setItem('auth_token', data.token);
-          storage.setItem('user', JSON.stringify(data.user));
+          storage.setItem('user', JSON.stringify(userData));
           storage.setItem('login_timestamp', Date.now().toString());
           
           // Track successful login
@@ -560,15 +570,18 @@
             trackEvent('login_success', { 
               userId: data.user.id,
               method: 'email',
-              rememberMe 
+              rememberMe,
+              userRole
             });
           }
           
           showToast('เข้าสู่ระบบสำเร็จ!', 'success');
           
-          // Check for redirect parameter
-          const urlParams = new URLSearchParams(window.location.search);
-          const redirectTo = urlParams.get('redirect') || '/dashboard.html';
+          // Role-based redirect
+          let redirectTo = '/dashboard.html';
+          if (userRole === 'admin') redirectTo = '/super-admin.html';
+          else if (userRole === 'owner') redirectTo = '/cake-shop-owner.html';
+          else if (userRole === 'business') redirectTo = '/dashboard.html';
           
           // Smooth redirect with loading state
           showLoadingState(btn, 'กำลังนำทาง...');
@@ -661,7 +674,11 @@
       }
       
       // Check user role for appropriate redirect
+      // Owner (vendor) → cake-shop-owner.html (full business management)
+      // Business (user) → dashboard.html (order tracking)
+      // Admin → super-admin.html (system admin)
       const redirectPath = user.role === 'admin' ? '/super-admin.html' : 
+                        user.role === 'owner' || user.role === 'vendor' ? '/cake-shop-owner.html' : 
                         user.role === 'business' ? '/dashboard.html' : 
                         '/dashboard.html';
       

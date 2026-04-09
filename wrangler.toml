@@ -20,5 +20,5 @@ name = "ENGINE_STATE"
 class_name = "EngineState"
 
 [[migrations]]
-tag = "v1"
+tag = "v2"
 new_classes = ["EngineState"]

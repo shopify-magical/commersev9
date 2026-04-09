@@ -1,0 +1,15 @@
+[2026-04-08T18:52:32.325Z] [INFO] [Perception] Sensor registered: timer (temporal) 
+[2026-04-08T18:52:32.328Z] [INFO] [Perception] Sensor registered: metrics (system) 
+[2026-04-08T18:52:32.329Z] [INFO] [Engine] Initialized: ProductionEngine (f3136b44-a418-460c-b2c1-0bd7e76460f5) 
+[2026-04-08T18:52:32.329Z] [INFO] [Engine] Starting autonomous loop 
+[2026-04-08T18:52:32.330Z] [INFO] [Perception] Sensor started: timer @ 5000ms 
+[2026-04-08T18:52:32.330Z] [INFO] [Perception] Sensor started: metrics @ 5000ms 
+[Server] Listening on 0.0.0.0:3999
+[Server] Dashboard: http://localhost:3999/
+[Server] Health: http://localhost:3999/health
+[Server] Metrics: http://localhost:3999/metrics
+
+[Server] Received SIGTERM, shutting down...
+[2026-04-09T03:27:25.264Z] [INFO] [Perception] Sensor stopped: timer 
+[2026-04-09T03:27:25.265Z] [INFO] [Perception] Sensor stopped: metrics 
+[2026-04-09T03:27:25.266Z] [INFO] [Engine] Stopped 

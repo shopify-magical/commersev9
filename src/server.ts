@@ -324,8 +324,21 @@ export class AgenticServer {
     // CSP - using report-only for now to avoid blocking issues
     res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com; frame-src https://www.youtube.com https://player.vimeo.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
 
-    // Serve dashboard at root
-    if ((url === '/' || url === '/dashboard') && method === 'GET') {
+    // Serve homepage at root - index.html (cake shop)
+    if (url === '/' && method === 'GET') {
+      try {
+        const html = await readFile(join(this.publicDir, 'index.html'), 'utf-8');
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end(html);
+      } catch {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end('<h1>Sweet Layers Bakery</h1><p>Welcome! Run build to see products.</p>');
+      }
+      return;
+    }
+
+    // Serve dashboard at /dashboard
+    if (url === '/dashboard' && method === 'GET') {
       try {
         const html = await readFile(join(this.publicDir, 'dashboard.html'), 'utf-8');
         res.writeHead(200, { 'Content-Type': 'text/html' });
@@ -1436,7 +1449,8 @@ export class AgenticServer {
     return new Promise((resolve) => {
       this.server.listen(this.config.port, this.config.host, () => {
         console.log(`[Server] Listening on ${this.config.host}:${this.config.port}`);
-        console.log(`[Server] Dashboard: http://localhost:${this.config.port}/`);
+        console.log(`[Server] Homepage: http://localhost:${this.config.port}/`);
+    console.log(`[Server] Dashboard: http://localhost:${this.config.port}/dashboard`);
         console.log(`[Server] Health: http://localhost:${this.config.port}/health`);
         console.log(`[Server] Metrics: http://localhost:${this.config.port}/metrics`);
         resolve();

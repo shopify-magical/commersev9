@@ -1,0 +1,576 @@
+{
+  "metadata": {
+    "generatedAt": "2026-04-08T18:57:45.164Z",
+    "environment": "local",
+    "duration": 393
+  },
+  "summary": {
+    "total": 25,
+    "passed": 0,
+    "failed": 25,
+    "skipped": 0,
+    "error": 0,
+    "passRate": 0
+  },
+  "suite": {
+    "id": "suite_1775674664770",
+    "name": "API Regression Suite",
+    "startTime": 1775674664770,
+    "endTime": 1775674665163,
+    "duration": 393
+  },
+  "results": [
+    {
+      "id": "user.get.not_found",
+      "name": "Get user by non-existent ID",
+      "status": "failed",
+      "duration": 270,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 1)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/users/non-existent-id"
+      },
+      "validations": []
+    },
+    {
+      "id": "product.list.pagination",
+      "name": "Products pagination",
+      "status": "failed",
+      "duration": 283,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 2)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/products"
+      },
+      "validations": []
+    },
+    {
+      "id": "auth.login.success",
+      "name": "User login with valid credentials",
+      "status": "failed",
+      "duration": 294,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 0)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/api/auth/login",
+        "body": {
+          "username": "testuser",
+          "password": "password123"
+        }
+      },
+      "validations": []
+    },
+    {
+      "id": "error.500.internal_server",
+      "name": "500 internal server error",
+      "status": "failed",
+      "duration": 308,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 3)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/error-trigger"
+      },
+      "validations": []
+    },
+    {
+      "id": "user.create.success",
+      "name": "Create new user",
+      "status": "failed",
+      "duration": 47,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 1)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/api/users",
+        "body": {
+          "email": "newuser@example.com",
+          "name": "New User",
+          "password": "securePassword123"
+        }
+      },
+      "validations": []
+    },
+    {
+      "id": "product.get.success",
+      "name": "Get product by ID",
+      "status": "failed",
+      "duration": 47,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 2)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/products/prod-123"
+      },
+      "validations": []
+    },
+    {
+      "id": "auth.login.invalid_credentials",
+      "name": "User login with invalid credentials",
+      "status": "failed",
+      "duration": 40,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 0)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/api/auth/login",
+        "body": {
+          "username": "testuser",
+          "password": "wrongpassword"
+        }
+      },
+      "validations": []
+    },
+    {
+      "id": "error.timeout",
+      "name": "Request timeout handling",
+      "status": "failed",
+      "duration": 32,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 3)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/slow-endpoint"
+      },
+      "validations": []
+    },
+    {
+      "id": "user.create.duplicate_email",
+      "name": "Create user with duplicate email",
+      "status": "failed",
+      "duration": 20,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 1)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/api/users",
+        "body": {
+          "email": "existing@example.com",
+          "name": "Duplicate User",
+          "password": "password123"
+        }
+      },
+      "validations": []
+    },
+    {
+      "id": "product.create.validation",
+      "name": "Create product with validation",
+      "status": "failed",
+      "duration": 16,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 2)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/api/products",
+        "body": {
+          "name": "Test Product",
+          "price": 99.99,
+          "category": "test"
+        }
+      },
+      "validations": []
+    },
+    {
+      "id": "auth.login.missing_fields",
+      "name": "User login with missing required fields",
+      "status": "failed",
+      "duration": 16,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 0)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/api/auth/login",
+        "body": {
+          "username": "testuser"
+        }
+      },
+      "validations": []
+    },
+    {
+      "id": "perf.response_time.list",
+      "name": "Response time for list endpoint",
+      "status": "failed",
+      "duration": 16,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 3)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/users"
+      },
+      "validations": []
+    },
+    {
+      "id": "user.update.success",
+      "name": "Update user details",
+      "status": "failed",
+      "duration": 19,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 1)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "PUT",
+        "path": "/api/users/user-123",
+        "body": {
+          "name": "Updated Name"
+        }
+      },
+      "validations": []
+    },
+    {
+      "id": "product.price_filter",
+      "name": "Filter products by price range",
+      "status": "failed",
+      "duration": 19,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 2)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/products"
+      },
+      "validations": []
+    },
+    {
+      "id": "auth.logout.success",
+      "name": "User logout with valid token",
+      "status": "failed",
+      "duration": 16,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 0)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/api/auth/logout",
+        "headers": {
+          "Authorization": "Bearer valid-token"
+        }
+      },
+      "validations": []
+    },
+    {
+      "id": "perf.response_time.create",
+      "name": "Response time for create endpoint",
+      "status": "failed",
+      "duration": 17,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 3)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/api/users",
+        "body": {
+          "email": "perf-test@example.com",
+          "name": "Perf Test",
+          "password": "password123"
+        }
+      },
+      "validations": []
+    },
+    {
+      "id": "user.delete.success",
+      "name": "Delete user",
+      "status": "failed",
+      "duration": 10,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 1)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "DELETE",
+        "path": "/api/users/user-to-delete"
+      },
+      "validations": []
+    },
+    {
+      "id": "error.404.not_found",
+      "name": "404 for non-existent endpoint",
+      "status": "failed",
+      "duration": 10,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 2)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/unknown-endpoint"
+      },
+      "validations": []
+    },
+    {
+      "id": "auth.token.refresh",
+      "name": "Refresh authentication token",
+      "status": "failed",
+      "duration": 11,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 0)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/api/auth/refresh",
+        "headers": {
+          "Authorization": "Bearer valid-token"
+        }
+      },
+      "validations": []
+    },
+    {
+      "id": "product.list.success",
+      "name": "List all products",
+      "status": "failed",
+      "duration": 8,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 1)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/products"
+      },
+      "validations": []
+    },
+    {
+      "id": "error.405.method_not_allowed",
+      "name": "405 for wrong HTTP method",
+      "status": "failed",
+      "duration": 7,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 2)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "PATCH",
+        "path": "/api/users"
+      },
+      "validations": []
+    },
+    {
+      "id": "user.list.success",
+      "name": "List all users",
+      "status": "failed",
+      "duration": 6,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 0)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/users"
+      },
+      "validations": []
+    },
+    {
+      "id": "product.list.filter_category",
+      "name": "Filter products by category",
+      "status": "failed",
+      "duration": 5,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 1)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/products"
+      },
+      "validations": []
+    },
+    {
+      "id": "error.429.rate_limit",
+      "name": "429 rate limit exceeded",
+      "status": "failed",
+      "duration": 3,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 2)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/products"
+      },
+      "validations": []
+    },
+    {
+      "id": "user.get.by_id",
+      "name": "Get user by ID",
+      "status": "failed",
+      "duration": 2,
+      "retries": 0,
+      "error": {
+        "message": "Request failed: fetch failed",
+        "stack": "ApiError: Request failed: fetch failed\n    at ApiClient.request (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/client/index.ts:194:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async executeTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:276:24)\n    at async RetryHandler.retry (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/retry/index.ts:56:24)\n    at async TestRunner.runTest (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:316:25)\n    at async runChunk (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:233:24)\n    at async Promise.all (index 0)\n    at async TestRunner.runParallelTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:250:5)\n    at async TestRunner.runTestSuite (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/src/runner/index.ts:171:9)\n    at async runTests (/Users/stevejohn/CascadeProjects/windsurf-project-2/bizcommerz-clone/agentic-engine/tests/api-framework/tests/integration/api-tests.ts:474:18)",
+        "type": "network"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/api/users/user-123"
+      },
+      "validations": []
+    }
+  ],
+  "coverage": {
+    "totalEndpoints": 12,
+    "coveredEndpoints": 0,
+    "totalMethods": 16,
+    "coveredMethods": 0,
+    "coveragePercentage": 0,
+    "uncoveredEndpoints": [
+      "/api/auth/login",
+      "/api/auth/logout",
+      "/api/auth/refresh",
+      "/api/users",
+      "/api/users/user-123",
+      "/api/users/non-existent-id",
+      "/api/users/user-to-delete",
+      "/api/products",
+      "/api/products/prod-123",
+      "/api/unknown-endpoint",
+      "/api/error-trigger",
+      "/api/slow-endpoint"
+    ],
+    "uncoveredMethods": [
+      {
+        "method": "POST",
+        "endpoint": "/api/auth/login"
+      },
+      {
+        "method": "POST",
+        "endpoint": "/api/auth/logout"
+      },
+      {
+        "method": "POST",
+        "endpoint": "/api/auth/refresh"
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/users"
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/users/user-123"
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/users/non-existent-id"
+      },
+      {
+        "method": "POST",
+        "endpoint": "/api/users"
+      },
+      {
+        "method": "PUT",
+        "endpoint": "/api/users/user-123"
+      },
+      {
+        "method": "DELETE",
+        "endpoint": "/api/users/user-to-delete"
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/products"
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/products/prod-123"
+      },
+      {
+        "method": "POST",
+        "endpoint": "/api/products"
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/unknown-endpoint"
+      },
+      {
+        "method": "PATCH",
+        "endpoint": "/api/users"
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/error-trigger"
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/slow-endpoint"
+      }
+    ]
+  }
+}

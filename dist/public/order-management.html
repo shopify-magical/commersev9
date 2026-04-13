@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sweet Layers - Order Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2A6B52;
+      --primary-dark: #1F4A3A;
+      --primary-light: #E8F5F0;
+      --accent: #C4A647;
+      --accent-dark: #B3941A;
+      --cream: #FDF9F5;
+      --brown: #3D2E22;
+      --brown-light: #5A4535;
+      --gray-100: #F5EDE4;
+      --gray-200: #E8DCD0;
+      --gray-300: #D4C4B5;
+      --gray-400: #B8A08A;
+      --gray-500: #9A7D6A;
+      --white: #ffffff;
+      --bg: var(--cream);
+      --card-bg: var(--white);
+      --text: var(--brown);
+      --text-muted: var(--gray-500);
+      --border: var(--gray-200);
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 1px 3px rgba(13,42,34,0.06);
+      --shadow-lg: 0 8px 30px rgba(13,42,34,0.12);
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'Inter', -apple-system, sans-serif; 
+      background: var(--bg); 
+      color: var(--text); 
+    }
+    
+    .orders-layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .orders-sidebar {
+      background: var(--card-bg);
+      border-right: 1px solid var(--border);
+      padding: 20px;
+    }
+    
+    .orders-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+    
+    .orders-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+    }
+    
+    .orders-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .orders-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+    
+    .orders-nav-item:hover {
+      background: var(--bg);
+      color: var(--primary);
+    }
+    
+    .orders-nav-item.active {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+    
+    /* Main Content */
+    .orders-main {
+      padding: 20px;
+    }
+    
+    .orders-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .orders-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+    
+    /* Filter Tabs */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+    }
+    
+    .filter-tab {
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-muted);
+      position: relative;
+    }
+    
+    .filter-tab:hover {
+      color: var(--text);
+    }
+    
+    .filter-tab.active {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+    
+    .filter-tab .badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--primary);
+      color: white;
+      font-size: 0.625rem;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+    
+    /* Order Stats */
+    .order-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .order-stat {
+      background: var(--card-bg);
+      padding: 16px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+    
+    .order-stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+    
+    .order-stat-label {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+    
+    /* Orders Table */
+    .orders-table-container {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .table-title {
+      font-weight: 600;
+      font-size: 1.125rem;
+    }
+    
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      min-width: 250px;
+    }
+    
+    .search-box input {
+      border: none;
+      background: transparent;
+      outline: none;
+      flex: 1;
+      font-size: 0.875rem;
+    }
+    
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .orders-table th {
+      text-align: left;
+      padding: 12px 20px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    
+    .orders-table td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.875rem;
+    }
+    
+    .orders-table tr:hover {
+      background: var(--bg);
+    }
+    
+    .order-id {
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    .customer-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .customer-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .customer-name {
+      font-weight: 500;
+    }
+    
+    .customer-email {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    
+    .order-items {
+      max-width: 200px;
+    }
+    
+    .order-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+    
+    .order-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .item-emoji {
+      font-size: 1rem;
+    }
+    
+    .item-name {
+      font-size: 0.875rem;
+    }
+    
+    .item-quantity {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    
+    .order-amount {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+    
+    .status-badge.pending {
+      background: var(--warning);
+      color: white;
+    }
+    
+    .status-badge.processing {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .status-badge.ready {
+      background: var(--success);
+      color: white;
+    }
+    
+    .status-badge.completed {
+      background: var(--border);
+      color: var(--text-muted);
+    }
+    
+    .status-badge.cancelled {
+      background: var(--danger);
+      color: white;
+    }
+    
+    .order-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .action-btn {
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .action-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+    
+    .action-btn.primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    
+    .action-btn.primary:hover {
+      background: var(--primary-dark);
+    }
+    
+    /* Order Detail Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .modal-title {
+      font-weight: 600;
+      font-size: 1.25rem;
+    }
+    
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-body {
+      padding: 20px;
+    }
+    
+    .order-detail-section {
+      margin-bottom: 24px;
+    }
+    
+    .detail-section-title {
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--primary);
+    }
+    
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .detail-label {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+    
+    .detail-value {
+      font-weight: 500;
+      font-size: 0.875rem;
+    }
+    
+    /* Buttons */
+    .btn {
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      border: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+    
+    .btn-secondary {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--border);
+    }
+    
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+    
+    .btn-success:hover {
+      background: #16a34a;
+    }
+    
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .orders-layout {
+        grid-template-columns: 1fr;
+      }
+      
+      .orders-sidebar {
+        display: none;
+      }
+      
+      .orders-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+      }
+      
+      .order-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .filter-tabs {
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      
+      .orders-table-container {
+        overflow-x: auto;
+      }
+      
+      .orders-table {
+        min-width: 600px;
+      }
+      
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="orders-layout">
+    <!-- Sidebar -->
+    <aside class="orders-sidebar">
+      <div class="orders-logo">
+        <div class="orders-logo-icon">Orders</div>
+        <div>
+          <div style="font-weight: 600;">Order Management</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);">Sweet Layers</div>
+        </div>
+      </div>
+      
+        <nav class="orders-nav">
+        <a href="cake-shop-owner.html" class="orders-nav-item">
+          <span>Dashboard</span> Dashboard
+        </a>
+        <a href="#" class="orders-nav-item active">
+          <span>Orders</span> Order Management
+        </a>
+        <a href="kitchen-operations.html" class="orders-nav-item">
+          <span>Kitchen</span> Kitchen Operations
+        </a>
+        <a href="#" class="orders-nav-item">
+          <span>Analytics</span> Analytics
+        </a>
+        <a href="#" class="orders-nav-item">
+          <span>Customers</span> Customers
+        </a>
+      </nav>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="orders-main">
+      <!-- Header -->
+      <header class="orders-header">
+        <div>
+          <h1 class="orders-title">Order Management</h1>
+          <p style="color: var(--text-muted);">Manage and track all customer orders</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-secondary" onclick="exportOrders()">
+            <span>Export</span> Export Orders
+          </button>
+          <button class="btn btn-primary" onclick="addNewOrder()">
+            <span>Add</span> New Order
+          </button>
+        </div>
+      </header>
+      
+      <!-- Filter Tabs -->
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="filterOrders('all')">
+          All Orders
+          <span class="badge">47</span>
+        </button>
+        <button class="filter-tab" onclick="filterOrders('pending')">
+          Pending
+          <span class="badge">12</span>
+        </button>
+        <button class="filter-tab" onclick="filterOrders('processing')">
+          Processing
+          <span class="badge">8</span>
+        </button>
+        <button class="filter-tab" onclick="filterOrders('ready')">
+          Ready
+          <span class="badge">5</span>
+        </button>
+        <button class="filter-tab" onclick="filterOrders('completed')">
+          Completed
+          <span class="badge">20</span>
+        </button>
+        <button class="filter-tab" onclick="filterOrders('cancelled')">
+          Cancelled
+          <span class="badge">2</span>
+        </button>
+      </div>
+      
+      <!-- Order Stats -->
+      <div class="order-stats">
+        <div class="order-stat">
+          <div class="order-stat-value">47</div>
+          <div class="order-stat-label">Total Orders</div>
+        </div>
+        <div class="order-stat">
+          <div class="order-stat-value">12</div>
+          <div class="order-stat-label">Pending</div>
+        </div>
+        <div class="order-stat">
+          <div class="order-stat-value">8</div>
+          <div class="order-stat-label">Processing</div>
+        </div>
+        <div class="order-stat">
+          <div class="order-stat-value">$4,182</div>
+          <div class="order-stat-label">Today's Revenue</div>
+        </div>
+      </div>
+      
+      <!-- Orders Table -->
+      <div class="orders-table-container">
+        <div class="table-header">
+          <div class="table-title">Recent Orders</div>
+          <div class="search-box">
+            <span>Search</span>
+            <input type="text" placeholder="Search orders..." onkeyup="searchOrders(this.value)">
+          </div>
+        </div>
+        
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Items</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Time</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody">
+            <tr>
+              <td class="order-id">#ORD-2847</td>
+              <td>
+                <div class="customer-info">
+                  <div class="customer-avatar">SC</div>
+                  <div>
+                    <div class="customer-name">Sarah Chen</div>
+                    <div class="customer-email">sarah.c@email.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="order-items">
+                  <div class="order-item">
+                    <span class="item-emoji">Product</span>
+                    <span class="item-name">Heritage Mooncake</span>
+                    <span class="item-quantity">x2</span>
+                  </div>
+                  <div class="order-item">
+                    <span class="item-emoji">Product</span>
+                    <span class="item-name">Thai Tea Cake</span>
+                    <span class="item-quantity">x1</span>
+                  </div>
+                </div>
+              </td>
+              <td class="order-amount">$127.00</td>
+              <td>
+                <span class="status-badge processing">Processing</span>
+              </td>
+              <td>2:45 PM</td>
+              <td>
+                <div class="order-actions">
+                  <button class="action-btn" onclick="viewOrder('ORD-2847')">View</button>
+                  <button class="action-btn primary" onclick="updateStatus('ORD-2847')">Update</button>
+                </div>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="order-id">#ORD-2846</td>
+              <td>
+                <div class="customer-info">
+                  <div class="customer-avatar">MW</div>
+                  <div>
+                    <div class="customer-name">Michael Wong</div>
+                    <div class="customer-email">m.wong@email.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="order-items">
+                  <div class="order-item">
+                    <span class="item-emoji">Product</span>
+                    <span class="item-name">Heritage Mooncake</span>
+                    <span class="item-quantity">x1</span>
+                  </div>
+                </div>
+              </td>
+              <td class="order-amount">$58.00</td>
+              <td>
+                <span class="status-badge ready">Ready</span>
+              </td>
+              <td>2:30 PM</td>
+              <td>
+                <div class="order-actions">
+                  <button class="action-btn" onclick="viewOrder('ORD-2846')">View</button>
+                  <button class="action-btn success" onclick="completeOrder('ORD-2846')">Complete</button>
+                </div>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="order-id">#ORD-2845</td>
+              <td>
+                <div class="customer-info">
+                  <div class="customer-avatar">LP</div>
+                  <div>
+                    <div class="customer-name">Lisa Park</div>
+                    <div class="customer-email">lisa.p@email.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="order-items">
+                  <div class="order-item">
+                    <span class="item-emoji">Product</span>
+                    <span class="item-name">Pandan Custard</span>
+                    <span class="item-quantity">x2</span>
+                  </div>
+                  <div class="order-item">
+                    <span class="item-emoji">Product</span>
+                    <span class="item-name">Chocolate Truffle</span>
+                    <span class="item-quantity">x1</span>
+                  </div>
+                </div>
+              </td>
+              <td class="order-amount">$94.00</td>
+              <td>
+                <span class="status-badge pending">Pending</span>
+              </td>
+              <td>2:15 PM</td>
+              <td>
+                <div class="order-actions">
+                  <button class="action-btn" onclick="viewOrder('ORD-2845')">View</button>
+                  <button class="action-btn primary" onclick="updateStatus('ORD-2845')">Update</button>
+                </div>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="order-id">#ORD-2844</td>
+              <td>
+                <div class="customer-info">
+                  <div class="customer-avatar">DL</div>
+                  <div>
+                    <div class="customer-name">David Liu</div>
+                    <div class="customer-email">d.liu@email.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="order-items">
+                  <div class="order-item">
+                    <span class="item-emoji">Product</span>
+                    <span class="item-name">Chocolate Truffle</span>
+                    <span class="item-quantity">x3</span>
+                  </div>
+                </div>
+              </td>
+              <td class="order-amount">$87.00</td>
+              <td>
+                <span class="status-badge completed">Completed</span>
+              </td>
+              <td>1:45 PM</td>
+              <td>
+                <div class="order-actions">
+                  <button class="action-btn" onclick="viewOrder('ORD-2844')">View</button>
+                  <button class="action-btn" onclick="printReceipt('ORD-2844')">Print</button>
+                </div>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="order-id">#ORD-2843</td>
+              <td>
+                <div class="customer-info">
+                  <div class="customer-avatar">EJ</div>
+                  <div>
+                    <div class="customer-name">Emma Johnson</div>
+                    <div class="customer-email">emma.j@email.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="order-items">
+                  <div class="order-item">
+                    <span class="item-emoji">Product</span>
+                    <span class="item-name">Thai Tea Cake</span>
+                    <span class="item-quantity">x1</span>
+                  </div>
+                  <div class="order-item">
+                    <span class="item-emoji">Product</span>
+                    <span class="item-name">Pandan Custard</span>
+                    <span class="item-quantity">x1</span>
+                  </div>
+                </div>
+              </td>
+              <td class="order-amount">$76.00</td>
+              <td>
+                <span class="status-badge cancelled">Cancelled</span>
+              </td>
+              <td>1:30 PM</td>
+              <td>
+                <div class="order-actions">
+                  <button class="action-btn" onclick="viewOrder('ORD-2843')">View</button>
+                  <button class="action-btn" onclick="refundOrder('ORD-2843')">Refund</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+  
+  <!-- Order Detail Modal -->
+  <div class="modal" id="orderModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Order Details</div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Order details will be populated here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sample order data
+    const orders = [
+      {
+        id: 'ORD-2847',
+        customer: { name: 'Sarah Chen', email: 'sarah.c@email.com', initials: 'SC' },
+        items: [
+          { emoji: 'Product', name: 'Heritage Mooncake', quantity: 2, price: 58 },
+          { emoji: 'Product', name: 'Thai Tea Cake', quantity: 1, price: 38 }
+        ],
+        amount: 127,
+        status: 'processing',
+        time: '2:45 PM',
+        phone: '+1 234-567-8901',
+        address: '123 Main St, San Francisco, CA 94102',
+        notes: 'Custom message: Happy Anniversary!'
+      },
+      {
+        id: 'ORD-2846',
+        customer: { name: 'Michael Wong', email: 'm.wong@email.com', initials: 'MW' },
+        items: [
+          { emoji: 'Product', name: 'Heritage Mooncake', quantity: 1, price: 58 }
+        ],
+        amount: 58,
+        status: 'ready',
+        time: '2:30 PM',
+        phone: '+1 234-567-8902',
+        address: '456 Oak Ave, San Francisco, CA 94103',
+        notes: 'Gift wrap requested'
+      }
+    ];
+    
+    // Filter orders
+    function filterOrders(status) {
+      // Update active tab
+      document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Filter logic would go here
+      console.log('Filtering orders by status:', status);
+    }
+    
+    // Search orders
+    function searchOrders(query) {
+      console.log('Searching orders:', query);
+      // Implement search logic
+    }
+    
+    // View order details
+    function viewOrder(orderId) {
+      const order = orders.find(o => o.id === orderId);
+      if (!order) return;
+      
+      const modalBody = document.getElementById('modalBody');
+      modalBody.innerHTML = `
+        <div class="order-detail-section">
+          <div class="detail-section-title">Order Information</div>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label">Order ID:</span>
+              <span class="detail-value">${order.id}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Status:</span>
+              <span class="detail-value">
+                <span class="status-badge ${order.status}">${order.status}</span>
+              </span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Time:</span>
+              <span class="detail-value">${order.time}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Total Amount:</span>
+              <span class="detail-value">$${order.amount}.00</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="order-detail-section">
+          <div class="detail-section-title">Customer Information</div>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label">Name:</span>
+              <span class="detail-value">${order.customer.name}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Email:</span>
+              <span class="detail-value">${order.customer.email}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Phone:</span>
+              <span class="detail-value">${order.phone}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Address:</span>
+              <span class="detail-value">${order.address}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="order-detail-section">
+          <div class="detail-section-title">Order Items</div>
+          ${order.items.map(item => `
+            <div class="detail-item">
+              <span class="detail-label">${item.emoji} ${item.name} x${item.quantity}</span>
+              <span class="detail-value">$${item.price * item.quantity}.00</span>
+            </div>
+          `).join('')}
+        </div>
+        
+        <div class="order-detail-section">
+          <div class="detail-section-title">Special Notes</div>
+          <div class="detail-item">
+            <span class="detail-value">${order.notes}</span>
+          </div>
+        </div>
+        
+        <div style="display: flex; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-primary" onclick="updateStatus('${order.id}')">Update Status</button>
+          <button class="btn btn-secondary" onclick="printReceipt('${order.id}')">Print Receipt</button>
+          <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+        </div>
+      `;
+      
+      document.getElementById('orderModal').classList.add('active');
+    }
+    
+    // Close modal
+    function closeModal() {
+      document.getElementById('orderModal').classList.remove('active');
+    }
+    
+    // Update order status
+    function updateStatus(orderId) {
+      const newStatus = prompt('Enter new status (pending/processing/ready/completed/cancelled):');
+      if (newStatus) {
+        alert(`Order ${orderId} status updated to: ${newStatus}`);
+        // Update the order in the table
+      }
+    }
+    
+    // Complete order
+    function completeOrder(orderId) {
+      if (confirm(`Mark order ${orderId} as completed?`)) {
+        alert(`Order ${orderId} marked as completed`);
+        // Update the order status
+      }
+    }
+    
+    // Print receipt
+    function printReceipt(orderId) {
+      alert(`Printing receipt for order ${orderId}...`);
+    }
+    
+    // Refund order
+    function refundOrder(orderId) {
+      if (confirm(`Process refund for order ${orderId}?`)) {
+        alert(`Refund processed for order ${orderId}`);
+      }
+    }
+    
+    // Add new order
+    function addNewOrder() {
+      alert('Opening new order form...');
+    }
+    
+    // Export orders
+    function exportOrders() {
+      alert('Exporting orders to CSV...');
+    }
+    
+    // Close modal when clicking outside
+    document.getElementById('orderModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>

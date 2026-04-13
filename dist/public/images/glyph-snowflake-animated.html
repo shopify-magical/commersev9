@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animated Glyph Showcase</title>
+  <link rel="stylesheet" href="/css/glyph-animations.css">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: Arial, sans-serif;
+    }
+    .showcase {
+      text-align: center;
+      color: white;
+    }
+    .glyph-row {
+      display: flex;
+      gap: 40px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .glyph-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .label {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="showcase">
+    <h1>Animated Glyph Showcase</h1>
+    
+    <div class="glyph-row">
+      <div class="glyph-item">
+        <div class="glyph-container">
+          <img src="/images/glyph-snowflake.svg" alt="Floating Glyph" class="glyph-responsive" width="200">
+        </div>
+        <span class="label">Floating</span>
+      </div>
+      
+      <div class="glyph-item">
+        <div class="glyph-spin">
+          <img src="/images/glyph-snowflake.svg" alt="Spinning Glyph" class="glyph-responsive" width="200">
+        </div>
+        <span class="label">Spinning</span>
+      </div>
+      
+      <div class="glyph-item">
+        <div class="glyph-pulse">
+          <img src="/images/glyph-snowflake.svg" alt="Pulsing Glyph" class="glyph-responsive" width="200">
+        </div>
+        <span class="label">Pulsing</span>
+      </div>
+    </div>
+    
+    <div class="glyph-row">
+      <div class="glyph-item">
+        <div class="glyph-glow">
+          <img src="/images/glyph-snowflake-white.svg" alt="Glowing Glyph" class="glyph-responsive" width="200">
+        </div>
+        <span class="label">Glowing</span>
+      </div>
+      
+      <div class="glyph-item">
+        <div class="glyph-loader">
+          <img src="/images/glyph-snowflake.svg" alt="Loading Glyph" class="glyph-responsive" width="200">
+        </div>
+        <span class="label">Loading</span>
+      </div>
+      
+      <div class="glyph-item">
+        <div class="glyph-interactive">
+          <img src="/images/glyph-snowflake.svg" alt="Interactive Glyph" class="glyph-responsive" width="200">
+        </div>
+        <span class="label">Interactive (Hover)</span>
+      </div>
+    </div>
+    
+    <div class="glyph-row">
+      <div class="glyph-item" style="position: relative;">
+        <div class="glyph-container">
+          <img src="/images/glyph-snowflake.svg" alt="Particle Glyph" class="glyph-responsive" width="200">
+          <div class="glyph-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+          </div>
+        </div>
+        <span class="label">Particles</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

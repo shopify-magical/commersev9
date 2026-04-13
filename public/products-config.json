@@ -1,10 +1,149 @@
 {
   "products": [
-    { "name": "Product Name", "category": "Category", "prompt": "Description for AI image generator" }
+    {
+      "id": 1,
+      "name": "Traditional Mooncake",
+      "category": "Mooncakes",
+      "price": 350,
+      "image": "/images/mooncake-traditional.webp",
+      "description": "Classic handmade mooncake with lotus seed paste and salted egg yolk",
+      "prompt": "Traditional Chinese mooncake with golden crust, intricate floral patterns, lotus seed filling, salted egg yolk center, on elegant plate",
+      "stock": 50,
+      "featured": true
+    },
+    {
+      "id": 2,
+      "name": "Black Sesame Mooncake",
+      "category": "Mooncakes",
+      "price": 380,
+      "image": "/images/black-sesame.webp",
+      "description": "Premium black sesame mooncake with rich nutty flavor",
+      "prompt": "Black sesame mooncake with dark crust, golden sesame seeds, cross-section showing black sesame paste, on white porcelain plate",
+      "stock": 45,
+      "featured": true
+    },
+    {
+      "id": 3,
+      "name": "Mung Bean Mooncake",
+      "category": "Mooncakes",
+      "price": 320,
+      "image": "/images/mung-bean.webp",
+      "description": "Sweet mung bean mooncake with smooth texture",
+      "prompt": "Mung bean mooncake with golden crust, green bean paste filling, traditional Chinese patterns, on bamboo mat",
+      "stock": 40,
+      "featured": false
+    },
+    {
+      "id": 4,
+      "name": "Pandan Custard Mooncake",
+      "category": "Mooncakes",
+      "price": 360,
+      "image": "/images/pandan-custard.webp",
+      "description": "Aromatic pandan mooncake with creamy custard filling",
+      "prompt": "Pandan green mooncake with pandan leaf patterns, custard filling cross-section, on banana leaf",
+      "stock": 35,
+      "featured": true
+    },
+    {
+      "id": 5,
+      "name": "Taro Coconut Mooncake",
+      "category": "Mooncakes",
+      "price": 370,
+      "image": "/images/taro-coconut.webp",
+      "description": "Purple taro mooncake with coconut cream filling",
+      "prompt": "Purple taro mooncake with coconut cream, purple taro patterns, on ceramic plate with coconut flakes",
+      "stock": 30,
+      "featured": false
+    },
+    {
+      "id": 6,
+      "name": "Red Bean Mooncake",
+      "category": "Mooncakes",
+      "price": 330,
+      "image": "/images/red-bean.webp",
+      "description": "Sweet red bean mooncake with traditional flavor",
+      "prompt": "Red bean mooncake with red bean paste, traditional Chinese characters, on wooden tray",
+      "stock": 42,
+      "featured": false
+    },
+    {
+      "id": 7,
+      "name": "Salted Egg Yolk Pastry",
+      "category": "Pastries",
+      "price": 180,
+      "image": "/images/salted-egg.webp",
+      "description": "Flaky pastry with salted egg yolk filling",
+      "prompt": "Golden flaky pastry with salted egg yolk, layered crust, egg yolk visible, on white plate",
+      "stock": 60,
+      "featured": true
+    },
+    {
+      "id": 8,
+      "name": "Pandan Cake",
+      "category": "Cakes",
+      "price": 250,
+      "image": "/images/cake-pandan.png",
+      "description": "Soft pandan cake with coconut cream",
+      "prompt": "Green pandan cake with layers, coconut cream frosting, pandan leaf garnish, on cake stand",
+      "stock": 25,
+      "featured": false
+    },
+    {
+      "id": 9,
+      "name": "Egg Salted Yolk Cake",
+      "category": "Cakes",
+      "price": 280,
+      "image": "/images/egg-salted-yolk.png",
+      "description": "Rich cake with salted egg yolk and cream",
+      "prompt": "Golden egg yolk cake with cream layers, salted egg yolk pieces, gold leaf garnish",
+      "stock": 20,
+      "featured": false
+    },
+    {
+      "id": 10,
+      "name": "Mooncake White Lotus",
+      "category": "Mooncakes",
+      "price": 340,
+      "image": "/images/mooncake-white-lotus.png",
+      "description": "White lotus seed mooncake with premium filling",
+      "prompt": "White lotus mooncake with white crust, lotus patterns, premium white lotus paste, on crystal plate",
+      "stock": 38,
+      "featured": true
+    },
+    {
+      "id": 11,
+      "name": "Heritage Bakery Box",
+      "category": "Gift Sets",
+      "price": 1200,
+      "image": "/images/heritage-bakery.webp",
+      "description": "Premium gift box with assorted mooncakes and pastries",
+      "prompt": "Elegant gift box with gold foil, assortment of mooncakes and pastries, red ribbon, on silk cloth",
+      "stock": 15,
+      "featured": true
+    },
+    {
+      "id": 12,
+      "name": "Pastry Arrangement Platter",
+      "category": "Gift Sets",
+      "price": 850,
+      "image": "/images/pastry-arrangement.webp",
+      "description": "Beautifully arranged platter with various pastries",
+      "prompt": "Circular platter with assorted pastries, mooncakes, decorative flowers, on wooden table",
+      "stock": 18,
+      "featured": false
+    }
+  ],
+  "categories": [
+    { "id": "mooncakes", "name": "Mooncakes", "icon": "🥮" },
+    { "id": "pastries", "name": "Pastries", "icon": "🥐" },
+    { "id": "cakes", "name": "Cakes", "icon": "🎂" },
+    { "id": "gift-sets", "name": "Gift Sets", "icon": "🎁" }
   ],
   "config": {
-    "business": "Your Business Name",
-    "style": "professional product photography, white studio background",
-    "website": "https://your-domain.com"
+    "business": "Sweet Layers",
+    "style": "professional product photography, elegant bakery presentation, warm lighting, traditional Chinese aesthetics",
+    "website": "https://sweetlayers.com",
+    "currency": "THB",
+    "language": "th"
   }
 }

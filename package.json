@@ -7,6 +7,10 @@
   "scripts": {
     "hexa": "tsx src/hexa.ts",
     "build": "tsc",
+    "build:css": "postcss public/css/*.css --dir public/dist/css",
+    "build:css:optimize": "postcss public/css/*.css --dir public/dist/css && cssnano public/dist/css/*.css --output public/dist/css/",
+    "build:js": "tsc",
+    "build:all": "npm run build:css:optimize && npm run build:js",
     "start": "node dist/index.js",
     "server": "tsx src/server.ts",
     "server:prod": "NODE_ENV=production tsx src/server.ts",
@@ -26,18 +30,31 @@
     "deploy:staging": "wrangler deploy --env staging",
     "wrangler:dev": "wrangler dev",
     "screenshots": "node screenshots.js",
-    "screenshots:install": "npm install playwright && npx playwright install chromium"
+    "screenshots:install": "npm install playwright && npx playwright install chromium",
+    "css:purge": "purgecss --config purgecss.config.js",
+    "css:minify": "cssnano public/css/*.css --output public/dist/css/"
   },
   "dependencies": {
+    "@sentinel-hub/sentinelhub-js": "^0.12.5",
     "ajv": "^8.12.0",
     "ajv-formats": "^2.1.1",
     "dotenv": "^16.3.1"
   },
   "devDependencies": {
-    "commander": "^11.1.0",
     "@cloudflare/workers-types": "^4.20260408.1",
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "@types/node": "^20.0.0",
+    "autoprefixer": "^10.4.16",
+    "commander": "^11.1.0",
+    "cssnano": "^6.0.1",
+    "cssnano-cli": "^1.0.0",
     "playwright": "^1.40.0",
+    "postcss": "^8.4.31",
+    "postcss-import": "^16.0.0",
+    "purgecss": "^6.0.0",
+    "rollup": "^4.9.0",
+    "terser": "^5.19.0",
     "tsx": "^4.7.0",
     "typescript": "^5.4.0",
     "wrangler": "^3.100.0"

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luxury Search Bar Demo</title>
+  <link rel="stylesheet" href="../styles/design-system.css">
+  <link rel="stylesheet" href="../styles/components/search-bar.css">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #F5F5F7;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    
+    .demo-container {
+      max-width: 800px;
+      width: 100%;
+    }
+    
+    .demo-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .demo-header h1 {
+      font-family: 'Playfair Display', serif;
+      color: #191970;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    
+    .demo-header p {
+      color: #6A6A7A;
+      font-size: 1rem;
+    }
+    
+    .search-examples {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+    
+    .example-tag {
+      padding: 6px 12px;
+      background: #4169E1;
+      color: white;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .example-tag:hover {
+      background: #003366;
+    }
+    
+    .results-container {
+      margin-top: 40px;
+      min-height: 100px;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid #D1D5DB;
+      display: none;
+    }
+    
+    .results-container.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in;
+    }
+    
+    .result-item {
+      padding: 10px 0;
+      border-bottom: 1px solid #F3F4F6;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .result-item:last-child {
+      border-bottom: none;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <div class="demo-header">
+      <h1>🔍 Luxury Search</h1>
+      <p>Experience the elegance of our premium search bar</p>
+    </div>
+    
+    <div class="search-bar" role="search" aria-label="Search">
+      <svg class="search-icon" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input 
+        type="text" 
+        class="search-input" 
+        placeholder="Search for anything..." 
+        aria-placeholder="Search for anything..."
+        autocomplete="off"
+      >
+      <button class="search-clear" aria-label="Clear search">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <div class="search-loading" role="status" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12a9 9 0 1 1-6.219-9.238L18 4"></path>
+          <path d="M18.658 15.425a9 9 0 0 1-6.343 2.184"></path>
+        </svg>
+      </div>
+      <button class="search-btn" type="button" aria-label="Search">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="22 15 5 8 22 15 21 22 15 22 8 15 15 8 22 15"></polygon>
+        </svg>
+        <span>Search</span>
+      </button>
+    </div>
+    
+    <div class="search-examples">
+      <span class="example-tag" data-query="luxury watches">⌚ Luxury Watches</span>
+      <span class="example-tag" data-query="designer bags">👜 Designer Bags</span>
+      <span class="example-tag" data-query="premium cars">🚗 Premium Cars</span>
+      <span class="example-tag" data-query="fine jewelry">💎 Fine Jewelry</span>
+    </div>
+    
+    <div class="results-container" id="results">
+      <!-- Results will appear here -->
+    </div>
+  </div>
+
+  <script>
+    // Search bar functionality
+    const searchBar = document.querySelector('.search-bar');
+    const searchInput = searchBar.querySelector('.search-input');
+    const searchBtn = searchBar.querySelector('.search-btn');
+    const searchClear = searchBar.querySelector('.search-clear');
+    const searchLoading = searchBar.querySelector('.search-loading');
+    const resultsContainer = document.getElementById('results');
+    const exampleTags = document.querySelectorAll('.example-tag');
+    
+    // Ripple effect for search button
+    searchBtn.addEventListener('click', function(e) {
+      // Create ripple
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      const rect = searchBtn.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      ripple.style.width = ripple.style.height = `${size}px`;
+      ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+      ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+      this.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 600);
+      
+      // Perform search
+      performSearch(searchInput.value);
+    });
+    
+    // Input enter key
+    searchInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter' && this.value.trim()) {
+        performSearch(this.value.trim());
+      }
+    });
+    
+    // Clear button
+    searchClear.addEventListener('click', function(e) {
+      e.stopPropagation();
+      searchInput.value = '';
+      searchInput.focus();
+      resultsContainer.classList.remove('active');
+      resultsContainer.innerHTML = '';
+    });
+    
+    // Example tags
+    exampleTags.forEach(tag => {
+      tag.addEventListener('click', function() {
+        const query = this.dataset.query;
+        searchInput.value = query;
+        performSearch(query);
+      });
+    });
+    
+    // Perform search simulation
+    function performSearch(query) {
+      if (!query.trim()) return;
+      
+      // Show loading state
+      searchLoading.classList.add('active');
+      searchBtn.disabled = true;
+      searchBtn.innerHTML = `
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12a9 9 0 1 1-6.219-9.238L18 4"></path>
+          <path d="M18.658 15.425a9 9 0 0 1-6.343 2.184"></path>
+        </svg>
+        <span>Searching...</span>
+      `;
+      
+      // Simulate API call
+      setTimeout(() => {
+        // Hide loading state
+        searchLoading.classList.remove('active');
+        searchBtn.disabled = false;
+        searchBtn.innerHTML = `
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="22 15 5 8 22 15 21 22 15 22 8 15 15 8 22 15"></polygon>
+          </svg>
+          <span>Search</span>
+        `;
+        
+        // Display results
+        displayResults(query);
+      }, 1500);
+    }
+    
+    // Display simulated results
+    function displayResults(query) {
+      const results = [
+        { title: `Premium ${query} - Top Results`, link: `#${encodeURIComponent(query)}` },
+        { title: `Luxury Collection: ${query} 2024`, link: `#${encodeURIComponent(query)}` },
+        { title: `Exclusive Deals on ${query}`, link: `#${encodeURIComponent(query)}` },
+        { title: `Limited Edition ${query}`, link: `#${encodeURIComponent(query)}` },
+        { title: `Best ${query} for Connoisseurs`, link: `#${encodeURIComponent(query)}` }
+      ];
+      
+      let html = `<div class="results-header text-sans text-lg font-weight-medium text-primary mb-4">
+                    <svg class="inline mr-2" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    Results for "${query}"
+                  </div>`;
+      
+      results.forEach((result, index) => {
+        html += `
+          <div class="result-item">
+            <div class="text-sans text-md text-primary">
+              <a href="${result.link}" class="hover:text-primary-dark transition-colors">${result.title}</a>
+            </div>
+            <div class="text-sm text-muted font-weight-light">#${index + 1}</div>
+          </div>
+        `;
+      });
+      
+      resultsContainer.innerHTML = html;
+      resultsContainer.classList.add('active');
+    }
+    
+    // Initialize focus on load
+    document.addEventListener('DOMContentLoaded', () => {
+      searchInput.focus();
+    });
+  </script>
+</body>
+</html>

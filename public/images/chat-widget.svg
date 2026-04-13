@@ -1,0 +1,15 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Chat bubble background -->
+  <path d="M32 8C18.7452 8 8 18.7452 8 32C8 45.2548 18.7452 56 32 56C35.8 56 39.4 55.2 42.6 53.8L56 58L51.8 44.6C53.2 41.4 54 37.8 54 34C54 19.6 44.4 8 32 8Z" fill="#2A6B52" stroke="#1F4A3A" stroke-width="2"/>
+  
+  <!-- Chat bubble tail -->
+  <path d="M42.6 53.8L56 58L51.8 44.6" fill="#2A6B52" stroke="#1F4A3A" stroke-width="2"/>
+  
+  <!-- Three dots for typing indicator -->
+  <circle cx="24" cy="32" r="4" fill="#C4A647"/>
+  <circle cx="32" cy="32" r="4" fill="#C4A647"/>
+  <circle cx="40" cy="32" r="4" fill="#C4A647"/>
+  
+  <!-- Optional: Shine effect -->
+  <path d="M16 20C16 16 20 12 28 12" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round"/>
+</svg>

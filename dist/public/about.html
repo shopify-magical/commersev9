@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เกี่ยวกับเรา - Sweet Layers</title>
+  <meta name="description" content="Sweet Layers - ร้านขนมไข่ ขนมเปี๊ยะ มูนเค้ก แบบดั้งเดิม สูตรต้นตำรับ">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #2A6B52; --primary-dark: #1F4A3A; --primary-light: #E8F5F0;
+      --accent: #C4A647; --accent-dark: #B3941A;
+      --cream: #FDF9F5; --brown: #3D2E22; --brown-light: #5A4535;
+      --gray-100: #F5EDE4; --gray-200: #E8DCD0; --gray-300: #D4C4B5;
+      --gray-400: #B8A08A; --gray-500: #9A7D6A; --white: #ffffff;
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --shadow-sm: 0 1px 3px rgba(13,42,34,0.06);
+      --shadow-md: 0 4px 16px rgba(13,42,34,0.08);
+      --width-xl: 1280px;
+    }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--cream);
+      color: var(--brown);
+      line-height: 1.6;
+    }
+    
+    /* Header */
+    .header {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      padding: 12px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-container {
+      max-width: var(--width-xl);
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+    }
+    .nav-links a {
+      color: var(--brown);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); }
+
+    /* Hero */
+    .about-hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--white);
+      padding: 80px 16px;
+      text-align: center;
+    }
+    .about-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+    }
+    .about-hero p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Story Section */
+    .story-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 60px 16px;
+    }
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .story-image {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+    .story-image img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+    }
+    .story-content h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+    .story-content p {
+      color: var(--gray-500);
+      margin-bottom: 16px;
+    }
+
+    /* Values */
+    .values-section {
+      background: var(--white);
+      padding: 60px 16px;
+    }
+    .values-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .values-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .value-card {
+      text-align: center;
+      padding: 32px 24px;
+      background: var(--cream);
+      border-radius: var(--radius-md);
+    }
+    .value-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+    .value-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+    .value-card p {
+      font-size: 0.9rem;
+      color: var(--gray-500);
+    }
+
+    /* Stats */
+    .stats-section {
+      padding: 60px 16px;
+      background: var(--primary);
+      color: var(--white);
+    }
+    .stats-grid {
+      max-width: 800px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    /* Team */
+    .team-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 60px 16px;
+    }
+    .team-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .team-member {
+      text-align: center;
+    }
+    .team-member img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 16px;
+      background: var(--gray-200);
+    }
+    .team-member h3 {
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+    .team-member p {
+      color: var(--gray-500);
+      font-size: 0.9rem;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--brown);
+      color: var(--white);
+      padding: 40px 16px;
+      text-align: center;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    .footer-links a {
+      color: var(--white);
+      text-decoration: none;
+      opacity: 0.8;
+    }
+    .footer-links a:hover { opacity: 1; }
+
+    @media (max-width: 768px) {
+      .story-grid, .values-grid, .stats-grid, .team-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links { display: none; }
+      .about-hero h1 { font-size: 1.75rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-container">
+      <a href="/" class="logo">
+        <span>CAKE</span>
+        <span>Sweet Layers</span>
+      </a>
+      <nav class="nav-links">
+        <a href="/">หน้าแรก</a>
+        <a href="/shop.html">สินค้า</a>
+        <a href="/about.html" class="active">เกี่ยวกับ</a>
+        <a href="/contact.html">ติดต่อ</a>
+      </nav>
+      <a href="/cart.html" style="text-decoration: none;">Cart</a>
+    </div>
+  </header>
+
+  <section class="about-hero">
+    <h1>Our Story</h1>
+    <p>ร้านขนมไข่ ขนมเปี๊ยะ มูนเค้ก แบบดั้งเดิม สืบทอดสูตรต้นตำรับกว่า 30 ปี</p>
+  </section>
+
+  <section class="story-section">
+    <div class="story-grid">
+      <div class="story-image">
+        <img src="images/heritage-bakery.jpg" alt="หน้าร้าน Sweet Layers ร้านขนมแบบดั้งเดิม">
+      </div>
+      <div class="story-content">
+        <h2>🔥 เริ่มต้นจากเตาถ่าน</h2>
+        <p>Sweet Layers ก่อตั้งขึ้นในปี พ.ศ. 2539 โดยคุณยายสมใจ เริ่มต้นจากการขายขนมเปี๊ยะไส้ถั่วหน้าโรงเรียน ด้วยความตั้งใจและสูตรลับเฉพาะที่สืบทอดจากรุ่นสู่รุ่น</p>
+        <p>วันนี้เรายังคงใช้วัตถุดิบคุณภาพดี ผลิตสดใหม่ทุกวัน และยึดมั่นในความอร่อยแบบต้นตำรับ แต่พร้อมที่จะพัฒนาและบริการลูกค้าด้วยเทคโนโลยีสมัยใหม่</p>
+        <p>💚 ทุกคำกัด คือ ความตั้งใจของเรา</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="values-section">
+    <div class="values-container">
+      <h2>ค่านิยมของเรา</h2>
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon">🌿</div>
+          <h3>วัตถุดิบคุณภาพ</h3>
+          <p>เลือกใช้วัตถุดิบเกรดพรีเมี่ยม ไม่มีสารกันบูด ปลอดภัยต่อสุขภาพ</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">👨‍🍳</div>
+          <h3>ทำสดใหม่ทุกวัน</h3>
+          <p>อบใหม่ทุกเช้า ไม่เหลือขายวันถัดไป สด อร่อย มั่นใจได้</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">❤️</div>
+          <h3>ดูแลทุกความต้องการ</h3>
+          <p>รับทำขนมตามออร์เดอร์พิเศษ ปรับสูตรตามความต้องการลูกค้า</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-section">
+    <div class="stats-grid">
+      <div>
+        <div class="stat-number">30+</div>
+        <div class="stat-label">ปี ประสบการณ์</div>
+      </div>
+      <div>
+        <div class="stat-number">50,000+</div>
+        <div class="stat-label">ลูกค้าประจำ</div>
+      </div>
+      <div>
+        <div class="stat-number">100+</div>
+        <div class="stat-label">รายการขนม</div>
+      </div>
+      <div>
+        <div class="stat-number">99%</div>
+        <div class="stat-label">ความพึงพอใจ</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="team-section">
+    <h2>ทีมงานของเรา</h2>
+    <div class="team-grid">
+      <div class="team-member">
+        <img src="images/chef.jpg" alt="คุณยายสมใจ">
+        <h3>คุณยายสมใจ</h3>
+        <p>ผู้ก่อตั้ง & เชฟใหญ่</p>
+      </div>
+      <div class="team-member">
+        <img src="images/baker.jpg" alt="คุณมานพ">
+        <h3>คุณมานพ</h3>
+        <p>เชฟขนมปัง & มูนเค้ก</p>
+      </div>
+      <div class="team-member">
+        <img src="images/staff.jpg" alt="คุณนิดา">
+        <h3>คุณนิดา</h3>
+        <p>ผู้จัดการร้าน</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="/shop.html">สินค้า</a>
+      <a href="/about.html">เกี่ยวกับ</a>
+      <a href="/contact.html">ติดต่อ</a>
+      <a href="/login.html">เข้าสู่ระบบ</a>
+    </div>
+    <p>© 2026 Sweet Layers. สืบสานรสชาติแห่งความอร่อย</p>
+  </footer>
+</body>
+</html>

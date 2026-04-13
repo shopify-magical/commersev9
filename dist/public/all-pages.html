@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookingGo - All Pages</title>
+  <link rel="stylesheet" href="/css/shared.css">
+  <style>
+    body {
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #2A6B52 0%, #1F4A3A 100%);
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+    
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+    
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    
+    .page-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      transition: all var(--transition);
+      box-shadow: var(--shadow-lg);
+      border: 2px solid transparent;
+    }
+    
+    .page-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--accent);
+    }
+    
+    .page-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--primary-light);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    
+    .page-icon svg {
+      width: 24px;
+      height: 24px;
+      color: var(--primary);
+    }
+    
+    .page-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--brown);
+      margin-bottom: 8px;
+    }
+    
+    .page-desc {
+      font-size: 0.85rem;
+      color: var(--gray-500);
+      line-height: 1.5;
+    }
+    
+    .page-category {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 4px 12px;
+      background: var(--gray-100);
+      color: var(--gray-500);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .section-title {
+      color: white;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin: 32px 0 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid rgba(255,255,255,0.2);
+    }
+    
+    .section-title:first-child {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🚀 BookingGo SaaS</h1>
+      <p>All Pages & Dashboards</p>
+    </div>
+    
+    <!-- Unified Agentic Dashboard -->
+    <h2 class="section-title">🚀 Unified Agentic Dashboard</h2>
+    <div class="grid">
+      <a href="/unified-dashboard.html" class="page-card" style="border: 2px solid var(--primary); background: linear-gradient(135deg, #f0fdf4 0%, #fff 100%);">
+        <div class="page-icon" style="background: var(--primary);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div class="page-title" style="color: var(--primary);">🧠 Unified Agentic Dashboard</div>
+        <div class="page-desc">Fusion of Router + Agentic Engine with real-time AI assistance</div>
+        <span class="page-category" style="background: var(--primary); color: white;">NEW</span>
+      </a>
+    </div>
+    
+    <!-- Main Application Pages -->
+    <h2 class="section-title">Main Application</h2>
+    <div class="grid">
+      <a href="/index.html" class="page-card">
+        <div class="page-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="page-title">Home / Shop</div>
+        <div class="page-desc">Main landing page with product catalog</div>
+        <span class="page-category">Shop</span>
+      </a>
+      
+      <a href="/shop.html" class="page-card">
+        <div class="page-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        </div>
+        <div class="page-title">Shop</div>
+        <div class="page-desc">Product listing page</div>
+        <span class="page-category">Shop</span>
+      </a>
+      
+      <a href="/product.html" class="page-card">
+        <div class="page-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="page-title">Product Details</div>
+        <div class="page-desc">Single product view</div>
+        <span class="page-category">Shop</span>
+      </a>
+      
+      <a href="/cart.html" class="page-card">
+        <div class="page-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        </div>
+        <div class="page-title">Shopping Cart</div>
+        <div class="page-desc">Cart and checkout flow</div>
+        <span class="page-category">Shop</span>
+      </a>
+      
+      <a href="/checkout.html" class="page-card">
+        <div class="page-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        </div>
+        <div class="page-title">Checkout</div>
+        <div class="page-desc">Payment and order confirmation</div>
+        <span class="page-category">Shop</span>
+      </a>
+    </div>
+    
+    <!-- Authentication Pages -->
+    <h2 class="section-title">Authentication</h2>
+    <div class="grid">
+      <a href="/login.html" class="page-card">
+        <div class="page-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        </div>
+        <div class="page-title">Login</div>
+        <div class="page-desc">User authentication</div>
+        <span class="page-category">Auth</span>
+      </a>
+      
+      <a href="/onboard.html" class="page-card">
+        <div class="page-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        </div>
+        <div class="page-title">Onboarding</div>
+        <div class="page-desc">New user setup</div>
+        <span class="page-category">Auth</span>
+      </a>
+    </div>
+    
+    <!-- Dashboard Pages -->
+    <h2 class="section-title">Dashboards</h2>
+    <div class="grid">
+      <a href="/dashboard.html" class="page-card">
+        <div class="page-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <div class="page-title">Business Dashboard</div>
+        <div class="page-desc">Main business management dashboard</div>
+        <span class="page-category">Dashboard</span>
+      </a>
+      
+      <a href="/booking-dashboard.html" class="page-card">
+        <div class="page-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="page-title">Booking Dashboard</div>
+        <div class="page-desc">Appointment and booking management</div>
+        <span class="page-category">Dashboard</span>
+      </a>
+      
+      <a href="/super-admin.html" class="page-card">
+        <div class="page-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="page-title">Super Admin</div>
+        <div class="page-desc">Platform administration with all settings</div>
+        <span class="page-category">Admin</span>
+      </a>
+    </div>
+    
+    <!-- Information Pages -->
+    <h2 class="section-title">Information</h2>
+    <div class="grid">
+      <a href="/about.html" class="page-card">
+        <div class="page-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        </div>
+        <div class="page-title">About</div>
+        <div class="page-desc">Company information</div>
+        <span class="page-category">Info</span>
+      </a>
+      
+      <a href="/contact.html" class="page-card">
+        <div class="page-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="page-title">Contact</div>
+        <div class="page-desc">Contact form and information</div>
+        <span class="page-category">Info</span>
+      </a>
+    </div>
+    
+    <!-- Documentation -->
+    <h2 class="section-title">Documentation</h2>
+    <div class="grid">
+      <a href="/SHARED_RESOURCES.md" class="page-card" target="_blank">
+        <div class="page-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div class="page-title">Shared Resources Docs</div>
+        <div class="page-desc">CSS/JS shared utilities documentation</div>
+        <span class="page-category">Docs</span>
+      </a>
+      
+      <a href="/ROUTER_DOCUMENTATION.md" class="page-card" target="_blank">
+        <div class="page-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+        </div>
+        <div class="page-title">Router Documentation</div>
+        <div class="page-desc">Routing system API and usage guide</div>
+        <span class="page-category">Docs</span>
+      </a>
+    </div>
+    
+    <!-- Footer -->
+    <div style="text-align: center; margin-top: 48px; color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+      <p>BookingGo SaaS Platform</p>
+      <p style="margin-top: 8px; font-size: 0.8rem;">Click any card to navigate to the page</p>
+    </div>
+  </div>
+</body>
+</html>

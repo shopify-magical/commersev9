@@ -1,0 +1,172 @@
+<!-- Global Footer Component -->
+<footer class="global-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-section">
+        <h3 class="footer-title">Sweet Layers</h3>
+        <p class="footer-description">Premium artisan Chinese pastries and mooncakes, handcrafted with love and tradition.</p>
+      </div>
+      
+      <div class="footer-section">
+        <h4 class="footer-heading">Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="/shop.html">Shop</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h4 class="footer-heading">Contact</h4>
+        <ul class="footer-contact">
+          <li>123 Bakery Street</li>
+          <li>San Francisco, CA 94102</li>
+          <li>(415) 555-0123</li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h4 class="footer-heading">Newsletter</h4>
+        <p class="footer-newsletter-text">Subscribe for updates and exclusive offers.</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Your email" class="newsletter-input">
+          <button class="newsletter-btn">Subscribe</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p class="footer-copyright">© 2024 Sweet Layers. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  /* Global Footer Styles */
+  .global-footer {
+    background: var(--primary-dark);
+    color: var(--white);
+    padding: 3rem 1rem;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 2rem;
+  }
+  
+  .footer-section {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .footer-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  
+  .footer-description {
+    color: var(--gray-200);
+    font-size: 0.875rem;
+    line-height: 1.75;
+  }
+  
+  .footer-heading {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+  }
+  
+  .footer-links,
+  .footer-contact {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-links li,
+  .footer-contact li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .footer-links a {
+    color: var(--gray-200);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color var(--transition-fast);
+  }
+  
+  .footer-links a:hover {
+    color: var(--white);
+  }
+  
+  .footer-contact li {
+    color: var(--gray-200);
+    font-size: 0.875rem;
+  }
+  
+  .footer-newsletter-text {
+    color: var(--gray-200);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+  }
+  
+  .newsletter-form {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .newsletter-input {
+    flex: 1;
+    padding: 0.5rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+  }
+  
+  .newsletter-btn {
+    padding: 0.5rem 1rem;
+    background: var(--accent);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: background var(--transition-fast);
+  }
+  
+  .newsletter-btn:hover {
+    background: var(--accent-dark);
+  }
+  
+  .footer-bottom {
+    border-top: 1px solid var(--gray-300);
+    margin-top: 2rem;
+    padding-top: 2rem;
+    text-align: center;
+  }
+  
+  .footer-copyright {
+    color: var(--gray-200);
+    font-size: 0.875rem;
+  }
+  
+  @media (max-width: 768px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    
+    .global-footer {
+      padding: 2rem 1rem;
+    }
+  }
+</style>

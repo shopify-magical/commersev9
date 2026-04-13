@@ -1,0 +1,47 @@
+/**
+ * COLOR UTILITIES
+ * Background, text, and border color utilities
+ */
+
+/* Background Colors */
+.bg-primary { background-color: var(--primary); }
+.bg-accent { background-color: var(--accent); }
+.bg-cream { background-color: var(--cream); }
+.bg-white { background-color: var(--white); }
+.bg-gray-100 { background-color: var(--gray-100); }
+.bg-gray-200 { background-color: var(--gray-200); }
+.bg-gray-300 { background-color: var(--gray-300); }
+.bg-transparent { background-color: transparent; }
+
+/* Text Colors */
+.text-primary { color: var(--primary); }
+.text-accent { color: var(--accent); }
+.text-brown { color: var(--brown); }
+.text-gray-400 { color: var(--gray-400); }
+.text-gray-500 { color: var(--gray-500); }
+.text-white { color: var(--white); }
+.text-current { color: currentColor; }
+.text-transparent { color: transparent; }
+
+/* Border Colors */
+.border-primary { border-color: var(--primary); }
+.border-accent { border-color: var(--accent); }
+.border-gray-200 { border-color: var(--gray-200); }
+.border-gray-300 { border-color: var(--gray-300); }
+.border-white { border-color: var(--white); }
+
+/* Opacity */
+.opacity-0 { opacity: 0; }
+.opacity-25 { opacity: 0.25; }
+.opacity-50 { opacity: 0.5; }
+.opacity-75 { opacity: 0.75; }
+.opacity-100 { opacity: 1; }
+
+/* Color State Variants */
+.hover\:bg-primary:hover { background-color: var(--primary); }
+.hover\:bg-accent:hover { background-color: var(--accent); }
+.hover\:text-primary:hover { color: var(--primary); }
+.hover\:text-accent:hover { color: var(--accent); }
+
+.focus\:bg-primary:focus { background-color: var(--primary); }
+.focus\:text-primary:focus { color: var(--primary); }

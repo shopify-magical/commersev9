@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Sweet Layers Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #2A6B52; --primary-dark: #1F4A3A; --primary-light: #E8F5F0;
+      --accent: #C4A647; --accent-dark: #B3941A;
+      --cream: #FDF9F5; --brown: #3D2E22; --brown-light: #5A4535;
+      --gray-100: #F5EDE4; --gray-200: #E8DCD0; --gray-300: #D4C4B5;
+      --gray-400: #B8A08A; --gray-500: #9A7D6A; --white: #ffffff;
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --shadow-md: 0 4px 16px rgba(13,42,34,0.08);
+    }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--cream);
+      color: var(--brown);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .register-container {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      max-width: 500px;
+      width: 100%;
+      overflow: hidden;
+    }
+    .register-header {
+      background: var(--primary);
+      color: var(--white);
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .register-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      margin-bottom: 8px;
+    }
+    .register-header p {
+      font-size: 0.875rem;
+      opacity: 0.9;
+    }
+    .register-body {
+      padding: 32px 24px;
+    }
+    .role-selector {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .role-option {
+      flex: 1;
+      padding: 16px;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .role-option:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+    .role-option.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+    .role-option h3 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--primary);
+    }
+    .role-option p {
+      font-size: 0.75rem;
+      color: var(--gray-500);
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--brown);
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .form-group input.error {
+      border-color: #EF4444;
+    }
+    .error-message {
+      font-size: 0.75rem;
+      color: #EF4444;
+      margin-top: 4px;
+    }
+    .tenant-fields {
+      background: var(--primary-light);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .tenant-fields.active {
+      display: block;
+    }
+    .tenant-fields h3 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--primary);
+    }
+    .register-btn {
+      width: 100%;
+      padding: 14px 24px;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .register-btn:hover {
+      background: var(--primary-dark);
+    }
+    .register-btn:disabled {
+      background: var(--gray-400);
+      cursor: not-allowed;
+    }
+    .login-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.875rem;
+    }
+    .login-link a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 16px 24px;
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      font-weight: 500;
+      transform: translateX(400px);
+      transition: transform 0.3s;
+      z-index: 1000;
+    }
+    .toast.show {
+      transform: translateX(0);
+    }
+    .toast.success {
+      background: #10B981;
+      color: var(--white);
+    }
+    .toast.error {
+      background: #EF4444;
+      color: var(--white);
+    }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <div class="register-header">
+      <h1>🍰 Sweet Layers</h1>
+      <p>Create your account</p>
+    </div>
+    <div class="register-body">
+      <div class="role-selector">
+        <div class="role-option" data-role="customer" onclick="selectRole('customer')">
+          <h3>Customer</h3>
+          <p>Shop & Order</p>
+        </div>
+        <div class="role-option" data-role="admin" onclick="selectRole('admin')">
+          <h3>Admin</h3>
+          <p>Manage Shop</p>
+        </div>
+      </div>
+
+      <form id="registerForm" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label for="name">Full Name *</label>
+          <input type="text" id="name" name="name" required placeholder="John Doe">
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input type="email" id="email" name="email" required placeholder="john@example.com">
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="+66 812345678">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password *</label>
+          <input type="password" id="password" name="password" required placeholder="Min 8 characters">
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password *</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Re-enter password">
+        </div>
+
+        <div class="tenant-fields" id="tenantFields">
+          <h3>🏪 Shop Information</h3>
+          <div class="form-group">
+            <label for="tenantName">Shop Name *</label>
+            <input type="text" id="tenantName" name="tenantName" placeholder="My Bakery">
+          </div>
+          <div class="form-group">
+            <label for="tenantDomain">Shop Domain *</label>
+            <input type="text" id="tenantDomain" name="tenantDomain" placeholder="mybakery.sweetlayers.com">
+          </div>
+        </div>
+
+        <button type="submit" class="register-btn" id="registerBtn">Create Account</button>
+      </form>
+
+      <div class="login-link">
+        Already have an account? <a href="/login.html">Sign in</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/api-client.js"></script>
+  <script>
+    let selectedRole = 'customer';
+
+    function selectRole(role) {
+      selectedRole = role;
+      
+      // Update UI
+      document.querySelectorAll('.role-option').forEach(el => {
+        el.classList.remove('selected');
+      });
+      document.querySelector(`[data-role="${role}"]`).classList.add('selected');
+
+      // Show/hide tenant fields
+      const tenantFields = document.getElementById('tenantFields');
+      if (role === 'admin') {
+        tenantFields.classList.add('active');
+        document.getElementById('tenantName').required = true;
+        document.getElementById('tenantDomain').required = true;
+      } else {
+        tenantFields.classList.remove('active');
+        document.getElementById('tenantName').required = false;
+        document.getElementById('tenantDomain').required = false;
+      }
+    }
+
+    async function handleRegister(event) {
+      event.preventDefault();
+      
+      const btn = document.getElementById('registerBtn');
+      btn.disabled = true;
+      btn.textContent = 'Creating account...';
+
+      const formData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        password: document.getElementById('password').value,
+        confirmPassword: document.getElementById('confirmPassword').value,
+        role: selectedRole
+      };
+
+      // Validation
+      if (formData.password !== formData.confirmPassword) {
+        showToast('Passwords do not match', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+        return;
+      }
+
+      if (formData.password.length < 8) {
+        showToast('Password must be at least 8 characters', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+        return;
+      }
+
+      // Add tenant info for admin
+      if (selectedRole === 'admin') {
+        formData.tenantName = document.getElementById('tenantName').value;
+        formData.tenantDomain = document.getElementById('tenantDomain').value;
+      }
+
+      try {
+        const response = await fetch('/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          // Store token
+          localStorage.setItem('auth_token', result.token);
+          localStorage.setItem('user', JSON.stringify(result.user));
+          if (result.tenant) {
+            localStorage.setItem('tenant', JSON.stringify(result.tenant));
+          }
+
+          showToast('Registration successful! Redirecting...', 'success');
+          
+          // Redirect based on role
+          setTimeout(() => {
+            if (selectedRole === 'admin') {
+              window.location.href = '/dashboard/admin.html';
+            } else {
+              window.location.href = '/dashboard/customer.html';
+            }
+          }, 1500);
+        } else {
+          showToast(result.message || 'Registration failed', 'error');
+          btn.disabled = false;
+          btn.textContent = 'Create Account';
+        }
+      } catch (error) {
+        console.error('Registration error:', error);
+        showToast('Registration failed. Please try again.', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+      }
+    }
+
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Initialize
+    selectRole('customer');
+  </script>
+</body>
+</html>

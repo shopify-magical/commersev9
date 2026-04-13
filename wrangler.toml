@@ -1,11 +1,8 @@
 #:schema node_modules/wrangler/config-schema.json
 name = "bizcommerz-agentic-engine"
 main = "src/worker.ts"
-compatibility_date = "2025-03-20"
+compatibility_date = "2026-04-12"
 compatibility_flags = ["nodejs_compat"]
-
-[site]
-bucket = "./public"
 
 [observability]
 enabled = true
@@ -19,6 +16,18 @@ ENABLE_LEARNING = "true"
 name = "ENGINE_STATE"
 class_name = "EngineState"
 
+[[kv_namespaces]]
+binding = "USERS_KV"
+id = "7ca5890396ba4c0f9925c1e6a64022a3"
+
+[[kv_namespaces]]
+binding = "TENANTS_KV"
+id = "215cf74b290e4e0cadf708644c4929f8"
+
+[[kv_namespaces]]
+binding = "SESSIONS_KV"
+id = "2204631a5e8f4bfa86e964771b4120c9"
+
 [[migrations]]
 tag = "v2"
-new_classes = ["EngineState"]
+new_sqlite_classes = ["EngineState"]

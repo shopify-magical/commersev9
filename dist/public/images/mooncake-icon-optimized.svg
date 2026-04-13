@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="mooncakeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4A574"/>
+      <stop offset="100%" style="stop-color:#8B5A2B"/>
+    </linearGradient>
+    <linearGradient id="innerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#C4956A"/>
+      <stop offset="100%" style="stop-color:#6B4423"/>
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <!-- Main mooncake circle -->
+  <ellipse cx="32" cy="32" rx="28" ry="28" fill="url(#mooncakeGradient)" filter="url(#shadow)"/>
+  <!-- Inner ring -->
+  <ellipse cx="32" cy="32" rx="22" ry="22" fill="url(#innerGradient)"/>
+  <!-- Chinese character 月 (moon) -->
+  <text x="32" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#3D2914" font-weight="bold">月</text>
+  <!-- Sparkle accents -->
+  <ellipse cx="18" cy="18" rx="3" ry="3" fill="#FFD700" opacity="0.8"/>
+  <ellipse cx="46" cy="22" rx="2" ry="2" fill="#FFD700" opacity="0.6"/>
+  <ellipse cx="24" cy="46" rx="2" ry="2" fill="#FFD700" opacity="0.7"/>
+</svg>

@@ -1,0 +1,153 @@
+/* Glyph Animation Styles */
+
+.glyph-container {
+  position: relative;
+  display: inline-block;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.glyph-spin {
+  animation: spin 20s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.glyph-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.8; }
+}
+
+.glyph-glow {
+  filter: drop-shadow(0 0 10px rgba(42, 107, 82, 0.5));
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { filter: drop-shadow(0 0 5px rgba(42, 107, 82, 0.3)); }
+  to { filter: drop-shadow(0 0 20px rgba(42, 107, 82, 0.7)); }
+}
+
+/* Individual element animations */
+.glyph-petal {
+  animation: petalPulse 3s ease-in-out infinite;
+}
+
+.glyph-petal:nth-child(1) { animation-delay: 0s; }
+.glyph-petal:nth-child(2) { animation-delay: 0.2s; }
+.glyph-petal:nth-child(3) { animation-delay: 0.4s; }
+.glyph-petal:nth-child(4) { animation-delay: 0.6s; }
+.glyph-petal:nth-child(5) { animation-delay: 0.8s; }
+
+@keyframes petalPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.glyph-arm {
+  animation: armReach 2s ease-in-out infinite;
+}
+
+.glyph-arm:nth-child(1) { animation-delay: 0s; }
+.glyph-arm:nth-child(2) { animation-delay: 0.3s; }
+.glyph-arm:nth-child(3) { animation-delay: 0.6s; }
+.glyph-arm:nth-child(4) { animation-delay: 0.9s; }
+.glyph-arm:nth-child(5) { animation-delay: 1.2s; }
+.glyph-arm:nth-child(6) { animation-delay: 1.5s; }
+
+@keyframes armReach {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(1.1); }
+}
+
+/* Hover effects */
+.glyph-interactive:hover {
+  animation: interactivePulse 0.5s ease-in-out;
+  cursor: pointer;
+}
+
+@keyframes interactivePulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Particle effects */
+.glyph-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(42, 107, 82, 0.6);
+  border-radius: 50%;
+  animation: particleFloat 4s ease-in-out infinite;
+}
+
+.particle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+.particle:nth-child(2) { top: 30%; left: 80%; animation-delay: 1s; }
+.particle:nth-child(3) { top: 70%; left: 30%; animation-delay: 2s; }
+.particle:nth-child(4) { top: 80%; left: 70%; animation-delay: 3s; }
+
+@keyframes particleFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+  50% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+}
+
+/* Loading animation */
+.glyph-loader {
+  animation: loader 1.5s ease-in-out infinite;
+}
+
+@keyframes loader {
+  0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+  50% { transform: rotate(180deg) scale(1.1); opacity: 1; }
+  100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+}
+
+/* Morphing effect */
+.glyph-morph {
+  animation: morph 4s ease-in-out infinite;
+}
+
+@keyframes morph {
+  0%, 100% { border-radius: 0%; }
+  25% { border-radius: 25%; }
+  50% { border-radius: 50%; }
+  75% { border-radius: 25%; }
+}
+
+/* Responsive sizing */
+.glyph-responsive {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .glyph-responsive {
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .glyph-responsive {
+    max-width: 100px;
+  }
+}

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frontend-Backend Integration Test</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .test-section {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      color: #2A6B52;
+    }
+    .test-result {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+    }
+    .success {
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+    }
+    .error {
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+    }
+    .info {
+      background: #d1ecf1;
+      border: 1px solid #bee5eb;
+      color: #0c5460;
+    }
+    button {
+      background: #2A6B52;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:hover {
+      background: #1F4A3A;
+    }
+    pre {
+      background: #f8f9fa;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Frontend-Backend Integration Test</h1>
+  
+  <div class="test-section">
+    <h2>API Client Test</h2>
+    <button onclick="testHealth()">Test Health Endpoint</button>
+    <button onclick="testProducts()">Test Products API</button>
+    <button onclick="testAgentMetrics()">Test Agent Metrics</button>
+    <div id="api-results"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>Product Catalog Test</h2>
+    <button onclick="testProductCatalog()">Test Product Catalog</button>
+    <div id="catalog-results"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>Authentication Test</h2>
+    <button onclick="testLogin()">Test Login</button>
+    <button onclick="testVerify()">Test Token Verification</button>
+    <div id="auth-results"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>Agentic Engine Test</h2>
+    <button onclick="testSubmitGoal()">Test Submit Goal</button>
+    <button onclick="testSubmitObservation()">Test Submit Observation</button>
+    <div id="agentic-results"></div>
+  </div>
+
+  <script src="js/api-client.js"></script>
+  <script>
+    const apiClient = new SweetLayersAPIClient();
+
+    function displayResult(elementId, result, isSuccess) {
+      const element = document.getElementById(elementId);
+      const className = isSuccess ? 'success' : 'error';
+      element.innerHTML += `
+        <div class="test-result ${className}">
+          <pre>${JSON.stringify(result, null, 2)}</pre>
+        </div>
+      `;
+    }
+
+    function displayInfo(elementId, message) {
+      const element = document.getElementById(elementId);
+      element.innerHTML += `
+        <div class="test-result info">
+          ${message}
+        </div>
+      `;
+    }
+
+    async function testHealth() {
+      displayInfo('api-results', 'Testing health endpoint...');
+      try {
+        const response = await fetch('/health');
+        const data = await response.json();
+        displayResult('api-results', data, response.ok);
+      } catch (error) {
+        displayResult('api-results', { error: error.message }, false);
+      }
+    }
+
+    async function testProducts() {
+      displayInfo('api-results', 'Testing products API...');
+      try {
+        const data = await apiClient.getProducts();
+        displayResult('api-results', data, true);
+      } catch (error) {
+        displayResult('api-results', { error: error.message }, false);
+      }
+    }
+
+    async function testAgentMetrics() {
+      displayInfo('api-results', 'Testing agent metrics...');
+      try {
+        const data = await apiClient.getAgentMetrics();
+        displayResult('api-results', data, true);
+      } catch (error) {
+        displayResult('api-results', { error: error.message }, false);
+      }
+    }
+
+    async function testProductCatalog() {
+      displayInfo('catalog-results', 'Testing product catalog integration...');
+      try {
+        const data = await apiClient.getProducts();
+        displayResult('catalog-results', {
+          productsLoaded: data.products.length,
+          sampleProducts: data.products.slice(0, 3)
+        }, true);
+      } catch (error) {
+        displayResult('catalog-results', { error: error.message }, false);
+      }
+    }
+
+    async function testLogin() {
+      displayInfo('auth-results', 'Testing login...');
+      try {
+        const data = await apiClient.login('demo@sweetlayers.com', 'demo123');
+        displayResult('auth-results', data, data.success);
+      } catch (error) {
+        displayResult('auth-results', { error: error.message }, false);
+      }
+    }
+
+    async function testVerify() {
+      displayInfo('auth-results', 'Testing token verification...');
+      try {
+        const data = await apiClient.verifyToken();
+        displayResult('auth-results', data, data.success);
+      } catch (error) {
+        displayResult('auth-results', { error: error.message }, false);
+      }
+    }
+
+    async function testSubmitGoal() {
+      displayInfo('agentic-results', 'Testing goal submission...');
+      try {
+        const data = await apiClient.submitGoal('Test goal from integration test', 'medium', { test: true });
+        displayResult('agentic-results', data, true);
+      } catch (error) {
+        displayResult('agentic-results', { error: error.message }, false);
+      }
+    }
+
+    async function testSubmitObservation() {
+      displayInfo('agentic-results', 'Testing observation submission...');
+      try {
+        const data = await apiClient.submitObservation('test', { action: 'integration_test' }, Date.now(), 'test-session', 'test-user');
+        displayResult('agentic-results', data, true);
+      } catch (error) {
+        displayResult('agentic-results', { error: error.message }, false);
+      }
+    }
+
+    // Run initial health check on load
+    window.addEventListener('load', () => {
+      displayInfo('api-results', 'Integration test page loaded. Click buttons to test endpoints.');
+    });
+  </script>
+</body>
+</html>

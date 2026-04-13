@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ชำระเงิน - Sweet Layers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #2A6B52; --primary-dark: #1F4A3A; --primary-light: #E8F5F0;
+      --accent: #C4A647; --accent-dark: #B3941A;
+      --cream: #FDF9F5; --brown: #3D2E22; --brown-light: #5A4535;
+      --gray-100: #F5EDE4; --gray-200: #E8DCD0; --gray-300: #D4C4B5;
+      --gray-400: #B8A08A; --gray-500: #9A7D6A; --white: #ffffff;
+      --success: #10B981; --error: #EF4444;
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --shadow-md: 0 4px 16px rgba(13,42,34,0.08);
+    }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--cream);
+      color: var(--brown);
+      line-height: 1.5;
+    }
+    
+    .checkout-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      padding: 16px 0;
+    }
+    .header-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--brown);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: var(--primary);
+    }
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--success);
+    }
+
+    .checkout-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 32px;
+    }
+
+    /* Form Section */
+    .checkout-form h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .form-section {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-family: inherit;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .form-group textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    /* Payment Methods */
+    .payment-methods {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .payment-method {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .payment-method:hover,
+    .payment-method.active {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+    .payment-method input {
+      accent-color: var(--primary);
+    }
+    .payment-method-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    .payment-method-info {
+      flex: 1;
+    }
+    .payment-method-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .payment-method-desc {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+    }
+
+    /* QR Section */
+    .qr-section {
+      display: none;
+      text-align: center;
+      padding: 24px;
+      background: var(--primary-light);
+      border-radius: var(--radius-md);
+      margin-top: 16px;
+    }
+    .qr-section.show {
+      display: block;
+    }
+    .qr-code {
+      width: 250px;
+      height: 250px;
+      background: var(--white);
+      margin: 0 auto 16px;
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+    .qr-code img {
+      width: 100%;
+      height: 100%;
+    }
+    .qr-amount {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .qr-phone {
+      color: var(--gray-500);
+      font-size: 0.9rem;
+    }
+    .qr-note {
+      margin-top: 12px;
+      font-size: 0.85rem;
+      color: var(--gray-500);
+    }
+
+    /* Slip Upload */
+    .slip-upload {
+      margin-top: 16px;
+      padding: 20px;
+      border: 2px dashed var(--gray-300);
+      border-radius: var(--radius-md);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .slip-upload:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+    .slip-upload input {
+      display: none;
+    }
+    .slip-upload-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+    .slip-preview {
+      max-width: 200px;
+      margin: 12px auto 0;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Order Summary */
+    .order-summary {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      height: fit-content;
+      position: sticky;
+      top: 20px;
+    }
+    .summary-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 20px;
+    }
+    .summary-items {
+      margin-bottom: 20px;
+    }
+    .summary-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .summary-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+    }
+    .summary-item-info {
+      flex: 1;
+    }
+    .summary-item-name {
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+    .summary-item-qty {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+    }
+    .summary-item-price {
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .summary-row.total {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      padding-top: 16px;
+      border-top: 2px solid var(--gray-200);
+      margin-top: 16px;
+    }
+    .place-order-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.2s;
+    }
+    .place-order-btn:hover { background: var(--primary-dark); }
+    .place-order-btn:disabled {
+      background: var(--gray-300);
+      cursor: not-allowed;
+    }
+
+    /* Success Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.show {
+      display: flex;
+    }
+    .success-modal {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--success);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 24px;
+    }
+    .success-modal h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+    }
+    .success-modal p {
+      color: var(--gray-500);
+      margin-bottom: 24px;
+    }
+    .order-id {
+      background: var(--primary-light);
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      font-family: monospace;
+      font-size: 1.1rem;
+      color: var(--primary);
+      margin-bottom: 24px;
+    }
+    .create-account-opt {
+      background: linear-gradient(135deg, #fff 0%, #f0fdf4 100%);
+      border: 2px dashed var(--primary);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+      animation: fadeInUp 0.4s ease;
+    }
+    .create-account-opt .account-title {
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 4px;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .create-account-opt .account-desc {
+      font-size: 0.85rem;
+      color: var(--gray-500);
+      margin-bottom: 16px;
+    }
+    .account-inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .account-inputs input {
+      padding: 12px 16px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      background: white;
+    }
+    .account-inputs input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(42, 107, 82, 0.1);
+      outline: none;
+    }
+    .save-account-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(42, 107, 82, 0.3);
+    }
+    .save-account-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(42, 107, 82, 0.4);
+    }
+    .skip-btn {
+      background: none;
+      border: none;
+      color: var(--gray-400);
+      font-size: 0.85rem;
+      cursor: pointer;
+      padding: 8px;
+    }
+    .skip-btn:hover {
+      color: var(--gray-500);
+    }
+    .save-success {
+      color: var(--primary);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+/* ===== ENHANCED CHECKOUT ANIMATIONS & UX ===== */
+    
+    /* Smooth form transitions */
+    .form-section {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: fadeInUp 0.5s ease-out forwards;
+    }
+    
+    .form-section:hover {
+      box-shadow: 0 8px 32px rgba(42, 107, 82, 0.12);
+      transform: translateY(-2px);
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Staggered animation for sections */
+    .form-section:nth-child(1) { animation-delay: 0.1s; }
+    .form-section:nth-child(2) { animation-delay: 0.2s; }
+    .form-section:nth-child(3) { animation-delay: 0.3s; }
+    
+    /* Enhanced input focus animations */
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      transition: all 0.25s ease;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+      box-shadow: 0 0 0 4px rgba(42, 107, 82, 0.15);
+      transform: scale(1.01);
+    }
+    
+    /* Payment method animations */
+    .payment-method {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .payment-method::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(42, 107, 82, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .payment-method:hover::before {
+      left: 100%;
+    }
+    
+    .payment-method.active {
+      animation: pulseBorder 2s ease infinite;
+    }
+    
+    @keyframes pulseBorder {
+      0%, 100% { border-color: var(--primary); }
+      50% { border-color: var(--accent); }
+    }
+    
+    /* QR Section reveal animation */
+    .qr-section {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+    }
+    
+    .qr-section.show {
+      max-height: 500px;
+      opacity: 1;
+    }
+    
+    .qr-code {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    
+    /* Slip upload enhanced interactions */
+    .slip-upload {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .slip-upload::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border: 2px dashed var(--primary);
+      border-radius: calc(var(--radius-md) + 3px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .slip-upload:hover::after {
+      opacity: 1;
+    }
+    
+    .slip-upload.drag-over {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      transform: scale(1.02);
+    }
+    
+    /* Order summary sticky animation */
+    .order-summary {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .order-summary.stuck {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-xl);
+    }
+    
+    /* Summary item animations */
+    .summary-item {
+      animation: slideInRight 0.4s ease-out forwards;
+      opacity: 0;
+    }
+    
+    .summary-item:nth-child(1) { animation-delay: 0.1s; }
+    .summary-item:nth-child(2) { animation-delay: 0.2s; }
+    .summary-item:nth-child(3) { animation-delay: 0.3s; }
+    
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    /* Place order button enhanced */
+    .place-order-btn {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .place-order-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+    
+    .place-order-btn:active::before {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .place-order-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(42, 107, 82, 0.4);
+    }
+    
+    /* Success modal enhanced */
+    .modal-overlay {
+      backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
+    }
+    
+    .success-modal {
+      animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    @keyframes modalPop {
+      0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+      }
+      70% {
+        transform: scale(1.02);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+    
+    .success-icon {
+      animation: successBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s both;
+    }
+    
+    @keyframes successBounce {
+      0% { transform: scale(0); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    
+    /* Loading state animations */
+    .place-order-btn.loading {
+      color: transparent;
+    }
+    
+    .place-order-btn.loading::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 50%;
+      left: 50%;
+      margin: -10px 0 0 -10px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Progress indicator */
+    .checkout-progress {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin: 20px 0 0 0;
+      padding-top: 20px;
+      border-top: 1px solid var(--gray-200);
+    }
+    
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.5;
+      transition: all 0.3s ease;
+    }
+    
+    .progress-step.active {
+      opacity: 1;
+    }
+    
+    .progress-step.completed {
+      opacity: 1;
+    }
+    
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gray-500);
+      transition: all 0.3s ease;
+    }
+    
+    .progress-step.active .step-number {
+      background: var(--primary);
+      color: white;
+      transform: scale(1.1);
+    }
+    
+    .progress-step.completed .step-number {
+      background: var(--success);
+      color: white;
+    }
+    
+    .step-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--brown);
+    }
+    
+    /* Form validation feedback */
+    .form-group.error input,
+    .form-group.error textarea {
+      border-color: var(--error);
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+      animation: shake 0.4s ease-in-out;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    
+    .error-message {
+      color: var(--error);
+      font-size: 0.8rem;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    /* Real-time price update animation */
+    #total {
+      display: inline-block;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+    
+    #total.price-updated {
+      transform: scale(1.1);
+      color: var(--accent);
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+      .checkout-container {
+        gap: 16px;
+      }
+      
+      .form-section {
+        padding: 16px;
+      }
+      
+      .payment-methods {
+        gap: 8px;
+      }
+      
+      .payment-method {
+        padding: 12px;
+      }
+      
+      /* Disable sticky on mobile for better UX */
+      .order-summary {
+        position: static;
+        order: -1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="checkout-header">
+    <div class="header-container">
+      <a href="/cart.html" class="back-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        กลับตะกร้า
+      </a>
+      <div class="logo">Sweet Layers</div>
+      <div class="secure-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        ปลอดภัย 100%
+      </div>
+    </div>
+    <!-- Checkout Progress Indicator -->
+  <div class="checkout-progress" id="checkoutProgress">
+    <div class="progress-step active" data-step="1">
+      <div class="step-number">1</div>
+      <span class="step-label">ข้อมูล</span>
+    </div>
+    <div class="progress-step" data-step="2">
+      <div class="step-number">2</div>
+      <span class="step-label">ที่อยู่</span>
+    </div>
+    <div class="progress-step" data-step="3">
+      <div class="step-number">3</div>
+      <span class="step-label">ชำระเงิน</span>
+    </div>
+    <div class="progress-step" data-step="4">
+      <div class="step-number">4</div>
+      <span class="step-label">เสร็จสิ้น</span>
+    </div>
+  </div>
+</header>
+
+  <main class="checkout-container">
+    <!-- Left: Form -->
+    <div class="checkout-form">
+      <!-- Customer Info -->
+      <div class="form-section">
+        <h2>ข้อมูลลูกค้า</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">ชื่อ-นามสกุล *</label>
+            <input type="text" id="name" placeholder="สมชาย ใจดี" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">เบอร์โทรศัพท์ *</label>
+            <input type="tel" id="phone" placeholder="08xxxxxxxx" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">อีเมล (ไม่บังคับ)</label>
+          <input type="email" id="email" placeholder="example@email.com">
+        </div>
+      </div>
+
+      <!-- Shipping -->
+      <div class="form-section">
+        <h2>ที่อยู่จัดส่ง</h2>
+        <div class="form-group">
+          <label for="address">ที่อยู่ *</label>
+          <textarea id="address" placeholder="บ้านเลขที่ ถนน ตำบล อำเภอ" required></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="province">จังหวัด *</label>
+            <input type="text" id="province" placeholder="กรุงเทพมหานคร" required>
+          </div>
+          <div class="form-group">
+            <label for="postal">รหัสไปรษณีย์ *</label>
+            <input type="text" id="postal" placeholder="10110" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="note">หมายเหตุ (ไม่บังคับ)</label>
+          <textarea id="note" placeholder="เช่น ส่งช่วงบ่าย, โทรก่อนส่ง"></textarea>
+        </div>
+      </div>
+
+      <!-- Payment -->
+      <div class="form-section">
+        <h2>วิธีชำระเงิน</h2>
+        <div class="payment-methods">
+          <label class="payment-method active" onclick="selectPayment('promptpay')">
+            <input type="radio" name="payment" value="promptpay" checked>
+            <div class="payment-method-icon">Pay</div>
+            <div class="payment-method-info">
+              <div class="payment-method-name">พร้อมเพย์ (PromptPay)</div>
+              <div class="payment-method-desc">สแกน QR Code ผ่านแอพธนาคาร</div>
+            </div>
+          </label>
+          
+          <label class="payment-method" onclick="selectPayment('cod')">
+            <input type="radio" name="payment" value="cod">
+            <div class="payment-method-icon">Cash</div>
+            <div class="payment-method-info">
+              <div class="payment-method-name">เก็บเงินปลายทาง</div>
+              <div class="payment-method-desc">ชำระเมื่อได้รับสินค้า (+20 บาท)</div>
+            </div>
+          </label>
+        </div>
+
+        <!-- QR Code Section -->
+        <div class="qr-section" id="qrSection">
+          <div class="qr-code">
+            <img id="qrImage" src="" alt="PromptPay QR">
+          </div>
+          <div class="qr-amount" id="qrAmount">฿0</div>
+          <div class="qr-phone">บัญชี: 0840871065</div>
+          <div class="qr-note">สแกน QR ด้วยแอพธนาคาร แล้วอัพโหลดสลิปด้านล่าง</div>
+          
+          <label class="slip-upload" id="slipUpload">
+            <input type="file" id="slipInput" accept="image/*" onchange="handleSlipUpload(this)">
+            <div class="slip-upload-icon">Upload</div>
+            <div>คลิกเพื่ออัพโหลดสลิป</div>
+            <div style="font-size: 0.8rem; color: var(--gray-500);">รองรับ JPG, PNG</div>
+            <img id="slipPreview" class="slip-preview" style="display: none;">
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Summary -->
+    <aside class="order-summary">
+      <h3 class="summary-title">สรุปคำสั่งซื้อ</h3>
+      <div class="summary-items" id="summaryItems">
+        <!-- Items loaded by JS -->
+      </div>
+      <div class="summary-row">
+        <span>ยอดสินค้า</span>
+        <span id="subtotal">฿0</span>
+      </div>
+      <div class="summary-row">
+        <span>ค่าจัดส่ง</span>
+        <span id="shipping">฿50</span>
+      </div>
+      <div class="summary-row total">
+        <span>ยอดรวม</span>
+        <span id="total">฿0</span>
+      </div>
+      <button class="place-order-btn" id="placeOrderBtn" onclick="placeOrder()">
+        สั่งซื้อสินค้า
+      </button>
+    </aside>
+  </main>
+
+  <!-- Success Modal -->
+  <div class="modal-overlay" id="successModal">
+    <div class="success-modal">
+      <div class="success-icon">✓</div>
+      <h2>สั่งซื้อสำเร็จ!</h2>
+      <p>ขอบคุณสำหรับคำสั่งซื้อ เราจะจัดส่งสินค้าให้เร็วที่สุด</p>
+      <div class="order-id" id="orderId">ORDER-123456</div>
+      
+      <!-- Create Account Option -->
+      <div class="create-account-opt" id="createAccountOpt">
+        <p class="account-title">🎁 บันทึกข้อมูล รับส่วนลดครั้งต่อไป!</p>
+        <p class="account-desc">กรอกข้อมูลวันนี้ รับสิทธิ์ส่วนลด 10% สำหรับการสั่งซื้อครั้งหน้า</p>
+        <div class="account-inputs">
+          <input type="text" id="saveName" placeholder="👤 ชื่อ-นามสกุล">
+          <input type="tel" id="savePhone" placeholder="📱 เบอร์โทรศัพท์">
+          <input type="email" id="saveEmail" placeholder="✉️ อีเมล (ไม่บังคับ)">
+        </div>
+        <button class="save-account-btn" onclick="saveAccount()">🎉 บันทึก & รับส่วนลด</button>
+        <button class="skip-btn" onclick="skipSaveAccount()">ไม่เอา ข้ามไป</button>
+      </div>
+      
+      <button class="place-order-btn" id="continueShoppingBtn" onclick="location.href='/shop.html'">
+        เลือกซื้อสินค้าต่อ
+      </button>
+    </div>
+  </div>
+
+  <script src="js/member-system.js"></script>
+  <script src="js/performance-optimizer.js"></script>
+  <script src="js/line-integration.js"></script>
+  <script src="js/ux-helpers.js"></script>
+  
+  <!-- Backend Integration Scripts -->
+  <script src="js/api-client.js"></script>
+  <script src="js/cart-backend-integration.js"></script>
+  
+  <script>
+    // ===== CHECKOUT PROGRESS & UX ENHANCEMENTS =====
+    
+    // Progress indicator update
+    function updateProgress(step) {
+      document.querySelectorAll('.progress-step').forEach((el, index) => {
+        el.classList.remove('active', 'completed');
+        if (index < step - 1) {
+          el.classList.add('completed');
+          el.querySelector('.step-number').innerHTML = '✓';
+        } else if (index === step - 1) {
+          el.classList.add('active');
+          el.querySelector('.step-number').textContent = step;
+        } else {
+          el.querySelector('.step-number').textContent = index + 1;
+        }
+      });
+    }
+    
+    // Form field validation
+    function validateField(field) {
+      const formGroup = field.closest('.form-group');
+      if (field.hasAttribute('required') && !field.value.trim()) {
+        formGroup?.classList.add('error');
+        return false;
+      } else {
+        formGroup?.classList.remove('error');
+        return true;
+      }
+    }
+    
+    // Add validation to required fields
+    document.querySelectorAll('input[required], textarea[required]').forEach(field => {
+      field.addEventListener('blur', () => validateField(field));
+      field.addEventListener('input', () => {
+        if (field.value.trim()) {
+          field.closest('.form-group')?.classList.remove('error');
+        }
+      });
+    });
+    
+    // Update progress based on form completion
+    function checkProgress() {
+      const name = document.getElementById('name')?.value;
+      const phone = document.getElementById('phone')?.value;
+      const address = document.getElementById('address')?.value;
+      const province = document.getElementById('province')?.value;
+      
+      if (name && phone) {
+        updateProgress(2); // Customer info complete
+      }
+      if (address && province) {
+        updateProgress(3); // Address complete
+      }
+    }
+    
+    // Listen for form changes
+    document.querySelectorAll('.form-section input, .form-section textarea').forEach(field => {
+      field.addEventListener('change', checkProgress);
+      field.addEventListener('input', debounce(checkProgress, 500));
+    });
+    
+    // Debounce helper
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+    
+    // Slip upload drag & drop
+    const slipUpload = document.getElementById('slipUpload');
+    if (slipUpload) {
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        slipUpload.addEventListener(eventName, preventDefaults, false);
+      });
+      
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      
+      ['dragenter', 'dragover'].forEach(eventName => {
+        slipUpload.addEventListener(eventName, () => {
+          slipUpload.classList.add('drag-over');
+        }, false);
+      });
+      
+      ['dragleave', 'drop'].forEach(eventName => {
+        slipUpload.addEventListener(eventName, () => {
+          slipUpload.classList.remove('drag-over');
+        }, false);
+      });
+      
+      slipUpload.addEventListener('drop', (e) => {
+        const files = e.dataTransfer.files;
+        if (files.length) {
+          document.getElementById('slipInput').files = files;
+          handleSlipUpload(document.getElementById('slipInput'));
+        }
+      });
+    }
+    
+    // Order summary sticky detection
+    const orderSummary = document.querySelector('.order-summary');
+    if (orderSummary && window.innerWidth > 768) {
+      let stickyObserver = new IntersectionObserver(
+        ([e]) => e.target.classList.toggle('stuck', e.intersectionRatio < 1),
+        { threshold: [1] }
+      );
+      stickyObserver.observe(orderSummary);
+    }
+    
+    // Price update animation
+    const totalEl = document.getElementById('total');
+    if (totalEl) {
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach(() => {
+          totalEl.classList.add('price-updated');
+          setTimeout(() => totalEl.classList.remove('price-updated'), 300);
+        });
+      });
+      observer.observe(totalEl, { childList: true });
+    }
+    
+    // Initialize progress
+    updateProgress(1);
+    
+    // Enhanced place order with loading state
+    const _originalPlaceOrder = window.placeOrder;
+    window.placeOrder = async function() {
+      const btn = document.getElementById('placeOrderBtn');
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const address = document.getElementById('address').value;
+      
+      // Validate all required fields
+      let isValid = true;
+      document.querySelectorAll('input[required], textarea[required]').forEach(field => {
+        if (!validateField(field)) isValid = false;
+      });
+      
+      if (!isValid) {
+        // Scroll to first error
+        const firstError = document.querySelector('.form-group.error');
+        if (firstError) {
+          firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return;
+      }
+      
+      if (paymentMethod === 'promptpay' && !slipImage) {
+        alert('กรุณาอัพโหลดสลิปการโอนเงิน');
+        document.getElementById('slipUpload')?.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+      
+      // Add loading state
+      btn.disabled = true;
+      btn.classList.add('loading');
+      btn.innerHTML = '<span>กำลังประมวลผล...</span>';
+      
+      // Update progress to final step
+      updateProgress(4);
+      
+      // Call original function
+      try {
+        await _originalPlaceOrder();
+      } finally {
+        btn.classList.remove('loading');
+      }
+    };
+  </script>
+  <script>
+    const API_BASE = window.location.hostname.includes('pages.dev')
+      ? 'https://bizcommerz-agentic-engine.aekbuffalo.workers.dev'
+      : window.location.origin;
+
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    let paymentMethod = 'promptpay';
+    let slipImage = null;
+    let orderTotal = 0;
+
+    function renderSummary() {
+      const itemsContainer = document.getElementById('summaryItems');
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const shipping = paymentMethod === 'cod' ? 70 : (subtotal > 500 ? 0 : 50);
+      orderTotal = subtotal + shipping;
+
+      itemsContainer.innerHTML = cart.map(item => `
+        <div class="summary-item">
+          <img src="${item.image}" alt="${item.name}">
+          <div class="summary-item-info">
+            <div class="summary-item-name">${item.name}</div>
+            <div class="summary-item-qty">x${item.qty}</div>
+          </div>
+          <div class="summary-item-price">฿${(item.price * item.qty).toFixed(0)}</div>
+        </div>
+      `).join('');
+
+      document.getElementById('subtotal').textContent = `฿${subtotal.toFixed(0)}`;
+      document.getElementById('shipping').textContent = shipping === 0 ? 'ฟรี' : `฿${shipping}`;
+      document.getElementById('total').textContent = `฿${orderTotal.toFixed(0)}`;
+
+      // Generate QR if PromptPay selected
+      if (paymentMethod === 'promptpay') {
+        generatePromptPayQR(orderTotal);
+      }
+    }
+
+    function selectPayment(method) {
+      paymentMethod = method;
+      document.querySelectorAll('.payment-method').forEach(el => {
+        el.classList.toggle('active', el.querySelector(`input[value="${method}"]`));
+      });
+      
+      const qrSection = document.getElementById('qrSection');
+      if (method === 'promptpay') {
+        qrSection.classList.add('show');
+        generatePromptPayQR(orderTotal);
+      } else {
+        qrSection.classList.remove('show');
+      }
+      
+      renderSummary();
+    }
+
+    async function generatePromptPayQR(amount) {
+      try {
+        const res = await fetch(`${API_BASE}/payment/promptpay`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount: amount,
+            orderId: `cake_${Date.now()}`,
+            customer: document.getElementById('name')?.value || 'Customer'
+          })
+        });
+        
+        const data = await res.json();
+        if (data.qrUrl) {
+          document.getElementById('qrImage').src = data.qrUrl;
+          document.getElementById('qrAmount').textContent = `฿${amount.toFixed(0)}`;
+        }
+      } catch (err) {
+        console.error('QR generation failed:', err);
+      }
+    }
+
+    function handleSlipUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        slipImage = e.target.result;
+        document.getElementById('slipPreview').src = slipImage;
+        document.getElementById('slipPreview').style.display = 'block';
+        document.querySelector('.slip-upload div:not(.slip-preview)').style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function placeOrder() {
+      const btn = document.getElementById('placeOrderBtn');
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const address = document.getElementById('address').value;
+      
+      if (!name || !phone || !address) {
+        alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+        return;
+      }
+
+      if (paymentMethod === 'promptpay' && !slipImage) {
+        alert('กรุณาอัพโหลดสลิปการโอนเงิน');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'กำลังสั่งซื้อ...';
+
+      // Use backend integration if available
+      if (window.cartIntegration && window.apiClient) {
+        try {
+          const customerInfo = {
+            name: name,
+            phone: phone,
+            email: document.getElementById('email').value
+          };
+          
+          const deliveryInfo = {
+            address: `${address} ${document.getElementById('province').value} ${document.getElementById('postal').value}`,
+            note: document.getElementById('note').value
+          };
+
+          // Checkout using backend integration
+          const result = await window.cartIntegration.checkout(customerInfo, deliveryInfo);
+          
+          if (result.success) {
+            // If PromptPay, verify slip
+            if (paymentMethod === 'promptpay' && slipImage) {
+              const verifyResult = await window.cartIntegration.verifyPaymentSlip(
+                slipImage, 
+                result.orderId, 
+                result.amount
+              );
+              
+              if (verifyResult.verified) {
+                showSuccessScreen(result.orderId);
+              } else {
+                alert('การตรวจสอบสลิปล้มเหลว');
+                btn.disabled = false;
+                btn.textContent = 'สั่งซื้อ';
+                return;
+              }
+            } else {
+              showSuccessScreen(result.orderId);
+            }
+          }
+        } catch (error) {
+          console.error('Checkout failed:', error);
+          alert('การสั่งซื้อล้มเหลว: ' + error.message);
+          btn.disabled = false;
+          btn.textContent = 'สั่งซื้อ';
+        }
+      } else {
+        // Fallback to original API call
+        const orderData = {
+          customer: name,
+          phone,
+          email: document.getElementById('email').value,
+          address: `${address} ${document.getElementById('province').value} ${document.getElementById('postal').value}`,
+          note: document.getElementById('note').value,
+          items: cart.map(item => item.name),
+          total: orderTotal,
+          payment: paymentMethod,
+          tenantId: 'default'
+        };
+
+        try {
+          const orderRes = await fetch(`${API_BASE}/triggers/order`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderData)
+          });
+
+          const orderResult = await orderRes.json();
+
+          // If PromptPay, verify slip
+          if (paymentMethod === 'promptpay' && slipImage) {
+          await fetch(`${API_BASE}/payment/verify-slip`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              imageBase64: slipImage,
+              paymentId: orderResult.orderId,
+              expectedAmount: orderTotal
+            })
+          });
+        }
+
+        // Show success
+        document.getElementById('orderId').textContent = orderResult.orderId || `ORDER-${Date.now()}`;
+        document.getElementById('successModal').classList.add('show');
+        
+        // Send LINE notifications
+        if (typeof LINEIntegration !== 'undefined') {
+          const lineBot = new LINEIntegration();
+          
+          // Send notification to admin
+          lineBot.sendOrderNotification({
+            orderId: orderResult.orderId || `ORDER-${Date.now()}`,
+            customer: name,
+            phone: phone,
+            total: orderTotal,
+            payment: paymentMethod,
+            items: cart.map(item => item.name)
+          });
+          
+          // Send confirmation to customer
+          lineBot.sendOrderConfirmation({
+            orderId: orderResult.orderId || `ORDER-${Date.now()}`,
+            customer: name,
+            total: orderTotal
+          });
+        }
+        
+        // Save order to member system
+        if (typeof memberSystem !== 'undefined') {
+          memberSystem.saveOrder({
+            orderId: orderResult.orderId,
+            items: cart.map(i => i.name),
+            total: orderTotal,
+            status: 'Processing'
+          });
+        }
+        
+        // Clear cart
+        localStorage.removeItem('cart');
+        
+      } catch (err) {
+        alert('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
+        btn.disabled = false;
+        btn.textContent = 'สั่งซื้อสินค้า';
+      }
+    }
+
+    // Init
+    if (cart.length === 0) {
+      location.href = '/shop.html';
+    }
+    renderSummary();
+    selectPayment('promptpay');
+
+    // Prefill create account form with checkout data
+    function prefillAccountForm() {
+      const name = document.getElementById('name')?.value;
+      const phone = document.getElementById('phone')?.value;
+      const email = document.getElementById('email')?.value;
+      
+      if (name) document.getElementById('saveName').value = name;
+      if (phone) document.getElementById('savePhone').value = phone;
+      if (email) document.getElementById('saveEmail').value = email;
+    }
+
+    // Save account function
+    function saveAccount() {
+      const name = document.getElementById('saveName').value;
+      const phone = document.getElementById('savePhone').value;
+      const email = document.getElementById('saveEmail').value || '';
+      
+      if (!name || !phone) {
+        alert('กรุณากรอกชื่อและเบอร์โทร');
+        return;
+      }
+
+      // Save to member system
+      if (typeof memberSystem !== 'undefined') {
+        memberSystem.login(email || `${phone}@customer.local`, name);
+        memberSystem.updateProfile({ phone, name });
+      } else {
+        // Fallback to localStorage
+        const member = { name, phone, email, createdAt: Date.now() };
+        localStorage.setItem('member', JSON.stringify(member));
+      }
+
+      // Show success and hide account option
+      const opt = document.getElementById('createAccountOpt');
+      opt.innerHTML = '<div class="save-success">✅ บันทึกสำเร็จ! ขอบคุณค่ะ</div>';
+      document.getElementById('continueShoppingBtn').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Skip save account
+    function skipSaveAccount() {
+      const opt = document.getElementById('createAccountOpt');
+      opt.style.display = 'none';
+    }
+
+    // Call prefill when success modal shows
+    window.addEventListener('load', () => {
+      const observer = new MutationObserver(() => {
+        const modal = document.getElementById('successModal');
+        if (modal && modal.classList.contains('show')) {
+          prefillAccountForm();
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    });
+  </script>
+  
+  <footer style="background: var(--brown); color: var(--gray-300); padding: 40px 16px; text-align: center; margin-top: 40px;">
+    <p style="margin-bottom: 8px;">🍰 Sweet Layers</p>
+    <p style="font-size: 0.85rem;">
+      <a href="/track.html" style="color: var(--accent);">ติดตามสถานะสั่งซื้อ</a> | 
+      <a href="/contact.html" style="color: var(--gray-300);">ติดต่อเรา</a>
+    </p>
+  </footer>
+</body>
+</html>

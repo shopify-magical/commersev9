@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>บล็อก & ข่าวสาร - Sweet Layers</title>
+  <meta name="description" content="เรื่องราวของ Sweet Layers เบื้องหลังการทำขนมไข่ สูตรลับ และข่าวสารใหม่ล่าสุด">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #2A6B52; --primary-dark: #1F4A3A; --primary-light: #E8F5F0;
+      --accent: #C4A647; --accent-dark: #B3941A;
+      --cream: #FDF9F5; --brown: #3D2E22; --brown-light: #5A4535;
+      --gray-100: #F5EDE4; --gray-200: #E8DCD0; --gray-300: #D4C4B5;
+      --gray-400: #B8A08A; --gray-500: #9A7D6A; --white: #ffffff;
+      --shadow-sm: 0 1px 3px rgba(13,42,34,0.06);
+      --shadow-md: 0 4px 16px rgba(13,42,34,0.08);
+      --shadow-lg: 0 8px 30px rgba(13,42,34,0.12);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --width-xl: 1280px;
+    }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--cream);
+      color: var(--brown);
+      line-height: 1.6;
+    }
+    
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      z-index: 100;
+      padding: 12px 0;
+    }
+    .header-container {
+      max-width: var(--width-xl);
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+    }
+    .nav-links a {
+      color: var(--brown);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--primary); }
+    .nav-links a.active { color: var(--primary); font-weight: 600; }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .cart-btn {
+      position: relative;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+    .cart-badge {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--accent);
+      color: var(--white);
+      font-size: 0.65rem;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-login {
+      padding: 8px 16px;
+      background: var(--primary);
+      color: var(--white);
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .btn-login:hover { background: var(--primary-dark); }
+
+    /* Blog Hero */
+    .blog-hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--white);
+      padding: 60px 16px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .blog-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: pulse 8s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+    .blog-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+    .blog-hero p {
+      opacity: 0.9;
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Blog Container */
+    .blog-container {
+      max-width: var(--width-xl);
+      margin: 0 auto;
+      padding: 40px 16px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 40px;
+    }
+
+    /* Featured Post */
+    .featured-post {
+      grid-column: 1 / -1;
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-bottom: 20px;
+    }
+    .featured-image {
+      position: relative;
+      overflow: hidden;
+    }
+    .featured-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    .featured-post:hover .featured-image img {
+      transform: scale(1.05);
+    }
+    .featured-badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: var(--accent);
+      color: var(--white);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .featured-content {
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .featured-meta {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+      font-size: 0.875rem;
+      color: var(--gray-500);
+    }
+    .featured-meta span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .featured-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      color: var(--brown);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    .featured-excerpt {
+      color: var(--gray-500);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: gap 0.2s;
+    }
+    .read-more:hover { gap: 12px; }
+
+    /* Blog Grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .blog-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .blog-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    .blog-image {
+      aspect-ratio: 16/10;
+      overflow: hidden;
+    }
+    .blog-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    .blog-card:hover .blog-image img {
+      transform: scale(1.05);
+    }
+    .blog-content {
+      padding: 20px;
+    }
+    .blog-category {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .blog-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--brown);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .blog-meta {
+      display: flex;
+      gap: 12px;
+      font-size: 0.8rem;
+      color: var(--gray-500);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .sidebar-widget {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .widget-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--brown);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--primary-light);
+    }
+    .category-list {
+      list-style: none;
+    }
+    .category-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .category-list li:last-child { border-bottom: none; }
+    .category-list a {
+      color: var(--brown);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .category-list a:hover { color: var(--primary); }
+    .category-count {
+      background: var(--gray-100);
+      color: var(--gray-500);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+    }
+    
+    .popular-post {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .popular-post:last-child { border-bottom: none; }
+    .popular-thumb {
+      width: 60px;
+      height: 60px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .popular-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .popular-content h4 {
+      font-size: 0.875rem;
+      color: var(--brown);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .popular-content span {
+      font-size: 0.75rem;
+      color: var(--gray-500);
+    }
+
+    /* Newsletter Widget */
+    .newsletter-widget {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--white);
+      border-radius: var(--radius-md);
+      padding: 24px;
+    }
+    .newsletter-widget h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+    }
+    .newsletter-widget p {
+      opacity: 0.9;
+      font-size: 0.875rem;
+      margin-bottom: 16px;
+    }
+    .newsletter-form {
+      display: flex;
+      gap: 8px;
+    }
+    .newsletter-form input {
+      flex: 1;
+      padding: 10px 14px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+    }
+    .newsletter-form button {
+      padding: 10px 16px;
+      background: var(--accent);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .newsletter-form button:hover { background: var(--accent-dark); }
+
+    /* Responsive */
+    @media (max-width: 968px) {
+      .blog-container {
+        grid-template-columns: 1fr;
+      }
+      .featured-post {
+        grid-template-columns: 1fr;
+      }
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        order: -1;
+      }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .blog-hero h1 { font-size: 2rem; }
+      .featured-content { padding: 20px; }
+      .featured-title { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <a href="/" class="logo">
+        <span>CAKE</span>
+        <span>Sweet Layers</span>
+      </a>
+      <nav class="nav-links">
+        <a href="/">หน้าแรก</a>
+        <a href="/shop.html">สินค้า</a>
+        <a href="/blog.html" class="active">บล็อก</a>
+        <a href="/about.html">เกี่ยวกับ</a>
+        <a href="/contact.html">ติดต่อ</a>
+      </nav>
+      <div class="header-actions">
+        <button class="cart-btn" onclick="location.href='/cart.html'">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span class="cart-badge" id="cartCount">0</span>
+        </button>
+        <a href="/login.html" class="btn-login">เข้าสู่ระบบ</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Blog Hero -->
+  <section class="blog-hero">
+    <h1>Sweet Stories</h1>
+    <p>เรื่องราวเบื้องหลังการทำขนม สูตรลับ และข่าวสารจาก Sweet Layers</p>
+  </section>
+
+  <!-- Blog Container -->
+  <div class="blog-container">
+    <!-- Featured Post -->
+    <article class="featured-post">
+      <div class="featured-image">
+        <img src="images/heritage-bakery.jpg" alt="Art of Mooncake Making" loading="eager">
+        <span class="featured-badge">Featured</span>
+      </div>
+      <div class="featured-content">
+        <div class="featured-meta">
+          <span>15 มี.ค. 2026</span>
+          <span>5 นาทีอ่าน</span>
+        </div>
+        <h2 class="featured-title">ศิลปะแห่งการทำขนมไข่: ตำนานที่สืบทอดมา 3 รุ่น</h2>
+        <p class="featured-excerpt">
+          เรียนรู้เบื้องหลังการทำขนมไข่แบบดั้งเดิมที่สืบทอดกันมาตั้งแต่รุ่นคุณยาย 
+          ตั้งแต่การคัดสรรวัตถุดิบจนถึงเทคนิคการห่อที่ต้องใช้ความชำนาญ...
+        </p>
+        <a href="#" class="read-more">
+          อ่านต่อ
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </article>
+
+    <!-- Blog Grid -->
+    <div class="blog-grid" id="blogGrid">
+      <!-- Blog cards will be loaded by JS -->
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- Newsletter -->
+      <div class="newsletter-widget">
+        <h3>รับข่าวสารก่อนใคร</h3>
+        <p>สมัครรับจดหมายข่าวเพื่อรับสูตรลับและโปรโมชั่นพิเศษ</p>
+        <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+          <input type="email" placeholder="silvercloud@o2odesign.com" required>
+          <button type="submit">สมัคร</button>
+        </form>
+      </div>
+
+      <!-- Categories -->
+      <div class="sidebar-widget">
+        <h3 class="widget-title">หมวดหมู่</h3>
+        <ul class="category-list">
+          <li><a href="#">สูตรลับและเทคนิค</a><span class="category-count">12</span></li>
+          <li><a href="#">เรื่องราวจากร้าน</a><span class="category-count">8</span></li>
+          <li><a href="#">ขนมไข่และเทศกาล</a><span class="category-count">6</span></li>
+          <li><a href="#">วัตถุดิบและคุณภาพ</a><span class="category-count">5</span></li>
+          <li><a href="#">อีเวนต์และกิจกรรม</a><span class="category-count">4</span></li>
+        </ul>
+      </div>
+
+      <!-- Popular Posts -->
+      <div class="sidebar-widget">
+        <h3 class="widget-title">ยอดนิยม</h3>
+        <div class="popular-posts">
+          <div class="popular-post">
+            <div class="popular-thumb">
+              <img src="images/pastry-taro.png" alt="Taro Pastry">
+            </div>
+            <div class="popular-content">
+              <h4>ความลับของไส้เผือกนุ่มละมุน</h4>
+              <span>2 วันที่แล้ว</span>
+            </div>
+          </div>
+          <div class="popular-post">
+            <div class="popular-thumb">
+              <img src="images/salted-egg.jpg" alt="Salted Egg">
+            </div>
+            <div class="popular-content">
+              <h4>วิธีเลือกไข่เค็มคุณภาพดี</h4>
+              <span>5 วันที่แล้ว</span>
+            </div>
+          </div>
+          <div class="popular-post">
+            <div class="popular-thumb">
+              <img src="images/black-sesame.jpg" alt="Sesame Mooncake">
+            </div>
+            <div class="popular-content">
+              <h4>ประโยชน์ของงาดำกับสุขภาพ</h4>
+              <span>1 สัปดาห์ที่แล้ว</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // Blog posts data
+    const blogPosts = [
+      {
+        id: 1,
+        title: '5 เทคนิคทำขนมไข่ให้หอมกรุ่น',
+        category: 'สูตรลับและเทคนิค',
+        image: 'images/pastry-redbean.png',
+        date: '12 มี.ค. 2026',
+        readTime: '3 นาที'
+      },
+      {
+        id: 2,
+        title: 'ขนมไข่กับเทศกาลไหว้พระจันทร์',
+        category: 'ขนมไข่และเทศกาล',
+        image: 'images/mooncake-white-lotus.png',
+        date: '10 มี.ค. 2026',
+        readTime: '4 นาที'
+      },
+      {
+        id: 3,
+        title: 'เปิดตัวเมนูใหม่: ขนมไข่ชาไทย',
+        category: 'เรื่องราวจากร้าน',
+        image: 'images/pandan-custard.jpg',
+        date: '8 มี.ค. 2026',
+        readTime: '2 นาที'
+      },
+      {
+        id: 4,
+        title: 'ทำไมเราเลือกใช้เนยสดจากฟาร์ม',
+        category: 'วัตถุดิบและคุณภาพ',
+        image: 'images/pastry-arrangement.jpg',
+        date: '5 มี.ค. 2026',
+        readTime: '3 นาที'
+      },
+      {
+        id: 5,
+        title: 'Workshop ทำขนมไข่ สำหรับครอบครัว',
+        category: 'อีเวนต์และกิจกรรม',
+        image: 'images/heritage-bakery.jpg',
+        date: '1 มี.ค. 2026',
+        readTime: '2 นาที'
+      },
+      {
+        id: 6,
+        title: 'ความหมายของสีสันในขนมจีน',
+        category: 'ขนมไข่และเทศกาล',
+        image: 'images/taro-coconut.jpg',
+        date: '28 ก.พ. 2026',
+        readTime: '4 นาที'
+      }
+    ];
+
+    // Render blog posts
+    function renderBlogPosts() {
+      const grid = document.getElementById('blogGrid');
+      grid.innerHTML = blogPosts.map(post => `
+        <article class="blog-card">
+          <div class="blog-image">
+            <img src="${post.image}" alt="${post.title}" loading="lazy">
+          </div>
+          <div class="blog-content">
+            <span class="blog-category">${post.category}</span>
+            <h3 class="blog-title">${post.title}</h3>
+            <div class="blog-meta">
+              <span>📅 ${post.date}</span>
+              <span>⏱️ ${post.readTime}</span>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    // Newsletter subscription
+    function subscribeNewsletter(e) {
+      e.preventDefault();
+      const email = e.target.querySelector('input').value;
+      alert(`ขอบคุณสำหรับการสมัคร! เราจะส่งข่าวสารไปที่ ${email}`);
+      e.target.reset();
+    }
+
+    // Update cart count from localStorage
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById('cartCount').textContent = count;
+    }
+
+    // Initialize
+    renderBlogPosts();
+    updateCartCount();
+  </script>
+</body>
+</html>

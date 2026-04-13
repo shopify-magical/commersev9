@@ -1,0 +1,10 @@
+{
+  "products": [
+    { "name": "Product Name", "category": "Category", "prompt": "Description for AI image generator" }
+  ],
+  "config": {
+    "business": "Your Business Name",
+    "style": "professional product photography, white studio background",
+    "website": "https://your-domain.com"
+  }
+}

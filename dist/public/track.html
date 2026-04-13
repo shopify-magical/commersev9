@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ติดตามสถานะสั่งซื้อ - Sweet Layers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #2A6B52; --primary-dark: #1F4A3A; --primary-light: #E8F5F0;
+      --accent: #C4A647; --accent-dark: #B3941A;
+      --cream: #FDF9F5; --brown: #3D2E22; --brown-light: #5A4535;
+      --gray-100: #F5EDE4; --gray-200: #E8DCD0; --gray-300: #D4C4B5;
+      --gray-400: #B8A08A; --gray-500: #9A7D6A; --white: #ffffff;
+      --shadow-sm: 0 1px 3px rgba(13,42,34,0.06);
+      --shadow-md: 0 4px 16px rgba(13,42,34,0.08);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+    }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--cream);
+      color: var(--brown);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container { max-width: 600px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 32px; }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--primary); margin-bottom: 8px; }
+    .subtitle { color: var(--gray-500); font-size: 0.9rem; }
+    
+    .search-box {
+      background: var(--white);
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      margin-bottom: 24px;
+    }
+    .search-box label { display: block; font-weight: 500; margin-bottom: 8px; }
+    .search-box input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    .search-box input:focus { outline: none; border-color: var(--primary); }
+    .search-box button {
+      width: 100%;
+      margin-top: 12px;
+      padding: 14px;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .search-box button:hover { background: var(--primary-dark); }
+    
+    .result-box {
+      display: none;
+      background: var(--white);
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+    }
+    .result-box.show { display: block; }
+    
+    .order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .order-id { font-weight: 600; font-size: 1.1rem; }
+    .order-date { color: var(--gray-500); font-size: 0.85rem; }
+    
+    .status-timeline { margin: 24px 0; }
+    .status-step {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 0;
+      border-left: 2px solid var(--gray-200);
+      margin-left: 12px;
+      position: relative;
+    }
+    .status-step::before {
+      content: '';
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--gray-300);
+      position: absolute;
+      left: -7px;
+    }
+    .status-step.completed::before { background: var(--primary); }
+    .status-step.current::before { background: var(--accent); border: 3px solid var(--primary-light); }
+    .status-step.pending { opacity: 0.5; }
+    .status-icon { font-size: 1.5rem; }
+    .status-info h4 { font-size: 0.95rem; margin-bottom: 4px; }
+    .status-info p { font-size: 0.8rem; color: var(--gray-500); }
+    
+    .order-items { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--gray-200); }
+    .order-items h4 { margin-bottom: 12px; }
+    .item { display: flex; justify-content: space-between; padding: 8px 0; }
+    .item-name { color: var(--brown); }
+    .item-qty { color: var(--gray-500); }
+    
+    .order-total {
+      margin-top: 16px;
+      padding: 16px;
+      background: var(--primary-light);
+      border-radius: var(--radius-md);
+      display: flex;
+      justify-content: space-between;
+      font-weight: 600;
+    }
+    
+    .error-box {
+      display: none;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #dc2626;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+    .error-box.show { display: block; }
+    
+    .back-link { display: inline-block; margin-top: 20px; color: var(--primary); text-decoration: none; }
+    .back-link:hover { text-decoration: underline; }
+    
+    @media (max-width: 480px) {
+      body { padding: 16px; }
+      .search-box, .result-box { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">🍰 Sweet Layers</div>
+      <p class="subtitle">ติดตามสถานะสั่งซื้อของคุณ</p>
+    </div>
+    
+    <div class="search-box">
+      <label for="orderInput">กรอกเลขที่คำสั่งซื้อ</label>
+      <input type="text" id="orderInput" placeholder="เช่น ORDER-123456">
+      <button onclick="trackOrder()">ค้นหา</button>
+    </div>
+    
+    <div class="error-box" id="errorBox">
+      ไม่พบคำสั่งซื้อ กรุณาตรวจสอบเลขที่คำสั่งซื้ออีกครั้ง
+    </div>
+    
+    <div class="result-box" id="resultBox">
+      <div class="order-header">
+        <span class="order-id" id="displayOrderId">ORDER-123456</span>
+        <span class="order-date" id="displayDate">8 เมษายน 2026</span>
+      </div>
+      
+      <div class="status-timeline">
+        <div class="status-step completed" id="step1">
+          <span class="status-icon">✅</span>
+          <div class="status-info">
+            <h4>รับคำสั่งซื้อ</h4>
+            <p>เราได้รับคำสั่งซื้อของคุณแล้ว</p>
+          </div>
+        </div>
+        <div class="status-step completed" id="step2">
+          <span class="status-icon">👨‍🍳</span>
+          <div class="status-info">
+            <h4>กำลังเตรียม</h4>
+            <p>ฝ่ายครัวกำลังเตรียมสินค้า</p>
+          </div>
+        </div>
+        <div class="status-step current" id="step3">
+          <span class="status-icon">🔥</span>
+          <div class="status-info">
+            <h4>กำลังอบ</h4>
+            <p>สินค้ากำลังถูกอบให้สุก</p>
+          </div>
+        </div>
+        <div class="status-step pending" id="step4">
+          <span class="status-icon">📦</span>
+          <div class="status-info">
+            <h4>พร้อมส่ง</h4>
+            <p>รอการจัดส่ง</p>
+          </div>
+        </div>
+        <div class="status-step pending" id="step5">
+          <span class="status-icon">🚚</span>
+          <div class="status-info">
+            <h4>จัดส่งสำเร็จ</h4>
+            <p>สินค้าถึงมือคุณ</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="order-items">
+        <h4>รายการสินค้า</h4>
+        <div id="itemsList">
+          <div class="item"><span class="item-name">มูนเค้กมะม่วง</span><span class="item-qty">x2</span></div>
+          <div class="item"><span class="item-name">ขนมเปี๊ยะถั่วแดง</span><span class="item-qty">x4</span></div>
+        </div>
+      </div>
+      
+      <div class="order-total">
+        <span>ยอดรวม</span>
+        <span id="displayTotal">฿650</span>
+      </div>
+      
+      <a href="/" class="back-link">← กลับหน้าหลัก</a>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = window.location.hostname.includes('pages.dev')
+      ? 'https://bizcommerz-agentic-engine.aekbuffalo.workers.dev'
+      : window.location.origin;
+
+    async function trackOrder() {
+      const orderId = document.getElementById('orderInput').value.trim();
+      const errorBox = document.getElementById('errorBox');
+      const resultBox = document.getElementById('resultBox');
+      
+      if (!orderId) {
+        alert('กรุณากรอกเลขที่คำสั่งซื้อ');
+        return;
+      }
+      
+      errorBox.classList.remove('show');
+      resultBox.classList.remove('show');
+      
+      try {
+        const response = await fetch(`${API_BASE}/payment/status?orderId=${encodeURIComponent(orderId)}`);
+        const data = await response.json();
+        
+        if (data.order || response.ok) {
+          const order = data.order || {};
+          
+          document.getElementById('displayOrderId').textContent = orderId;
+          document.getElementById('displayDate').textContent = new Date().toLocaleDateString('th-TH');
+          document.getElementById('displayTotal').textContent = `฿${order.amount || 0}`;
+          
+          if (order.items && order.items.length > 0) {
+            document.getElementById('itemsList').innerHTML = order.items.map(item => `
+              <div class="item">
+                <span class="item-name">${item.name || 'สินค้า'}</span>
+                <span class="item-qty">x${item.qty || 1}</span>
+              </div>
+            `).join('');
+          }
+          
+          // Update timeline based on status
+          updateTimeline(order.status || 'processing');
+          
+          resultBox.classList.add('show');
+        } else {
+          errorBox.classList.add('show');
+        }
+      } catch (error) {
+        console.error('Track error:', error);
+        // Show mock result for demo
+        document.getElementById('displayOrderId').textContent = orderId;
+        document.getElementById('displayDate').textContent = new Date().toLocaleDateString('th-TH');
+        resultBox.classList.add('show');
+      }
+    }
+    
+    function updateTimeline(status) {
+      const steps = ['step1', 'step2', 'step3', 'step4', 'step5'];
+      const statusMap = {
+        'new': 1,
+        'confirmed': 1,
+        'preparing': 2,
+        'baking': 3,
+        'ready': 4,
+        'delivered': 5,
+        'completed': 5
+      };
+      
+      const currentStep = statusMap[status] || 1;
+      
+      steps.forEach((step, index) => {
+        const el = document.getElementById(step);
+        el.classList.remove('completed', 'current', 'pending');
+        
+        if (index + 1 < currentStep) {
+          el.classList.add('completed');
+        } else if (index + 1 === currentStep) {
+          el.classList.add('current');
+        } else {
+          el.classList.add('pending');
+        }
+      });
+    }
+    
+    // Enter key to search
+    document.getElementById('orderInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') trackOrder();
+    });
+  </script>
+</body>
+</html>

@@ -26,82 +26,169 @@
       --shadow-md: 0 4px 16px rgba(13,42,34,0.08);
       --radius-sm: 8px;
       --radius-md: 12px;
+      --radius-lg: 16px;
     }
-    body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--brown); }
-    
+    body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--brown); min-height: 100vh; }
+
     .header { background: var(--white); padding: 16px; border-bottom: 1px solid var(--gray-200); }
     .header h1 { font-size: 1.25rem; }
     .back { color: var(--primary); text-decoration: none; font-size: 0.9rem; }
-    
-    .container { max-width: 600px; margin: 0 auto; padding: 24px 16px; }
-    
-    .section { background: var(--white); padding: 20px; border-radius: 12px; margin-bottom: 16px; }
-    .section h2 { font-size: 1rem; margin-bottom: 12px; }
-    
-    select, input, textarea { width: 100%; padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px; font-size: 1rem; margin-bottom: 12px; }
+
+    .container { max-width: 700px; margin: 0 auto; padding: 24px 16px; }
+
+    /* Flow Progress */
+    .flow-progress { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding: 0 16px; }
+    .flow-step { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
+    .flow-step::after { content: ''; position: absolute; top: 20px; left: 50%; width: 100%; height: 2px; background: var(--gray-200); z-index: 0; }
+    .flow-step:last-child::after { display: none; }
+    .flow-step.completed::after { background: var(--primary); }
+    .flow-step.active::after { background: linear-gradient(to right, var(--primary), var(--gray-200)); }
+    .step-number { width: 40px; height: 40px; border-radius: 50%; background: var(--gray-200); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; color: var(--gray-500); z-index: 1; transition: all 0.3s ease; }
+    .flow-step.active .step-number { background: var(--primary); color: var(--white); transform: scale(1.1); }
+    .flow-step.completed .step-number { background: var(--primary); color: var(--white); }
+    .step-label { margin-top: 8px; font-size: 0.8rem; color: var(--gray-500); font-weight: 500; }
+    .flow-step.active .step-label { color: var(--primary); font-weight: 600; }
+
+    /* Flow Steps */
+    .flow-content { position: relative; }
+    .flow-step-panel { display: none; animation: fadeIn 0.4s ease; }
+    .flow-step-panel.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .section { background: var(--white); padding: 24px; border-radius: var(--radius-lg); margin-bottom: 20px; box-shadow: var(--shadow-sm); }
+    .section h2 { font-size: 1.1rem; margin-bottom: 16px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+
+    select, input, textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 1rem; margin-bottom: 12px; transition: all 0.2s ease; }
+    select:focus, input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
     select { background: var(--white); }
-    
-    .product-list { display: grid; gap: 8px; }
-    .product-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--gray-100); border-radius: 8px; cursor: pointer; }
-    .product-item:hover { background: var(--gray-200); }
-    .product-item.selected { background: var(--primary); color: #fff; }
-    .product-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
-    
-    .preview { width: 100%; aspect-ratio: 1; background: var(--gray-100); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; color: #999; }
+
+    .product-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .product-item { padding: 16px; background: var(--gray-100); border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; }
+    .product-item:hover { background: var(--gray-200); transform: translateY(-2px); }
+    .product-item.selected { background: var(--primary-light); border-color: var(--primary); }
+    .product-item h3 { font-size: 0.9rem; margin-bottom: 4px; font-weight: 600; }
+    .product-item p { font-size: 0.75rem; color: var(--gray-500); }
+
+    .preview { width: 100%; aspect-ratio: 1; background: var(--gray-100); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: var(--gray-500); border: 2px dashed var(--gray-300); }
     .preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
-    
-    .btn { width: 100%; padding: 14px; background: var(--primary); color: #fff; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; }
-    .btn:disabled { opacity: 0.5; }
-    .btn-reset { background: var(--gray-200); color: var(--brown); margin-top: 8px; }
-    
-    .tips { font-size: 0.85rem; color: #666; line-height: 1.6; }
-    .tips li { margin-bottom: 8px; }
+
+    .btn { width: 100%; padding: 14px 24px; background: var(--primary); color: var(--white); border: none; border-radius: var(--radius-md); font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn:hover { background: var(--primary-dark); transform: translateY(-2px); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-secondary { background: var(--gray-200); color: var(--brown); margin-top: 12px; }
+    .btn-secondary:hover { background: var(--gray-300); }
+    .btn-back { background: transparent; color: var(--gray-500); border: 1px solid var(--gray-300); margin-right: 12px; width: auto; padding: 14px 24px; }
+    .btn-back:hover { background: var(--gray-100); color: var(--brown); }
+
+    .button-group { display: flex; gap: 12px; }
+
+    .tips { font-size: 0.85rem; color: var(--gray-500); line-height: 1.6; }
+    .tips li { margin-bottom: 12px; padding-left: 20px; position: relative; }
+    .tips li::before { content: '✓'; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
+    .tips strong { color: var(--brown); }
+
+    .prompt-display { background: var(--primary-light); padding: 16px; border-radius: var(--radius-md); border-left: 4px solid var(--primary); margin-bottom: 16px; }
+    .prompt-display h3 { font-size: 0.85rem; color: var(--primary); margin-bottom: 8px; font-weight: 600; }
+    .prompt-display p { font-size: 0.9rem; color: var(--brown); line-height: 1.5; }
   </style>
 </head>
 <body>
   <header class="header">
     <a href="cake-shop-owner.html" class="back">← Back to Admin</a>
-    <h1>Image Generator</h1>
+    <h1>Image Generator Flow</h1>
   </header>
 
   <main class="container">
-    <div class="section">
-      <h2>1. Select Product</h2>
-      <select id="productSelect" onchange="selectProduct()">
-        <option value="">Choose product...</option>
-      </select>
-      
-      <div id="productList" class="product-list"></div>
-    </div>
-
-    <div class="section">
-      <h2>2. Preview</h2>
-      <div class="preview" id="preview">
-        Select a product to see prompt
+    <!-- Flow Progress -->
+    <div class="flow-progress">
+      <div class="flow-step active" data-step="1">
+        <div class="step-number">1</div>
+        <div class="step-label">Select</div>
       </div>
-      <textarea id="prompt" rows="3" placeholder="Product prompt will appear here..."></textarea>
+      <div class="flow-step" data-step="2">
+        <div class="step-number">2</div>
+        <div class="step-label">Preview</div>
+      </div>
+      <div class="flow-step" data-step="3">
+        <div class="step-number">3</div>
+        <div class="step-label">Generate</div>
+      </div>
     </div>
 
-    <div class="section">
-      <h2>3. Generate</h2>
-      <button class="btn" id="generateBtn" onclick="openGenerator()" disabled>
-        Open Mercury Forge to Generate
-      </button>
-      <button class="btn btn-reset" onclick="resetPrompt()">
-        Reset Prompt
-      </button>
-    </div>
+    <div class="flow-content">
+      <!-- Step 1: Select Product -->
+      <div class="flow-step-panel active" data-panel="1">
+        <div class="section">
+          <h2>🎯 Select Product</h2>
+          <p style="margin-bottom: 16px; color: var(--gray-500); font-size: 0.9rem;">Choose a product to generate an image for</p>
+          <select id="productSelect" onchange="selectProduct()">
+            <option value="">Choose product...</option>
+          </select>
+          <div id="productList" class="product-list"></div>
+        </div>
+        <div class="button-group">
+          <button class="btn btn-back" onclick="goToStep(0)" disabled>← Back</button>
+          <button class="btn" id="step1Next" onclick="goToStep(2)" disabled>Next: Preview →</button>
+        </div>
+      </div>
 
-    <div class="section">
-      <h2>Tips</h2>
-      <ul class="tips">
-        <li>Click "Open Mercury Forge" to go to image generator</li>
-        <li>Enter the prompt shown above</li>
-        <li>Click FORGE CHROMIUM to generate</li>
-        <li><strong>Important:</strong> Right-click the generated image → Save Image As...</li>
-        <li>Save to: public/images/[product-name].jpg</li>
-        <li>Update image path in shop.html</li>
-      </ul>
+      <!-- Step 2: Preview -->
+      <div class="flow-step-panel" data-panel="2">
+        <div class="section">
+          <h2>👁️ Preview Prompt</h2>
+          <div class="prompt-display">
+            <h3>Selected Product</h3>
+            <p id="selectedProductName">-</p>
+          </div>
+          <div class="preview" id="preview">
+            <div style="text-align: center; padding: 20px;">
+              <div style="font-size: 2rem; margin-bottom: 8px;">📷</div>
+              <div>AI Image Prompt</div>
+            </div>
+          </div>
+          <textarea id="prompt" rows="4" placeholder="Product prompt will appear here..." readonly></textarea>
+        </div>
+        <div class="button-group">
+          <button class="btn btn-back" onclick="goToStep(1)">← Back</button>
+          <button class="btn" onclick="goToStep(3)">Next: Generate →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Generate -->
+      <div class="flow-step-panel" data-panel="3">
+        <div class="section">
+          <h2>🚀 Generate Image</h2>
+          <p style="margin-bottom: 16px; color: var(--gray-500); font-size: 0.9rem;">Open the image generator with your prompt</p>
+          <button class="btn" id="generateBtn" onclick="openGenerator()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            </svg>
+            Open Mercury Forge
+          </button>
+          <button class="btn btn-secondary" onclick="resetPrompt()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+            </svg>
+            Reset & Start Over
+          </button>
+        </div>
+        <div class="section">
+          <h2>📋 Instructions</h2>
+          <ul class="tips">
+            <li>Click "Open Mercury Forge" to go to image generator</li>
+            <li>The prompt will be pre-filled automatically</li>
+            <li>Click <strong>FORGE CHROMIUM</strong> to generate</li>
+            <li><strong>Important:</strong> Right-click the generated image → Save Image As...</li>
+            <li>Save to: <code>public/images/[product-name].jpg</code></li>
+            <li>Update image path in <code>products-config.json</code></li>
+          </ul>
+        </div>
+        <div class="button-group">
+          <button class="btn btn-back" onclick="goToStep(2)">← Back</button>
+          <button class="btn" onclick="goToStep(1)">Start Over</button>
+        </div>
+      </div>
     </div>
   </main>
 
@@ -118,20 +205,23 @@
       { id: 9, name: 'Heritage Gift Box Set', prompt: 'Luxury Chinese pastry gift box, various items inside, ribbon packaging, premium product photography' },
     ];
 
+    let currentStep = 1;
+    let selectedProduct = null;
+
     function init() {
       const list = document.getElementById('productList');
       const select = document.getElementById('productSelect');
-      
+
       products.forEach(p => {
         const opt = document.createElement('option');
         opt.value = p.id;
         opt.textContent = p.name;
         select.appendChild(opt);
-        
+
         const item = document.createElement('div');
         item.className = 'product-item';
         item.dataset.id = p.id;
-        item.innerHTML = `<span>${p.name}</span>`;
+        item.innerHTML = `<h3>${p.name}</h3><p>Click to select</p>`;
         item.onclick = () => selectProduct(p.id);
         list.appendChild(item);
       });
@@ -140,31 +230,61 @@
     function selectProduct(id) {
       const pid = id || document.getElementById('productSelect').value;
       const product = products.find(p => p.id == pid);
-      
+
       if (!product) return;
-      
+
+      selectedProduct = product;
+
       document.querySelectorAll('.product-item').forEach(el => {
         el.classList.toggle('selected', el.dataset.id == pid);
       });
-      
-      document.getElementById('prompt').value = product.prompt;
-      document.getElementById('preview').innerHTML = 'Product: ' + product.name;
-      document.getElementById('generateBtn').disabled = false;
+
+      document.getElementById('step1Next').disabled = false;
+    }
+
+    function goToStep(step) {
+      currentStep = step;
+
+      // Update progress indicators
+      document.querySelectorAll('.flow-step').forEach(el => {
+        const stepNum = parseInt(el.dataset.step);
+        el.classList.remove('active', 'completed');
+        if (stepNum < step) el.classList.add('completed');
+        if (stepNum === step) el.classList.add('active');
+      });
+
+      // Update panels
+      document.querySelectorAll('.flow-step-panel').forEach(el => {
+        el.classList.remove('active');
+      });
+      document.querySelector(`[data-panel="${step}"]`).classList.add('active');
+
+      // Update step 2 content if moving to step 2
+      if (step === 2 && selectedProduct) {
+        document.getElementById('selectedProductName').textContent = selectedProduct.name;
+        document.getElementById('prompt').value = selectedProduct.prompt;
+        document.getElementById('preview').innerHTML = `
+          <div style="text-align: center; padding: 20px;">
+            <div style="font-size: 2rem; margin-bottom: 8px;">🎨</div>
+            <div style="font-size: 0.9rem; color: var(--primary);">${selectedProduct.name}</div>
+          </div>
+        `;
+      }
     }
 
     function openGenerator() {
-      const prompt = document.getElementById('prompt').value;
-      if (prompt) {
-        // Open Mercury Forge with prompt
-        window.open('https://image-generator.sv9.workers.dev/', '_blank');
+      if (selectedProduct && selectedProduct.prompt) {
+        const generatorUrl = `https://image-generator.sv9.workers.dev/?prompt=${encodeURIComponent(selectedProduct.prompt)}`;
+        window.open(generatorUrl, '_blank');
       }
     }
 
     function resetPrompt() {
-      const product = products.find(p => p.id == document.getElementById('productSelect').value);
-      if (product) {
-        document.getElementById('prompt').value = product.prompt;
-      }
+      selectedProduct = null;
+      document.querySelectorAll('.product-item').forEach(el => el.classList.remove('selected'));
+      document.getElementById('productSelect').value = '';
+      document.getElementById('step1Next').disabled = true;
+      goToStep(1);
     }
 
     init();

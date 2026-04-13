@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LINE LIFF - Sweet Layers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://static.line-scdn.net/liff/edge/2/LineLiff.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #2A6B52; --primary-dark: #1F4A3A; --primary-light: #E8F5F0;
+      --accent: #C4A647; --accent-dark: #B3941A;
+      --cream: #FDF9F5; --brown: #3D2E22; --brown-light: #5A4535;
+      --gray-100: #F5EDE4; --gray-200: #E8DCD0; --gray-300: #D4C4B5;
+      --gray-400: #B8A08A; --gray-500: #9A7D6A; --white: #ffffff;
+      --radius-lg: 16px; --radius-xl: 24px;
+      --shadow-lg: 0 8px 30px rgba(13,42,34,0.12);
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--cream);
+      color: var(--brown);
+      min-height: 100vh;
+      padding: 16px;
+    }
+    
+    .liff-container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    
+    .subtitle {
+      color: var(--gray-500);
+      font-size: 0.9rem;
+    }
+    
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    
+    .action-btn {
+      background: var(--white);
+      border: none;
+      border-radius: var(--radius-lg);
+      padding: 20px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .action-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(13,42,34,0.15);
+    }
+    
+    .action-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+    
+    .action-title {
+      font-weight: 600;
+      color: var(--brown);
+      font-size: 0.9rem;
+    }
+    
+    .action-desc {
+      font-size: 0.75rem;
+      color: var(--gray-500);
+      margin-top: 4px;
+    }
+    
+    .featured-products {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: var(--primary);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    
+    .product-grid {
+      display: grid;
+      gap: 12px;
+    }
+    
+    .product-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px;
+      background: var(--cream);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .product-item:hover {
+      background: var(--primary-light);
+      transform: translateX(4px);
+    }
+    
+    .product-image {
+      width: 60px;
+      height: 60px;
+      border-radius: var(--radius-lg);
+      object-fit: cover;
+    }
+    
+    .product-info {
+      flex: 1;
+    }
+    
+    .product-name {
+      font-weight: 600;
+      color: var(--brown);
+      margin-bottom: 4px;
+    }
+    
+    .product-price {
+      color: var(--accent);
+      font-weight: 700;
+    }
+    
+    .cart-summary {
+      background: var(--primary);
+      color: white;
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    
+    .cart-count {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .cart-total {
+      font-size: 1.25rem;
+      margin-bottom: 16px;
+    }
+    
+    .checkout-btn {
+      background: var(--accent);
+      color: var(--brown);
+      border: none;
+      border-radius: var(--radius-lg);
+      padding: 12px 24px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+    
+    .checkout-btn:hover {
+      background: var(--accent-dark);
+      transform: translateY(-2px);
+    }
+    
+    .contact-info {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      color: var(--gray-500);
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--gray-500);
+    }
+    
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--gray-200);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="liff-container">
+    <header class="header">
+      <div class="logo">🎂 Sweet Layers</div>
+      <div class="subtitle">สั่งเค้กง่ายๆ ผ่าน LINE</div>
+    </header>
+
+    <div id="loading" class="loading">
+      <div class="loading-spinner"></div>
+      <div>กำลังเชื่อมต่อ...</div>
+    </div>
+
+    <div id="main-content" style="display: none;">
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <button class="action-btn" onclick="openCustomCake()">
+          <span class="action-icon">🎂</span>
+          <span class="action-title">สั่งทำเค้ก</span>
+          <span class="action-desc">ออกแบบเอง</span>
+        </button>
+        
+        <button class="action-btn" onclick="openShop()">
+          <span class="action-icon">🛍️</span>
+          <span class="action-title">ร้านค้า</span>
+          <span class="action-desc">เค้กพร้อมส่ง</span>
+        </button>
+        
+        <button class="action-btn" onclick="openOrders()">
+          <span class="action-icon">📋</span>
+          <span class="action-title">ออเดอร์ของฉัน</span>
+          <span class="action-desc">ติดตามสถานะ</span>
+        </button>
+        
+        <button class="action-btn" onclick="contactSupport()">
+          <span class="action-icon">💬</span>
+          <span class="action-title">ติดต่อเรา</span>
+          <span class="action-desc">สอบถามข้อมูล</span>
+        </button>
+      </div>
+
+      <!-- Cart Summary -->
+      <div class="cart-summary">
+        <div class="cart-count" id="cartCount">0</div>
+        <div class="cart-total" id="cartTotal">฿0</div>
+        <button class="checkout-btn" onclick="checkout()">ดำเนินการชำระเงิน</button>
+      </div>
+
+      <!-- Featured Products -->
+      <div class="featured-products">
+        <h3 class="section-title">🔥 เค้กยอดนิยม</h3>
+        <div class="product-grid" id="productGrid">
+          <!-- Products loaded by JS -->
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="contact-info">
+        <div class="contact-item">
+          <span>📱</span>
+          <span>084-087-1065</span>
+        </div>
+        <div class="contact-item">
+          <span>🕐</span>
+          <span>จันทร์ - เสาร์: 9:00 - 18:00</span>
+        </div>
+        <div class="contact-item">
+          <span>📍</span>
+          <span>กรุงเทพและปริมณฑล</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/line-integration.js"></script>
+  <script>
+    // LIFF Configuration
+    const LIFF_ID = '2008523083-1KKafaGY'; // Your LIFF ID
+    const LINE_CHANNEL_ID = '2008523083';
+    const LINE_CHANNEL_SECRET = '65f763d0af5e321d166cdeff84198182';
+    const LINE_ACCESS_TOKEN = 'f2d21879e9a8f2fdad6625c726a2f5bd';
+    
+    // Products data - using existing images
+    const featuredProducts = [
+      { id: 1, name: 'เค้กช็อกโกแลต', price: 450, image: '/images/mooncake-traditional.webp' },
+      { id: 2, name: 'เค้กสตรอเบอร์รี่', price: 480, image: '/images/pandan-custard.webp' },
+      { id: 3, name: 'เค้กมัทฉะ', price: 520, image: '/images/black-sesame.webp' },
+      { id: 4, name: 'เค้กวานิลลา', price: 420, image: '/images/red-bean.webp' }
+    ];
+
+    // Initialize LIFF
+    async function initializeLIFF() {
+      try {
+        // Check if liff is available (might not load due to CSP or not in LINE)
+        if (typeof liff === 'undefined') {
+          console.log('LIFF not available, running in browser mode');
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('main-content').style.display = 'block';
+          loadCart();
+          loadProducts();
+          return;
+        }
+        
+        await liff.init({ liffId: LIFF_ID });
+        
+        if (liff.isLoggedIn()) {
+          // เชื่อมต่อสำเร็จ
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('main-content').style.display = 'block';
+          
+          // สร้าง LINE Integration instance
+          window.lineIntegration = new LINEIntegration();
+          await window.lineIntegration.connectLINE();
+          
+          // โหลดข้อมูล
+          loadCart();
+          loadProducts();
+        } else {
+          // ถ้ายังไม่ login ให้ทำการ login
+          liff.login();
+        }
+      } catch (error) {
+        console.error('LIFF Initialization Error:', error);
+        document.getElementById('loading').innerHTML = `
+          <div>❌ เกิดข้อผิดพลาดในการเชื่อมต่อ</div>
+          <button onclick="location.reload()" style="margin-top: 16px; padding: 8px 16px; background: var(--primary); color: white; border: none; border-radius: 8px;">ลองใหม่</button>
+        `;
+      }
+    }
+
+    // Load cart data
+    function loadCart() {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const count = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+      const total = cart.reduce((sum, item) => sum + (item.price * (item.qty || 1)), 0);
+      
+      document.getElementById('cartCount').textContent = count;
+      document.getElementById('cartTotal').textContent = `฿${total}`;
+    }
+
+    // Load products
+    function loadProducts() {
+      const productGrid = document.getElementById('productGrid');
+      productGrid.innerHTML = featuredProducts.map(product => `
+        <div class="product-item" onclick="addToCart(${product.id})">
+          <img src="${product.image}" alt="${product.name}" class="product-image">
+          <div class="product-info">
+            <div class="product-name">${product.name}</div>
+            <div class="product-price">฿${product.price}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Add to cart
+    function addToCart(productId) {
+      const product = featuredProducts.find(p => p.id === productId);
+      if (!product) return;
+
+      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const existing = cart.find(item => item.name === product.name);
+      
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({
+          ...product,
+          qty: 1
+        });
+      }
+      
+      localStorage.setItem('cart', JSON.stringify(cart));
+      loadCart();
+      
+      // แจ้งเตือนผ่าน LINE (ถ้าเชื่อมต่ออยู่)
+      if (window.lineIntegration) {
+        window.lineIntegration.sendLINEMessage({
+          type: 'text',
+          text: `🛒 เพิ่ม ${product.name} ลงตะกร้าแล้ว`
+        });
+      }
+    }
+
+    // Navigation functions
+    function openCustomCake() {
+      liff.openWindow({
+        url: `https://bizcommerz-cake-shop.pages.dev/custom-cake.html`,
+        external: false
+      });
+    }
+
+    function openShop() {
+      liff.openWindow({
+        url: `https://bizcommerz-cake-shop.pages.dev/shop.html`,
+        external: false
+      });
+    }
+
+    function openOrders() {
+      liff.openWindow({
+        url: `https://bizcommerz-cake-shop.pages.dev/profile.html`,
+        external: false
+      });
+    }
+
+    function checkout() {
+      liff.openWindow({
+        url: `https://bizcommerz-cake-shop.pages.dev/checkout.html`,
+        external: false
+      });
+    }
+
+    function contactSupport() {
+      liff.openWindow({
+        url: 'https://lin.ee/your-line-id',
+        external: true
+      });
+    }
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', initializeLIFF);
+  </script>
+</body>
+</html>

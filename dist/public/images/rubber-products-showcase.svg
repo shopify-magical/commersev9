@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f7fafc"/>
+      <stop offset="100%" style="stop-color:#edf2f7"/>
+    </linearGradient>
+    <linearGradient id="cardGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff"/>
+      <stop offset="100%" style="stop-color:#f7fafc"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="600" height="300" fill="url(#bgGradient)"/>
+  
+  <!-- Title -->
+  <text x="300" y="35" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#2d3748" text-anchor="middle">Rubber Plus Products</text>
+  
+  <!-- Product 1: Latex Container -->
+  <g transform="translate(30, 60)">
+    <rect width="160" height="200" rx="12" fill="url(#cardGradient)" filter="url(#cardShadow)"/>
+    
+    <!-- Latex Container Illustration -->
+    <g transform="translate(30, 30)">
+      <ellipse cx="50" cy="80" rx="35" ry="10" fill="#4a5568"/>
+      <path d="M15 40 L15 75 Q15 85 50 85 Q85 85 85 75 L85 40" fill="#4a5568"/>
+      <ellipse cx="50" cy="40" rx="35" ry="10" fill="#718096" stroke="#4a5568" stroke-width="1"/>
+      <ellipse cx="50" cy="40" rx="30" ry="8" fill="#2d3748"/>
+      <ellipse cx="50" cy="43" rx="27" ry="6" fill="#f5e6d3"/>
+      <ellipse cx="42" cy="41" rx="10" ry="2" fill="rgba(255,255,255,0.4)"/>
+    </g>
+    
+    <text x="80" y="160" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2d3748" text-anchor="middle">Natural Latex</text>
+    <text x="80" y="180" font-family="Arial, sans-serif" font-size="11" fill="#718096" text-anchor="middle">Premium Quality</text>
+  </g>
+  
+  <!-- Product 2: Rubber Sheet -->
+  <g transform="translate(220, 60)">
+    <rect width="160" height="200" rx="12" fill="url(#cardGradient)" filter="url(#cardShadow)"/>
+    
+    <!-- Rubber Sheet Illustration -->
+    <g transform="translate(30, 30)">
+      <path d="M10 50 L20 30 L80 30 L90 50 L80 70 L20 70 Z" fill="#edf2f7" stroke="#cbd5e0" stroke-width="1"/>
+      <path d="M15 45 L25 25 L85 25 L95 45 L85 65 L25 65 Z" fill="#f7fafc" stroke="#cbd5e0" stroke-width="1"/>
+      <path d="M20 40 L30 20 L90 20 L100 40 L90 60 L30 60 Z" fill="#ffffff" stroke="#cbd5e0" stroke-width="1"/>
+      <rect x="40" y="35" width="30" height="10" rx="1" fill="#2A6B52"/>
+      <text x="55" y="43" font-family="Arial, sans-serif" font-size="6" font-weight="bold" fill="white" text-anchor="middle">A+</text>
+    </g>
+    
+    <text x="80" y="160" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2d3748" text-anchor="middle">Rubber Sheets</text>
+    <text x="80" y="180" font-family="Arial, sans-serif" font-size="11" fill="#718096" text-anchor="middle">Various Thickness</text>
+  </g>
+  
+  <!-- Product 3: Rubber Block -->
+  <g transform="translate(410, 60)">
+    <rect width="160" height="200" rx="12" fill="url(#cardGradient)" filter="url(#cardShadow)"/>
+    
+    <!-- Rubber Block Illustration -->
+    <g transform="translate(30, 25)">
+      <path d="M50 10 L80 27 L50 44 L20 27 Z" fill="#718096" stroke="#4a5568" stroke-width="1"/>
+      <path d="M20 27 L20 60 L50 77 L50 44 Z" fill="#2d3748" stroke="#1a202c" stroke-width="1"/>
+      <path d="M50 44 L50 77 L80 60 L80 27 Z" fill="#4a5568" stroke="#2d3748" stroke-width="1"/>
+      <circle cx="50" cy="27" r="8" fill="none" stroke="#2A6B52" stroke-width="1.5"/>
+      <text x="50" y="30" font-family="Arial, sans-serif" font-size="5" font-weight="bold" fill="#2A6B52" text-anchor="middle">A+</text>
+    </g>
+    
+    <text x="80" y="160" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2d3748" text-anchor="middle">Processed Rubber</text>
+    <text x="80" y="180" font-family="Arial, sans-serif" font-size="11" fill="#718096" text-anchor="middle">Industrial Grade</text>
+  </g>
+  
+  <!-- Decorative Elements -->
+  <circle cx="50" cy="270" r="8" fill="#2A6B52" opacity="0.2"/>
+  <circle cx="550" cy="270" r="8" fill="#2A6B52" opacity="0.2"/>
+  <circle cx="300" cy="280" r="5" fill="#ba8636" opacity="0.3"/>
+</svg>

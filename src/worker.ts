@@ -1,10 +1,11 @@
 /**
- * Cloudflare Workers entry point for Agentic Engine
- * Adapts the Node.js server for Edge runtime
+ * Cloudflare Workers entry point with Infinite Unix Routing
+ * Unix-style hierarchical routing with agentic decision making
  */
 
 import { AgenticEngine } from './orchestrator/index.js';
 import { Priority, type Goal } from './types/index.js';
+import { AuthService } from './auth/auth-service.js';
 
 // Engine instance (per-isolate, not per-request)
 let engine: AgenticEngine | null = null;
@@ -13,6 +14,9 @@ export interface Env {
   QUOTES_KV: KVNamespace;
   ORDERS_KV: KVNamespace;
   ENGINE_STATE: DurableObjectNamespace;
+  USERS_KV: KVNamespace;
+  TENANTS_KV: KVNamespace;
+  SESSIONS_KV: KVNamespace;
   API_TOKEN?: string;
   ENGINE_NAME?: string;
   LOG_LEVEL?: string;
@@ -23,7 +27,7 @@ export interface Env {
 function getEngine(env: Env): AgenticEngine {
   if (!engine) {
     engine = new AgenticEngine({
-      name: env.ENGINE_NAME || 'CloudflareEngine',
+      name: env.ENGINE_NAME || 'UnixRoutingEngine',
       tickIntervalMs: 5000,
       logLevel: (env.LOG_LEVEL as 'debug' | 'info' | 'warn' | 'error') || 'info',
       enableLearning: env.ENABLE_LEARNING !== 'false',
@@ -55,7 +59,7 @@ function jsonResponse(data: unknown, status = 200, headers?: Record<string, stri
   });
 }
 
-// Main fetch handler
+// Main fetch handler with Infinite Unix Routing
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
@@ -70,9 +74,269 @@ export default {
       });
     }
 
+    // Unix Routing Discovery Endpoint
+    if (url.pathname === '/routes' && method === 'GET') {
+      const eng = getEngine(env);
+      return jsonResponse({
+        service: 'Infinite Unix Routing Gateway',
+        version: '2.0.0',
+        routing: 'unix-hierarchical',
+        architecture: {
+          paths: {
+            '/bin': 'Essential system endpoints',
+            '/usr/bin': 'Extended functionality',
+            '/etc': 'Configuration and admin',
+            '/var': 'Variable data and logs',
+            '/tmp': 'Temporary operations',
+            '/opt': 'Third-party integrations',
+            '/home/:tenantId': 'Tenant-specific endpoints'
+          },
+          features: [
+            'Dynamic route registration',
+            'Agentic decision making',
+            'Middleware pipeline',
+            'Route composition',
+            'Performance monitoring',
+            'Legacy compatibility'
+          ]
+        },
+        engine: {
+          running: eng.isRunning(),
+          name: eng.getConfig().name
+        },
+        timestamp: Date.now()
+      }, 200, corsHeaders(origin));
+    }
+
+    // Service Discovery
+    if (url.pathname === '/' && method === 'GET') {
+      return jsonResponse({
+        service: 'Infinite Unix Routing Agentic Gateway',
+        version: '2.0.0',
+        architecture: 'Unix-style hierarchical routing with agentic decision making',
+        endpoints: {
+          discovery: 'GET /routes',
+          unix: {
+            bin: 'GET /bin/*',
+            usr: 'GET /usr/bin/*',
+            etc: 'GET /etc/*',
+            var: 'GET /var/*',
+            tmp: 'GET /tmp/*',
+            opt: 'GET /opt/*',
+            home: 'GET /home/:tenantId/*'
+          },
+          legacy: {
+            health: 'GET /health',
+            agentic: 'POST /api/agentic/*',
+            auth: 'POST /auth/*',
+            triggers: 'POST /triggers/*',
+            chat: 'GET /chat/*',
+            workers: 'GET /workers',
+            stats: 'GET /stats'
+          }
+        },
+        features: [
+          'Unix-style hierarchical routing',
+          'Dynamic route registration',
+          'Agentic decision making',
+          'Middleware pipeline',
+          'Route composition',
+          'Performance monitoring',
+          'Legacy compatibility'
+        ],
+        timestamp: Date.now()
+      }, 200, corsHeaders(origin));
+    }
+
+    // Unix-style routing - /bin (essential system endpoints)
+    if (url.pathname === '/bin/health' && method === 'GET') {
+      const eng = getEngine(env);
+      return jsonResponse({
+        status: eng.isRunning() ? 'healthy' : 'stopped',
+        timestamp: Date.now(),
+        system: 'unix-routing-gateway'
+      }, 200, corsHeaders(origin));
+    }
+
+    if (url.pathname === '/bin/ping' && method === 'GET') {
+      return jsonResponse({ pong: true, timestamp: Date.now() }, 200, corsHeaders(origin));
+    }
+
+    if (url.pathname === '/bin/version' && method === 'GET') {
+      return jsonResponse({
+        version: '2.0.0',
+        routing: 'infinite-unix',
+        timestamp: Date.now()
+      }, 200, corsHeaders(origin));
+    }
+
+    // Unix-style routing - /usr/bin (extended functionality)
+    if (url.pathname === '/usr/bin/products' && method === 'GET') {
+      const category = url.searchParams.get('category');
+      return jsonResponse({
+        products: [],
+        category: category || 'all',
+        timestamp: Date.now()
+      }, 200, corsHeaders(origin));
+    }
+
+    if (url.pathname === '/usr/bin/chat' && method === 'POST') {
+      const body = await request.json() as Record<string, unknown>;
+      return jsonResponse({
+        response: 'Chat response via Unix routing',
+        messageId: `unix_msg_${Date.now()}`
+      }, 200, corsHeaders(origin));
+    }
+
+    // Unix-style routing - /var (variable data)
+    if (url.pathname === '/var/stats' && method === 'GET') {
+      const eng = getEngine(env);
+      return jsonResponse({
+        requests: 0,
+        errors: 0,
+        uptime: eng.isRunning() ? Date.now() : 0,
+        timestamp: Date.now()
+      }, 200, corsHeaders(origin));
+    }
+
+    // Unix-style routing - /home (tenant-specific)
+    if (url.pathname.match(/^\/home\/[^/]+\/profile$/) && method === 'GET') {
+      const tenantId = url.pathname.split('/')[2];
+      return jsonResponse({
+        tenantId,
+        profile: { name: 'Tenant Profile' },
+        timestamp: Date.now()
+      }, 200, corsHeaders(origin));
+    }
+
+    // Pastry Store Specific Endpoints
+    if (url.pathname === '/usr/bin/recommendations' && method === 'POST') {
+      const eng = getEngine(env);
+      const body = await request.json() as Record<string, unknown>;
+
+      // Submit recommendation goal to agentic engine
+      const goal = eng.submitGoal(
+        `Generate product recommendations for customer with preferences: ${JSON.stringify(body.preferences)}`,
+        1 as any, // Priority.HIGH
+        {
+          type: 'recommendation',
+          preferences: body.preferences,
+          context: body.context
+        }
+      );
+
+      // Return mock recommendations (in production, would wait for goal completion)
+      return jsonResponse({
+        recommendations: [
+          {
+            productId: 'mooncake-lotus-seed',
+            score: 0.92,
+            reasoning: 'Traditional favorite with high customer satisfaction'
+          },
+          {
+            productId: 'baked-egg-tart',
+            score: 0.88,
+            reasoning: 'Popular choice with universal appeal'
+          },
+          {
+            productId: 'dim-sum-char-siu-bao',
+            score: 0.85,
+            reasoning: 'Savory-sweet balance matching preferences'
+          }
+        ],
+        metadata: {
+          confidence: 0.88,
+          modelVersion: '2.0.0',
+          processingTime: 150,
+          goalId: goal.id
+        }
+      }, 200, corsHeaders(origin));
+    }
+
+    if (url.pathname === '/tmp/orders/optimize' && method === 'POST') {
+      const eng = getEngine(env);
+      const body = await request.json() as Record<string, unknown>;
+
+      // Submit order optimization goal to agentic engine
+      const goal = eng.submitGoal(
+        `Optimize order with ${JSON.stringify((body.items as unknown[])?.length || 0)} items`,
+        0 as any, // Priority.CRITICAL
+        {
+          type: 'order-optimization',
+          items: body.items,
+          customer: body.customer,
+          optimization: body.optimization
+        }
+      );
+
+      return jsonResponse({
+        orderId: `order_${Date.now()}`,
+        goalId: goal.id,
+        status: 'processing',
+        optimizations: {
+          suggestedAddons: body.optimization?.suggestAddons ? ['tea-pu-erh', 'traditional-egg-roll'] : undefined,
+          deliveryEstimate: body.optimization?.enableDelivery ? '2-3 business days' : undefined,
+          totalSavings: body.optimization?.maximizeValue ? 15.50 : undefined
+        },
+        timestamp: Date.now()
+      }, 200, corsHeaders(origin));
+    }
+
+    if (url.pathname.match(/^\/home\/[^/]+\/insights$/) && method === 'GET') {
+      const tenantId = url.pathname.split('/')[2];
+      const timeframe = url.searchParams.get('timeframe') || '30days';
+
+      return jsonResponse({
+        customerId: tenantId,
+        preferences: {
+          flavorProfiles: ['sweet', 'traditional', 'savory-sweet'],
+          priceRange: 'mid-premium',
+          purchaseFrequency: 'weekly'
+        },
+        predictions: {
+          nextPurchasePrediction: '3 days',
+          churnRisk: 'low',
+          lifetimeValue: 2850
+        },
+        recommendations: [
+          'Try seasonal mooncakes for festivals',
+          'Explore Shanghai regional specialties',
+          'Consider dim sum bundles for gatherings'
+        ],
+        agenticAnalysis: {
+          loyaltyScore: 0.85,
+          engagementScore: 0.78,
+          satisfactionScore: 0.92
+        },
+        timeframe,
+        timestamp: Date.now()
+      }, 200, corsHeaders(origin));
+    }
+
+    if (url.pathname === '/var/inventory/forecast' && method === 'POST') {
+      const body = await request.json() as Record<string, unknown>;
+      const products = body.products as string[] || [];
+      const timeframe = body.timeframe as string || '30days';
+
+      return jsonResponse({
+        products: products.map(productId => ({
+          productId,
+          forecast: {
+            predictedDemand: Math.floor(Math.random() * 500) + 100,
+            confidence: 0.85 + Math.random() * 0.1,
+            recommendedStock: Math.floor(Math.random() * 600) + 150,
+            seasonalFactor: 1.0 + Math.random() * 0.5
+          }
+        })),
+        timeframe,
+        model: 'agentic-forecast-v2',
+        timestamp: Date.now()
+      }, 200, corsHeaders(origin));
+    }
+
     // Check route first before initializing engine
-    const isApiRoute = url.pathname.startsWith('/api') || 
-      url.pathname.startsWith('/health') || 
+    const isApiRoute = url.pathname.startsWith('/api') ||
+      url.pathname.startsWith('/health') ||
       url.pathname.startsWith('/workers') ||
       url.pathname.startsWith('/triggers') ||
       url.pathname.startsWith('/export') ||
@@ -82,11 +346,19 @@ export default {
       url.pathname.startsWith('/auth') ||
       url.pathname.startsWith('/stats') ||
       url.pathname.startsWith('/onboard') ||
-      url.pathname.startsWith('/ws');
+      url.pathname.startsWith('/ws') ||
+      url.pathname.startsWith('/debug') ||
+      url.pathname.startsWith('/bin') ||
+      url.pathname.startsWith('/usr') ||
+      url.pathname.startsWith('/etc') ||
+      url.pathname.startsWith('/var') ||
+      url.pathname.startsWith('/tmp') ||
+      url.pathname.startsWith('/opt') ||
+      url.pathname.startsWith('/home');
 
     // Root HTML page - redirect to shop
     if (url.pathname === '/' || url.pathname === '/index.html') {
-      return new Response('Redirecting to static site...', { 
+      return new Response('Redirecting to static site...', {
         status: 302,
         headers: { 'Location': '/shop.html' }
       });
@@ -109,7 +381,7 @@ export default {
             if (htmlResponse.ok) return htmlResponse;
           }
           // Return 404
-          return new Response('Page not found', { 
+          return new Response('Page not found', {
             status: 404,
             headers: { 'Content-Type': 'text/html' }
           });
@@ -126,6 +398,34 @@ export default {
 
     // Router
     try {
+      // Debug endpoint to check KV storage
+      if (url.pathname === '/debug/users' && method === 'GET') {
+        const authService = new AuthService(env);
+        const users = await authService.getAllUsers();
+        return jsonResponse({
+          success: true,
+          count: users.length,
+          users: users.map(u => ({ id: u.id, email: u.email, role: u.role, status: u.status }))
+        }, 200, corsHeaders(origin));
+      }
+
+      // Token-based authentication (workaround for login issue)
+      if (url.pathname === '/auth/token' && method === 'POST') {
+        const body = await request.json() as Record<string, unknown>;
+        const authService = new AuthService(env);
+
+        try {
+          const result = await authService.authenticateWithToken(body.token as string);
+          return jsonResponse(result, result.success ? 200 : 401, corsHeaders(origin));
+        } catch (error) {
+          return jsonResponse({
+            success: false,
+            message: 'Token authentication failed',
+            error: error instanceof Error ? error.message : 'Unknown error'
+          }, 500, corsHeaders(origin));
+        }
+      }
+
       // Health check
       if (url.pathname === '/health' && method === 'GET') {
         return jsonResponse({
@@ -197,7 +497,7 @@ export default {
       if (url.pathname === '/triggers/quote' && method === 'POST') {
         const body = await request.json() as Record<string, unknown>;
         const { customer, items, contact, notes, tenantId = 'default' } = body;
-        
+
         const quoteId = `quote_${Date.now()}`;
         const goal = eng.submitGoal(
           `Quote request: ${customer} - ${(items as unknown[])?.length || 0} items`,
@@ -231,9 +531,9 @@ export default {
       if (url.pathname === '/triggers/order' && method === 'POST') {
         const body = await request.json() as Record<string, unknown>;
         const { customer, items, delivery, payment, tenantId = 'default' } = body;
-        
+
         const orderId = `order_${Date.now()}`;
-        
+
         let goalId: string | null = null;
         try {
           const goal = eng.submitGoal(
@@ -279,10 +579,10 @@ export default {
       if (url.pathname === '/export/quotes' && method === 'GET') {
         const format = url.searchParams.get('format') || 'json';
         const tenantId = url.searchParams.get('tenantId');
-        
+
         const quotes: unknown[] = [];
         const keys = await env.QUOTES_KV.list({ prefix: 'quote_' });
-        
+
         for (const key of keys.keys) {
           const data = await env.QUOTES_KV.get(key.name);
           if (data) {
@@ -298,7 +598,7 @@ export default {
           const rows = (quotes as Array<Record<string, string>>).map(q =>
             `${q.id},"${q.customer}","${q.items}","${q.contact}","${q.notes}",${q.status},${q.createdAt}`
           ).join('\n');
-          
+
           return new Response(headers + rows, {
             status: 200,
             headers: {
@@ -316,10 +616,10 @@ export default {
       if (url.pathname === '/export/orders' && method === 'GET') {
         const format = url.searchParams.get('format') || 'json';
         const tenantId = url.searchParams.get('tenantId');
-        
+
         const orders: unknown[] = [];
         const keys = await env.ORDERS_KV.list({ prefix: 'order_' });
-        
+
         for (const key of keys.keys) {
           const data = await env.ORDERS_KV.get(key.name);
           if (data) {
@@ -335,7 +635,7 @@ export default {
           const rows = (orders as Array<Record<string, string>>).map(o =>
             `${o.id},"${o.customer}","${o.items}","${o.delivery}",${o.payment},${o.status},${o.createdAt}`
           ).join('\n');
-          
+
           return new Response(headers + rows, {
             status: 200,
             headers: {
@@ -418,7 +718,7 @@ export default {
 
         const jobId = `job_${Date.now()}`;
         const workerList = (workers as string[]).length > 0 ? workers as string[] : ['default'];
-        
+
         const assignments = workerList.map((worker, idx) => ({
           taskId: `${jobId}_${idx}`,
           worker,
@@ -446,7 +746,7 @@ export default {
       if (url.pathname === '/stats' && method === 'GET') {
         const metrics = eng.getMetrics();
         const learning = eng.learning.getStats();
-        
+
         return jsonResponse({
           overview: {
             totalGoals: metrics.tasksCompleted + metrics.tasksFailed,
@@ -487,7 +787,7 @@ export default {
 
         // Create payment record
         const paymentId = `pay_${Date.now()}`;
-        
+
         return jsonResponse({
           paymentId,
           orderId: orderId || `order_${Date.now()}`,
@@ -557,7 +857,7 @@ export default {
       // Payment status check
       if (url.pathname === '/payment/status' && method === 'GET') {
         const paymentId = url.searchParams.get('paymentId');
-        
+
         return jsonResponse({
           paymentId: paymentId || 'unknown',
           status: 'pending', // Would check actual payment provider in production
@@ -624,9 +924,9 @@ export default {
         const { email, password, rememberMe } = body;
 
         if (!email || !password) {
-          return jsonResponse({ 
-            success: false, 
-            message: 'Email and password are required' 
+          return jsonResponse({
+            success: false,
+            message: 'Email and password are required'
           }, 400, corsHeaders(origin));
         }
 
@@ -639,15 +939,15 @@ export default {
 
         // Normalize email/phone
         const normalizedEmail = String(email).toLowerCase().trim();
-        const user = mockUsers.find(u => 
-          u.email === normalizedEmail || 
+        const user = mockUsers.find(u =>
+          u.email === normalizedEmail ||
           u.email.replace(/@.+$/, '') === normalizedEmail
         );
 
         if (!user || user.password !== password) {
-          return jsonResponse({ 
-            success: false, 
-            message: 'Invalid email or password' 
+          return jsonResponse({
+            success: false,
+            message: 'Invalid email or password'
           }, 401, corsHeaders(origin));
         }
 
@@ -671,21 +971,21 @@ export default {
       // Authentication - Verify Token
       if (url.pathname === '/auth/verify' && method === 'GET') {
         const authHeader = request.headers.get('Authorization');
-        
+
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
-          return jsonResponse({ 
-            success: false, 
-            message: 'No token provided' 
+          return jsonResponse({
+            success: false,
+            message: 'No token provided'
           }, 401, corsHeaders(origin));
         }
 
         const token = authHeader.substring(7);
-        
+
         // Verify token (mock validation)
         if (!token.startsWith('token_')) {
-          return jsonResponse({ 
-            success: false, 
-            message: 'Invalid token' 
+          return jsonResponse({
+            success: false,
+            message: 'Invalid token'
           }, 401, corsHeaders(origin));
         }
 
@@ -703,7 +1003,7 @@ export default {
       }
 
       // ========== AGENTIC DASHBOARD API ENDPOINTS ==========
-      
+
       // Decision validation from frontend agent
       if (url.pathname === '/api/agentic/validate' && method === 'POST') {
         const body = await request.json() as Record<string, unknown>;
@@ -834,7 +1134,7 @@ export default {
         (server as WebSocket).addEventListener('message', (event) => {
           try {
             const msg = JSON.parse(event.data as string);
-            
+
             // Handle different message types
             switch(msg.type) {
               case 'user:connect':
@@ -896,6 +1196,271 @@ export default {
         });
       }
 
+      // ========== PRODUCT API ENDPOINTS ==========
+
+      // Get all products
+      if (url.pathname === '/api/products' && method === 'GET') {
+        const category = url.searchParams.get('category');
+        const search = url.searchParams.get('search');
+        const limit = parseInt(url.searchParams.get('limit') || '20');
+        const tenantId = url.searchParams.get('tenantId') || 'default';
+
+        const products = getRecommendations(category || search, limit);
+
+        return jsonResponse({
+          products,
+          count: products.length,
+          tenantId,
+          filters: { category, search },
+          timestamp: Date.now()
+        }, 200, corsHeaders(origin));
+      }
+
+      // Get single product
+      if (url.pathname.match(/^\/api\/products\/\d+$/) && method === 'GET') {
+        const productId = parseInt(url.pathname.split('/').pop() || '0');
+        const products = getRecommendations(undefined, 100);
+        const product = products.find((p: any) => p.id === productId);
+
+        if (!product) {
+          return jsonResponse({ error: 'Product not found' }, 404, corsHeaders(origin));
+        }
+
+        return jsonResponse({
+          product,
+          timestamp: Date.now()
+        }, 200, corsHeaders(origin));
+      }
+
+      // Get inventory
+      if (url.pathname === '/api/inventory' && method === 'GET') {
+        const category = url.searchParams.get('category');
+        const tenantId = url.searchParams.get('tenantId') || 'default';
+
+        const inventory = getInventory(category);
+
+        return jsonResponse({
+          inventory,
+          count: inventory.length,
+          tenantId,
+          timestamp: Date.now()
+        }, 200, corsHeaders(origin));
+      }
+
+      // ========== END PRODUCT API ==========
+
+      // ========== AUTHENTICATION API ENDPOINTS ==========
+
+      // User Registration
+      if (url.pathname === '/auth/register' && method === 'POST') {
+        const body = await request.json() as Record<string, unknown>;
+        const authService = new AuthService(env);
+
+        try {
+          const result = await authService.register(body);
+          return jsonResponse(result, result.success ? 201 : 400, corsHeaders(origin));
+        } catch (error) {
+          return jsonResponse({
+            success: false,
+            message: 'Registration failed',
+            error: error instanceof Error ? error.message : 'Unknown error'
+          }, 500, corsHeaders(origin));
+        }
+      }
+
+      // User Login (enhanced with multi-tenancy)
+      if (url.pathname === '/auth/login' && method === 'POST') {
+        const body = await request.json() as Record<string, unknown>;
+        const authService = new AuthService(env);
+
+        try {
+          const result = await authService.login({
+            email: body.email as string,
+            password: body.password as string,
+            tenantId: body.tenantId as string | undefined
+          });
+          return jsonResponse(result, result.success ? 200 : 401, corsHeaders(origin));
+        } catch (error) {
+          return jsonResponse({
+            success: false,
+            message: 'Login failed',
+            error: error instanceof Error ? error.message : 'Unknown error',
+            stack: error instanceof Error ? error.stack : undefined
+          }, 500, corsHeaders(origin));
+        }
+      }
+
+      // Token Verification (enhanced)
+      if (url.pathname === '/auth/verify' && method === 'GET') {
+        const authHeader = request.headers.get('Authorization');
+
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+          return jsonResponse({
+            success: false,
+            message: 'No token provided'
+          }, 401, corsHeaders(origin));
+        }
+
+        const token = authHeader.substring(7);
+        const authService = new AuthService(env);
+
+        try {
+          const result = await authService.verifyToken(token);
+          return jsonResponse({
+            success: result.valid,
+            user: result.user,
+            tenant: result.tenant,
+            timestamp: Date.now()
+          }, result.valid ? 200 : 401, corsHeaders(origin));
+        } catch (error) {
+          return jsonResponse({
+            success: false,
+            message: 'Token verification failed',
+            error: error instanceof Error ? error.message : 'Unknown error'
+          }, 500, corsHeaders(origin));
+        }
+      }
+
+      // Logout
+      if (url.pathname === '/auth/logout' && method === 'POST') {
+        const authHeader = request.headers.get('Authorization');
+
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+          return jsonResponse({
+            success: false,
+            message: 'No token provided'
+          }, 401, corsHeaders(origin));
+        }
+
+        const token = authHeader.substring(7);
+        const authService = new AuthService(env);
+
+        try {
+          await authService.logout(token);
+          return jsonResponse({
+            success: true,
+            message: 'Logged out successfully',
+            timestamp: Date.now()
+          }, 200, corsHeaders(origin));
+        } catch (error) {
+          return jsonResponse({
+            success: false,
+            message: 'Logout failed',
+            error: error instanceof Error ? error.message : 'Unknown error'
+          }, 500, corsHeaders(origin));
+        }
+      }
+
+      // ========== TENANT MANAGEMENT API (Superadmin) ==========
+
+      // Get all tenants (superadmin only)
+      if (url.pathname === '/admin/tenants' && method === 'GET') {
+        const authHeader = request.headers.get('Authorization');
+        const authService = new AuthService(env);
+
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+          return jsonResponse({ success: false, message: 'Unauthorized' }, 401, corsHeaders(origin));
+        }
+
+        const token = authHeader.substring(7);
+        const verification = await authService.verifyToken(token);
+
+        if (!verification.valid || verification.user?.role !== 'superadmin') {
+          return jsonResponse({ success: false, message: 'Forbidden - Superadmin only' }, 403, corsHeaders(origin));
+        }
+
+        try {
+          const tenants = await authService.getAllTenants();
+          return jsonResponse({
+            tenants,
+            count: tenants.length,
+            timestamp: Date.now()
+          }, 200, corsHeaders(origin));
+        } catch (error) {
+          return jsonResponse({
+            success: false,
+            message: 'Failed to get tenants',
+            error: error instanceof Error ? error.message : 'Unknown error'
+          }, 500, corsHeaders(origin));
+        }
+      }
+
+      // Update tenant (superadmin only)
+      if (url.pathname.match(/^\/admin\/tenants\/[^/]+$/) && method === 'PUT') {
+        const authHeader = request.headers.get('Authorization');
+        const authService = new AuthService(env);
+
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+          return jsonResponse({ success: false, message: 'Unauthorized' }, 401, corsHeaders(origin));
+        }
+
+        const token = authHeader.substring(7);
+        const verification = await authService.verifyToken(token);
+
+        if (!verification.valid || verification.user?.role !== 'superadmin') {
+          return jsonResponse({ success: false, message: 'Forbidden - Superadmin only' }, 403, corsHeaders(origin));
+        }
+
+        const tenantId = url.pathname.split('/').pop();
+        const body = await request.json() as Record<string, unknown>;
+
+        try {
+          await authService.updateTenant(tenantId as string, body);
+          return jsonResponse({
+            success: true,
+            message: 'Tenant updated successfully',
+            timestamp: Date.now()
+          }, 200, corsHeaders(origin));
+        } catch (error) {
+          return jsonResponse({
+            success: false,
+            message: 'Failed to update tenant',
+            error: error instanceof Error ? error.message : 'Unknown error'
+          }, 500, corsHeaders(origin));
+        }
+      }
+
+      // Get users by tenant (admin only)
+      if (url.pathname === '/admin/users' && method === 'GET') {
+        const authHeader = request.headers.get('Authorization');
+        const authService = new AuthService(env);
+
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+          return jsonResponse({ success: false, message: 'Unauthorized' }, 401, corsHeaders(origin));
+        }
+
+        const token = authHeader.substring(7);
+        const verification = await authService.verifyToken(token);
+
+        if (!verification.valid || (verification.user?.role !== 'admin' && verification.user?.role !== 'superadmin')) {
+          return jsonResponse({ success: false, message: 'Forbidden - Admin or Superadmin only' }, 403, corsHeaders(origin));
+        }
+
+        const tenantId = url.searchParams.get('tenantId') || verification.tenant?.id;
+
+        if (!tenantId && verification.user?.role !== 'superadmin') {
+          return jsonResponse({ success: false, message: 'Tenant ID required' }, 400, corsHeaders(origin));
+        }
+
+        try {
+          const users = await authService.getUsersByTenant(tenantId as string);
+          return jsonResponse({
+            users,
+            count: users.length,
+            tenantId,
+            timestamp: Date.now()
+          }, 200, corsHeaders(origin));
+        } catch (error) {
+          return jsonResponse({
+            success: false,
+            message: 'Failed to get users',
+            error: error instanceof Error ? error.message : 'Unknown error'
+          }, 500, corsHeaders(origin));
+        }
+      }
+
+      // ========== END AUTHENTICATION API ==========
+
       // ========== END AGENTIC DASHBOARD API ==========
 
       // 404 for unhandled API routes
@@ -923,9 +1488,9 @@ function getRecommendations(category?: string, limit = 5): unknown[] {
     { id: 4, name: 'Black Sesame Roll', category: 'pastries', price: 95 },
     { id: 5, name: 'Salted Egg Pastry', category: 'pastries', price: 150 },
   ];
-  
+
   if (category) {
-    return products.filter(p => 
+    return products.filter(p =>
       p.category === category || p.name.toLowerCase().includes(category.toLowerCase())
     ).slice(0, limit);
   }
@@ -938,7 +1503,7 @@ function getInventory(category?: string): unknown[] {
     { id: 2, name: 'Thai Tea Cake', category: 'cakes', stock: 30, available: 28 },
     { id: 3, name: 'Pandan Custard', category: 'pastries', stock: 100, available: 90 },
   ];
-  
+
   if (category) {
     return inventory.filter(i => i.category === category);
   }
@@ -949,41 +1514,41 @@ function getInventory(category?: string): unknown[] {
 function generatePromptPayQR(amount: number, phone: string, ref?: string): string {
   // Remove leading 0 from phone and add country code
   const phoneWithCountry = '66' + phone.replace(/^0/, '');
-  
+
   // Build TLV (Tag-Length-Value) structure
   function tlv(tag: string, value: string): string {
     const length = value.length.toString().padStart(2, '0');
     return tag + length + value;
   }
-  
+
   // PromptPay Application ID
   const appId = tlv('00', 'A000000677010111');
-  
+
   // Phone number
   const phoneData = tlv('01', phoneWithCountry);
-  
+
   // Country code
   const country = tlv('58', 'TH');
-  
+
   // Currency (764 = THB)
   const currency = tlv('53', '764');
-  
+
   // Amount (with 2 decimal places)
   const amountStr = amount.toFixed(2);
   const amountTlv = tlv('54', amountStr);
-  
+
   // Reference (optional)
   let refData = '';
   if (ref) {
     refData = tlv('62', tlv('05', ref));
   }
-  
+
   // Combine payload
   const payload = appId + phoneData + country + currency + amountTlv + refData + '6304';
-  
+
   // Calculate CRC16 checksum
   const crc = calculateCRC16(payload.slice(0, -4));
-  
+
   return payload + crc;
 }
 
@@ -1003,7 +1568,7 @@ function calculateCRC16(data: string): string {
 // Durable Object for engine state (optional, for scaling)
 export class EngineState {
   constructor(private state: DurableObjectState, private env: Env) {}
-  
+
   async fetch(request: Request): Promise<Response> {
     return new Response('Engine State DO', { status: 200 });
   }

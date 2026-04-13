@@ -1,0 +1,446 @@
+/* =========================================
+   LUXURY DESIGN SYSTEM
+   ========================================= */
+
+/* 
+  FONT IMPORTS 
+  Using Google Fonts for premium typography
+*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+/* 
+  COLOR PALETTE - Midnight Blue Luxury
+  Base: Midnight Blue (#191970) with gold accents
+*/
+:root {
+  /* Primary Colors */
+  --primary: #191970;
+  --primary-dark: #003366;
+  --primary-light: #4169E1;
+  --primary-10: rgba(25, 25, 112, 0.1);
+  --primary-20: rgba(25, 25, 112, 0.2);
+  --primary-30: rgba(25, 25, 112, 0.3);
+  
+  /* Accent Colors */
+  --accent-gold: #FFD700;
+  --accent-champagne: #F7E7CE;
+  --accent-10: rgba(255, 215, 0, 0.1);
+  
+  /* Neutral Colors */
+  --bg-light: #F5F5F7;
+  --bg-dark: #1A1A1A;
+  --text-primary: #1A1A1A;
+  --text-secondary: #4A4A6A;
+  --text-muted: #6A6A7A;
+  --border-light: rgba(25, 25, 112, 0.15);
+  --border-focus: #FFD700;
+  
+  /* Semantic Colors */
+  --success: #27AE60;
+  --warning: #F39C12;
+  --danger: #E74C3C;
+  
+  /* Spacing & Sizing */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 9999px;
+  
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  
+  /* Typography */
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Inter', sans-serif;
+  
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.8;
+  
+  /* Transitions */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Shadows */
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08);
+  --shadow-focus: 0 0 0 2px var(--accent-10), 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 
+  RESET & BASE STYLES 
+*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-light);
+  color: var(--text-primary);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 
+  TEXTURE UTILITIES 
+  Felt texture simulation with multi-layered effects
+*/
+.felt-texture {
+  position: relative;
+  background: var(--primary);
+  background: linear-gradient(
+    135deg, 
+    var(--primary) 0%, 
+    var(--primary-dark) 100%
+  );
+  box-shadow: 
+    var(--shadow-soft),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.felt-texture::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.4;
+}
+
+/* 
+  TYPOGRAPHY UTILITIES 
+*/
+.text-serif {
+  font-family: var(--font-serif);
+}
+
+.text-sans {
+  font-family: var(--font-sans);
+}
+
+.text-xs { font-size: 10px; line-height: var(--line-height-tight); letter-spacing: 0.02em; }
+.text-sm { font-size: 12px; line-height: var(--line-height-normal); letter-spacing: 0.01em; }
+.text-md { font-size: 14px; line-height: var(--line-height-normal); letter-spacing: 0.01em; }
+.text-lg { font-size: 16px; line-height: var(--line-height-normal); letter-spacing: 0em; }
+.text-xl { font-size: 20px; line-height: var(--line-height-relaxed); letter-spacing: -0.01em; }
+.text-2xl { font-size: 24px; line-height: var(--line-height-relaxed); letter-spacing: -0.02em; }
+.text-3xl { font-size: 32px; line-height: var(--line-height-relaxed); letter-spacing: -0.03em; }
+.text-4xl { font-size: 40px; line-height: var(--line-height-relaxed); letter-spacing: -0.04em; }
+.text-5xl { font-size: 48px; line-height: var(--line-height-relaxed); letter-spacing: -0.05em; }
+
+.font-weight-light { font-weight: 300; }
+.font-weight-normal { font-weight: 400; }
+.font-weight-medium { font-weight: 500; }
+.font-weight-semibold { font-weight: 600; }
+.font-weight-bold { font-weight: 700; }
+
+/* 
+  SEARCH BAR COMPONENT 
+  Height: 56px, Border-radius: 12px
+*/
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  border-radius: var(--radius-md);
+  padding: 0 var(--space-md);
+  background: var(--bg-light);
+  border: 1px solid var(--border-light);
+  transition: all var(--transition-fast);
+  overflow: hidden;
+}
+
+.search-bar::before {
+  /* Felt texture base */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(25, 25, 112, 0.03) 0%,
+    rgba(0, 51, 102, 0.05) 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+.search-bar::after {
+  /* Subtle gradient overlay */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top right,
+    rgba(255, 215, 0, 0.05) 0%,
+    transparent 70%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+.search-bar:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-hover);
+}
+
+.search-bar:hover::before {
+  opacity: 0.5;
+}
+
+.search-bar:focus-within {
+  border-color: var(--accent-gold);
+  box-shadow: 
+    0 0 0 2px var(--accent-10),
+    var(--shadow-soft);
+}
+
+/* Search Icon */
+.search-icon {
+  width: 20px;
+  height: 20px;
+  stroke: var(--text-secondary);
+  stroke-width: 1.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+  z-index: 2;
+  transition: stroke var(--transition-fast);
+}
+
+.search-bar:hover .search-icon {
+  stroke: var(--primary);
+}
+
+.search-bar:focus-within .search-icon {
+  stroke: var(--primary);
+}
+
+/* Search Input */
+.search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  padding: 0;
+  margin-left: var(--space-sm);
+  z-index: 2;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+  font-style: italic;
+  font-size: 15px;
+}
+
+/* Clear Button */
+.search-clear {
+  display: none;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  z-index: 2;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.search-clear:hover {
+  background: var(--bg-light);
+  color: var(--danger);
+}
+
+.search-clear svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Show clear button when input has value */
+.search-input:not(:empty) + .search-clear {
+  display: block;
+}
+
+/* Loading State */
+.search-loading {
+  display: none;
+  width: 20px;
+  height: 20px;
+  z-index: 2;
+  margin-right: 4px;
+}
+
+.search-loading.active {
+  display: block;
+  animation: rotate 1.5s linear infinite;
+}
+
+@keyframes rotate {
+  to { transform: rotate(360deg); }
+}
+
+/* Search Button */
+.search-btn {
+  height: 32px;
+  padding: 0 var(--space-md);
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  z-index: 2;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(25, 25, 112, 0.3);
+}
+
+.search-btn:active {
+  transform: translateY(0);
+}
+
+.search-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 
+  MICRO-INTERACTIONS 
+  Ripple effect for search execution
+*/
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  color: rgba(255, 255, 255, 0.3);
+  opacity: 0;
+  transform: scale(0);
+  pointer-events: none;
+  z-index: 3;
+  animation: ripple-anim 0.6s fast ease-out;
+}
+
+@keyframes ripple-anim {
+  to {
+    opacity: 0.3;
+    transform: scale(4);
+  }
+}
+
+/* 
+  RESPONSIVE DESIGN 
+  Mobile-first approach
+*/
+@media (max-width: 768px) {
+  .search-bar {
+    height: 48px;
+    padding: 0 var(--space-sm);
+  }
+  
+  .search-input {
+    font-size: 14px;
+  }
+  
+  .text-5xl { font-size: 32px; }
+  .text-4xl { font-size: 28px; }
+  .text-3xl { font-size: 24px; }
+}
+
+@media (max-width: 480px) {
+  .search-bar {
+    border-radius: var(--radius-lg);
+  }
+  
+  .search-input::placeholder {
+    font-size: 13px;
+  }
+}
+
+/* 
+  ACCESSIBILITY 
+  Focus indicators and ARIA support
+*/
+.search-bar[aria-expanded="true"] {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 0 2px var(--accent-10), var(--shadow-soft);
+}
+
+.search-input:focus {
+  outline: none;
+  caret-color: var(--primary);
+}
+
+/* 
+  CROSS-BROWSER FALLBACKS 
+  For CSS custom properties and modern features
+*/
+@media not all {
+  :root {
+    --primary: #191970;
+    --accent-gold: #FFD700;
+  }
+  
+  .search-bar {
+    background: #F5F5F7;
+    border: 1px solid #D1D5DB;
+  }
+  
+  .search-icon {
+    stroke: #6B7280;
+  }
+  
+  .search-input::placeholder {
+    color: #9CA3AF;
+  }
+}
+
+/* 
+  PRINT STYLES 
+*/
+@media print {
+  .search-bar {
+    border: 1px solid #D1D5DB;
+  }
+  
+  .search-input {
+    color: black;
+  }
+}

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สั่งทำเค้ก - Sweet Layers Cake Customizer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #2A6B52; --primary-dark: #1F4A3A; --primary-light: #E8F5F0;
+      --accent: #C4A647; --accent-dark: #B3941A;
+      --cream: #FDF9F5; --brown: #3D2E22; --brown-light: #5A4535;
+      --gray-100: #F5EDE4; --gray-200: #E8DCD0; --gray-300: #D4C4B5;
+      --gray-400: #B8A08A; --gray-500: #9A7D6A; --white: #ffffff;
+      --radius-lg: 16px; --radius-xl: 24px;
+      --shadow-lg: 0 8px 30px rgba(13,42,34,0.12);
+      --shadow-xl: 0 16px 48px rgba(13,42,34,0.16);
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--cream);
+      color: var(--brown);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      padding: 16px 24px;
+    }
+    
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+    
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--brown);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    
+    .back-btn:hover {
+      color: var(--primary);
+    }
+    
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+    
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    
+    .page-subtitle {
+      text-align: center;
+      color: var(--gray-500);
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+    }
+    
+    .customizer-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    /* FAQ Section */
+    .faq-section {
+      margin-top: 60px;
+      padding: 40px;
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .faq-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    
+    .faq-item {
+      border-bottom: 1px solid var(--gray-200);
+      padding: 16px 0;
+    }
+    
+    .faq-question {
+      font-weight: 600;
+      color: var(--brown);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: color 0.2s;
+    }
+    
+    .faq-question:hover {
+      color: var(--primary);
+    }
+    
+    .faq-answer {
+      color: var(--gray-500);
+      margin-top: 12px;
+      line-height: 1.6;
+      display: none;
+    }
+    
+    .faq-answer.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    /* Cart indicator */
+    .cart-indicator {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--primary);
+      color: white;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: var(--shadow-xl);
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+    
+    .cart-indicator:hover {
+      transform: scale(1.1);
+      background: var(--primary-dark);
+    }
+    
+    .cart-count {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--accent);
+      color: var(--brown);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    @media (max-width: 768px) {
+      .page-title {
+        font-size: 1.75rem;
+      }
+      
+      main {
+        padding: 24px 16px;
+      }
+      
+      .faq-section {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <a href="/shop.html" class="back-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        กลับไปหน้าร้าน
+      </a>
+      <div class="logo">Sweet Layers</div>
+      <a href="/cart.html" style="color: var(--brown);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 2L6 7H3v2h1.3L5 20h14l.7-11H21V7h-3l-3-5H9zm2 2h2l2 3h-6l2-3zm-5 5h12l-.5 9H6.5L6 9z"/>
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <h1 class="page-title">🎂 สั่งทำเค้กตามใจคุณ</h1>
+    <p class="page-subtitle">ออกแบบเค้กในแบบของคุณ เราทำสดใหม่ทุกชิ้น พร้อมส่งถึงมือ</p>
+    
+    <div class="customizer-wrapper">
+      <div id="cakeCustomizer" data-cake-customizer></div>
+    </div>
+    
+    <section class="faq-section">
+      <h2 class="faq-title">คำถามที่พบบ่อย</h2>
+      
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>ต้องสั่งล่วงหน้ากี่วัน?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          แนะนำสั่งล่วงหน้าอย่างน้อย 2-3 วัน สำหรับเค้กสั่งทำพิเศษ 
+          แต่หากเป็นเค้กมาตรฐานสามารถสั่งล่วงหน้า 1 วันได้
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>มีบริการจัดส่งหรือไม่?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          มีบริการจัดส่งทั่วกรุงเทพและปริมณฑล ค่าจัดส่งเริ่มต้น 50 บาท 
+          หรือฟรีเมื่อสั่งซื้อ 500 บาทขึ้นไป
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>สามารถแก้ไขรายการหลังสั่งซื้อได้ไหม?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          สามารถแก้ไขรายการได้ภายใน 6 ชั่วโมงหลังสั่งซื้อ 
+          โดยติดต่อทาง LINE @sweetlayers หรือโทร 084-087-1065
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>เค้กสามารถเก็บได้นานแค่ไหน?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          เค้กควรเก็บในตู้เย็นและรับประทานภายใน 3 วัน 
+          สำหรับเค้กที่มีครีมสดควรรับประทานภายใน 24 ชั่วโมง
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Floating Cart Button -->
+  <a href="/cart.html" class="cart-indicator" id="cartIndicator">
+    🛒
+    <span class="cart-count" id="cartCount">0</span>
+  </a>
+
+  <script src="js/cake-customizer.js"></script>
+  <script src="js/performance-optimizer.js"></script>
+  <script src="js/shared.js"></script>
+  <script>
+    // Initialize cake customizer
+    const customizer = new CakeCustomizer({
+      container: document.getElementById('cakeCustomizer'),
+      onComplete: (item) => {
+        console.log('Added to cart:', item);
+        updateCartCount();
+      }
+    });
+    
+    // FAQ toggle
+    function toggleFaq(element) {
+      const answer = element.nextElementSibling;
+      const icon = element.querySelector('span:last-child');
+      
+      answer.classList.toggle('show');
+      icon.textContent = answer.classList.contains('show') ? '−' : '+';
+    }
+    
+    // Update cart count
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const count = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+      document.getElementById('cartCount').textContent = count;
+    }
+    
+    // Initial cart count
+    updateCartCount();
+    
+    // Listen for cart updates
+    window.addEventListener('cartUpdated', () => updateCartCount());
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'cart') updateCartCount();
+    });
+  </script>
+</body>
+</html>
